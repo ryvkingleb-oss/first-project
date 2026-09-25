@@ -1,11 +1,4 @@
 <%- include('partials/head', { title, home: true }) %>
-<section class="home-hero">
-  <p class="home-brand" aria-hidden="true">Наряд</p>
-  <div class="home-hero-copy">
-    <h1>Задача и отклик</h1>
-    <p class="home-lead">Прораб описывает работу. Мастер своей специальности откликается.</p>
-  </div>
-</section>
 
 <section class="home-tiles" aria-label="Кто вы">
   <article class="home-tile home-tile-foreman">
@@ -30,21 +23,5 @@
       <a class="btn secondary" href="/login/master">Войти</a>
     </div>
   </article>
-</section>
-
-<section class="home-trust" aria-labelledby="trust-title">
-  <h2 id="trust-title">Деньги не списываются.</h2>
-  <p>Оплата не подключена. <%= formatMoney(PRICES.objectRub) %> за объект и <%= formatMoney(PRICES.masterMonthRub) %> в месяц — это цены на экране, не чек.</p>
-</section>
-
-<section class="home-close" id="demo" aria-labelledby="demo-title">
-  <h2 id="demo-title">Демо-кабинеты</h2>
-  <p class="home-pass">Пароль <strong class="num">demo1234</strong></p>
-  <ul class="home-people">
-    <li><a href="/login/foreman?phone=79002222222"><span class="home-person-role">Прораб</span><span class="home-person-name">Игорь Павлов</span><span class="home-person-phone num">79002222222</span></a></li>
-    <li><a href="/login/master?phone=79003333333"><span class="home-person-role">Сантехник</span><span class="home-person-name">Сергей Ким</span><span class="home-person-phone num">79003333333</span></a></li>
-    <li><a href="/login/master?phone=79004444444"><span class="home-person-role">Электрик</span><span class="home-person-name">Павел Орлов</span><span class="home-person-phone num">79004444444</span></a></li>
-    <li><a href="/login/master?phone=79005555555"><span class="home-person-role">Стиральные машины</span><span class="home-person-name">Марина Волкова</span><span class="home-person-phone num">79005555555</span></a></li>
-  </ul>
 </section>
 <%- include('partials/foot') %>

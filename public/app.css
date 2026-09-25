@@ -929,7 +929,7 @@ a.tel { text-underline-offset: 0.15em; }
   display: grid;
   gap: var(--space-4);
   width: min(100% - 32px, 68rem);
-  margin: var(--space-6) auto 0;
+  margin: var(--space-5) auto 0;
 }
 .home-tile {
   display: flex;
@@ -1073,7 +1073,7 @@ a.tel { text-underline-offset: 0.15em; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
     gap: var(--space-5);
-    margin-top: var(--space-7);
+    margin-top: var(--space-6);
   }
   .role-pick {
     grid-template-columns: repeat(2, minmax(0, 1fr));
