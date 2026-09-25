@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> — Наряд</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/app.css?v=3">
+  <link rel="stylesheet" href="/app.css?v=4">
   <meta name="theme-color" content="#f3efe6">
 </head>
 <body>
@@ -30,7 +30,7 @@
       </nav>
     <% } %>
   </header>
-  <main id="content" class="wrap<% if (typeof wide !== 'undefined' && wide) { %> wide<% } else if (typeof board !== 'undefined' && board) { %> board<% } %>">
+  <main id="content" class="<% if (typeof home !== 'undefined' && home) { %>home<% } else { %>wrap<% if (typeof wide !== 'undefined' && wide) { %> wide<% } else if (typeof board !== 'undefined' && board) { %> board<% } %><% } %>">
     <% if (flash) { %>
       <p class="banner <%= flash.type === 'error' ? 'is-error' : 'is-ok' %>" role="status"><%= flash.text %></p>
     <% } %>

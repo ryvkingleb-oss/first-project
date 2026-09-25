@@ -1,53 +1,87 @@
-<%- include('partials/head', { title, wide: true }) %>
-<section class="intro">
-  <p class="kicker">Наряд</p>
-  <h1>Клиент оставляет заявку, прораб ведёт квартиру, мастер берёт вызов.</h1>
+<%- include('partials/head', { title, home: true }) %>
+<section class="home-hero">
+  <div class="home-hero-copy">
+    <p class="home-kicker">Наряд</p>
+    <h1>Ремонт в одном наряде</h1>
+    <p class="home-lead">Клиент оставляет заявку, прораб ведёт квартиру, мастер берёт вызов.</p>
+    <div class="home-actions">
+      <a class="btn" href="/register">Оставить заявку</a>
+      <a class="btn secondary" href="/login">Войти</a>
+    </div>
+    <p class="home-jump"><a href="#demo">Демо-кабинеты</a></p>
+  </div>
 </section>
 
-<ol class="steps">
-  <li>
-    <span class="step-n">1</span>
-    <span class="step-name">Заявка</span>
-    <span class="step-note">Клиент пишет</span>
-  </li>
-  <li>
-    <span class="step-n">2</span>
-    <span class="step-name">Объект</span>
-    <span class="step-note">Прораб ведёт</span>
-  </li>
-  <li>
-    <span class="step-n">3</span>
-    <span class="step-name">Мастер</span>
-    <span class="step-note">Берёт вызов</span>
-  </li>
-</ol>
+<section class="home-how" aria-labelledby="how-title">
+  <p class="home-kicker" id="how-title">Как устроено</p>
+  <ol>
+    <li>
+      <span class="home-num">01</span>
+      <div>
+        <h2>Заявка</h2>
+        <p>Клиент пишет адрес и задачу.</p>
+      </div>
+    </li>
+    <li>
+      <span class="home-num">02</span>
+      <div>
+        <h2>Объект</h2>
+        <p>Прораб ведёт квартиру: этапы, долг, фото.</p>
+      </div>
+    </li>
+    <li>
+      <span class="home-num">03</span>
+      <div>
+        <h2>Мастер</h2>
+        <p>Берёт вызов своей специальности.</p>
+      </div>
+    </li>
+  </ol>
+</section>
 
-<div class="catalog">
-  <section class="entry">
-    <div class="entry-top">
-      <h2>Клиент</h2>
-      <p class="entry-price num">0 ₽</p>
-    </div>
-    <p class="entry-out">Заявка и статус</p>
+<section class="home-who" aria-labelledby="who-title">
+  <p class="home-kicker" id="who-title">Кому</p>
+  <article class="home-role">
+    <h2>Клиент</h2>
+    <p class="home-out">Заявка и статус.</p>
+    <p class="home-price num">0 ₽</p>
     <a class="btn" href="/register?role=client">Оставить заявку</a>
-  </section>
-  <section class="entry">
-    <div class="entry-top">
-      <h2>Прораб</h2>
-      <p class="entry-price num"><%= formatMoney(PRICES.objectRub) %> <span>за квартиру</span></p>
-    </div>
-    <p class="entry-out">Этапы, долг, фото</p>
+  </article>
+  <article class="home-role">
+    <h2>Прораб</h2>
+    <p class="home-out">Квартира: этапы, долг, фото.</p>
+    <p class="home-price num"><%= formatMoney(PRICES.objectRub) %></p>
+    <p class="home-unit">за квартиру</p>
     <a class="btn" href="/register?role=foreman">Вести квартиру</a>
-  </section>
-  <section class="entry">
-    <div class="entry-top">
-      <h2>Мастер</h2>
-      <p class="entry-price num"><%= formatMoney(PRICES.masterMonthRub) %> <span>в месяц</span></p>
-    </div>
-    <p class="entry-out">Входящие вызовы.</p>
+  </article>
+  <article class="home-role">
+    <h2>Мастер</h2>
+    <p class="home-out">Входящие вызовы.</p>
+    <p class="home-price num"><%= formatMoney(PRICES.masterMonthRub) %></p>
+    <p class="home-unit">в месяц</p>
     <a class="btn" href="/register?role=master">Брать вызовы</a>
-  </section>
-</div>
-<p class="pay-note">Оплата не подключена. Деньги не списываются.</p>
-<%- include('partials/demo') %>
+  </article>
+</section>
+
+<section class="home-trust-band">
+  <div class="home-trust">
+    <p class="home-kicker">Оплата</p>
+    <h2>Деньги не списываются.</h2>
+    <p>Оплата не подключена. 0 ₽, <%= formatMoney(PRICES.objectRub) %> и <%= formatMoney(PRICES.masterMonthRub) %> — это цены на экране, не чек.</p>
+  </div>
+</section>
+
+<section class="home-close" id="demo" aria-labelledby="demo-title">
+  <p class="home-kicker" id="demo-title">Попробовать</p>
+  <h2>Демо-кабинеты</h2>
+  <p class="home-pass">Пароль <strong class="num">demo1234</strong></p>
+  <ul class="home-people">
+    <li><a href="/login?phone=79001111111"><span class="home-person-role">Клиент</span><span class="home-person-name">Анна Соколова</span><span class="home-person-phone num">79001111111</span></a></li>
+    <li><a href="/login?phone=79002222222"><span class="home-person-role">Прораб</span><span class="home-person-name">Игорь Павлов</span><span class="home-person-phone num">79002222222</span></a></li>
+    <li><a href="/login?phone=79003333333"><span class="home-person-role">Сантехник</span><span class="home-person-name">Сергей Ким</span><span class="home-person-phone num">79003333333</span></a></li>
+    <li><a href="/login?phone=79004444444"><span class="home-person-role">Электрик</span><span class="home-person-name">Павел Орлов</span><span class="home-person-phone num">79004444444</span></a></li>
+    <li><a href="/login?phone=79005555555"><span class="home-person-role">Стиральные машины</span><span class="home-person-name">Марина Волкова</span><span class="home-person-phone num">79005555555</span></a></li>
+  </ul>
+  <p class="home-actions"><a class="btn" href="/login">Войти</a></p>
+</section>
 <%- include('partials/foot') %>
