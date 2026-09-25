@@ -26,7 +26,9 @@
   else if (allDone) step = 'finish';
   var stageNow = inProgress || planned;
 %>
-<p class="back"><a href="/foreman">Объекты</a></p>
+<% if (!isPrimary) { %>
+<p class="back"><a href="/foreman">К квартире</a></p>
+<% } %>
 <header class="obj-head">
   <div>
     <p class="kicker">Объект <%= object.id %><% if (object.status === 'done') { %> · готово<% } %></p>
@@ -328,5 +330,20 @@
       <button class="text-btn" type="submit">Отметить объект готовым</button>
     </form>
   <% } %>
+
+  <% if (others.length) { %>
+    <section class="sec">
+      <h2>Другие квартиры</h2>
+      <div class="rows">
+        <% others.forEach(function (item) { %>
+          <a class="row" href="/foreman/objects/<%= item.id %>">
+            <span class="row-title"><%= item.address %></span>
+            <span class="row-go"><%= item.status === 'done' ? 'Готово' : 'Открыть' %></span>
+          </a>
+        <% }) %>
+      </div>
+    </section>
+  <% } %>
+  <p class="hint"><a href="/foreman/objects/new">Новая квартира</a></p>
 </div>
 <%- include('../partials/foot') %>

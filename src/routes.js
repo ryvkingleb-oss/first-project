@@ -328,18 +328,22 @@ async function clientCancel(req, res, next) {
 async function foremanHome(req, res, next) {
   try {
     const { rows } = await pool.query(
-      `SELECT t.id, t.address, t.summary, t.specialty, t.created_at,
-              (SELECT COUNT(*)::int FROM task_responses r WHERE r.task_id = t.id) AS responses
-       FROM tasks t
-       WHERE t.foreman_id = $1
-       ORDER BY t.created_at DESC`,
+      `SELECT id FROM objects
+       WHERE foreman_id = $1
+       ORDER BY CASE WHEN status = 'done' THEN 1 ELSE 0 END, created_at DESC
+       LIMIT 1`,
       [res.locals.user.id]
     );
-    return render(res, 'foreman/home', {
-      title: 'Задачи',
-      tasks: rows,
-      price: PRICES.objectRub,
-    });
+    if (!rows[0]) {
+      return render(res, 'foreman/paywall', {
+        title: 'Квартира',
+        errors: {},
+        values: { request_id: '', address: '', client_name: '', client_phone: '', confirm_unpaid: false },
+        price: PRICES.objectRub,
+        cabinet: true,
+      });
+    }
+    return res.redirect(303, `/foreman/objects/${rows[0].id}`);
   } catch (error) {
     return next(error);
   }
@@ -598,6 +602,19 @@ async function foremanObject(req, res, next) {
     ]);
     const room = ROOMS[req.query.room] ? req.query.room : 'kitchen';
     const roomCounts = Object.fromEntries(counts.rows.map((row) => [row.room, row.n]));
+    const others = await pool.query(
+      `SELECT id, address, status FROM objects
+       WHERE foreman_id = $1 AND id <> $2
+       ORDER BY created_at DESC`,
+      [res.locals.user.id, id]
+    );
+    const primary = await pool.query(
+      `SELECT id FROM objects
+       WHERE foreman_id = $1
+       ORDER BY CASE WHEN status = 'done' THEN 1 ELSE 0 END, created_at DESC
+       LIMIT 1`,
+      [res.locals.user.id]
+    );
     let linked = null;
     if (object.request_id) {
       const linkedRow = await pool.query(
@@ -619,6 +636,8 @@ async function foremanObject(req, res, next) {
       roomCounts,
       price: PRICES.objectRub,
       offerLabel,
+      others: others.rows,
+      isPrimary: primary.rows[0] && primary.rows[0].id === id,
     });
   } catch (error) {
     return next(error);
@@ -960,34 +979,31 @@ async function saveObjectNote(req, res, next) {
 async function masterHome(req, res, next) {
   const user = res.locals.user;
   try {
-    let openTasks = [];
+    let incoming = [];
     if (user.orders_opened_unpaid && user.accepting_orders) {
       const { rows } = await pool.query(
-        `SELECT t.id, t.address, t.summary, t.created_at, u.full_name AS foreman_name
-         FROM tasks t
-         JOIN users u ON u.id = t.foreman_id
-         WHERE t.specialty = $1
-           AND NOT EXISTS (
-             SELECT 1 FROM task_responses r WHERE r.task_id = t.id AND r.master_id = $2
-           )
-         ORDER BY t.created_at DESC`,
-        [user.specialty, user.id]
+        `SELECT id, address, summary, created_at, object_id, contact_name
+         FROM offers
+         WHERE status = 'open' AND specialty = $1
+         ORDER BY created_at DESC`,
+        [user.specialty]
       );
-      openTasks = rows;
+      incoming = rows;
     }
     const mine = await pool.query(
-      `SELECT t.id, t.address, t.summary, r.created_at
-       FROM task_responses r
-       JOIN tasks t ON t.id = r.task_id
-       WHERE r.master_id = $1
-       ORDER BY r.created_at DESC`,
+      `SELECT id, address, summary, status, job_status, status_note, accepted_at,
+              contact_name, contact_phone
+       FROM offers
+       WHERE master_id = $1 AND status = 'accepted'
+       ORDER BY accepted_at DESC`,
       [user.id]
     );
     return render(res, 'master/home', {
-      title: 'Задачи',
-      openTasks,
+      title: user.full_name,
+      incoming,
       mine: mine.rows,
       price: PRICES.masterMonthRub,
+      offerLabel,
     });
   } catch (error) {
     return next(error);
@@ -1083,12 +1099,16 @@ async function masterOpenUnpaid(req, res, next) {
 }
 
 async function masterAccepting(req, res, next) {
-  if (!res.locals.user.orders_opened_unpaid) {
-    flash(req, 'error', 'Сначала откройте входящие. Оплата при этом не проводится.');
-    return res.redirect(303, '/master/subscription');
-  }
   const accepting = req.body.accepting_orders === '1';
   try {
+    if (!res.locals.user.orders_opened_unpaid && accepting) {
+      await pool.query(
+        'UPDATE users SET orders_opened_unpaid = TRUE, accepting_orders = TRUE WHERE id = $1 AND role = $2',
+        [res.locals.user.id, 'master']
+      );
+      flash(req, 'ok', 'Приём включён. Деньги не списаны.');
+      return res.redirect(303, '/master');
+    }
     await pool.query('UPDATE users SET accepting_orders = $2 WHERE id = $1', [
       res.locals.user.id,
       accepting,

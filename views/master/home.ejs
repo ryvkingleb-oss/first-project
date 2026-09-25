@@ -1,54 +1,95 @@
 <%- include('../partials/head', { title, board: true }) %>
+<%
+  var current = null;
+  mine.forEach(function (item) {
+    if (!current && item.job_status !== 'done') current = item;
+  });
+  function tone(offer) {
+    if (!offer || offer.status === 'cancelled') return 'cancelled';
+    if (offer.status === 'open') return 'open';
+    if (offer.job_status === 'in_progress') return 'in_progress';
+    if (offer.job_status === 'done') return 'done';
+    return 'accepted';
+  }
+%>
 <p class="kicker"><%= SPECIALTIES[user.specialty] %></p>
-<h1>Задачи</h1>
+<h1><%= user.full_name %></h1>
+<dl class="facts">
+  <div>
+    <dt>Телефон</dt>
+    <dd><a class="tel" href="tel:+<%= user.phone %>"><%= formatPhone(user.phone) %></a></dd>
+  </div>
+  <div>
+    <dt>Специальность</dt>
+    <dd><%= SPECIALTIES[user.specialty] %></dd>
+  </div>
+</dl>
+<p class="pay-note"><%= formatMoney(price) %> в месяц. Оплата не проводится. Деньги не списываются.</p>
+<form method="post" action="/master/accepting" class="switch">
+  <%- include('../partials/csrf') %>
+  <input type="hidden" name="accepting_orders" value="<%= user.accepting_orders ? '0' : '1' %>">
+  <span><% if (user.accepting_orders) { %>Сейчас вы принимаете заказы.<% } else { %>Приём выключен.<% } %></span>
+  <button class="btn<%= user.accepting_orders ? ' secondary' : '' %>" type="submit"><%= user.accepting_orders ? 'Пауза' : 'Принимаю заказы' %></button>
+</form>
 
-<% if (!user.orders_opened_unpaid) { %>
-  <p class="price num"><%= formatMoney(price) %></p>
-  <p class="price-unit">в месяц за входящие</p>
-  <p class="notice">Оплата не проводится. Деньги не списываются.</p>
-  <p class="actions"><a class="btn" href="/master/subscription">Открыть входящие</a></p>
-<% } else { %>
-  <p class="pay-note">Входящие без оплаты. <%= formatMoney(price) %> в месяц. Деньги не списаны.</p>
-  <form method="post" action="/master/accepting" class="switch">
-    <%- include('../partials/csrf') %>
-    <input type="hidden" name="accepting_orders" value="<%= user.accepting_orders ? '0' : '1' %>">
-    <span><% if (user.accepting_orders) { %>Сейчас вы видите новые задачи.<% } else { %>Приём выключен.<% } %></span>
-    <button class="btn<%= user.accepting_orders ? ' secondary' : '' %>" type="submit"><%= user.accepting_orders ? 'Пауза' : 'Показывать задачи' %></button>
-  </form>
+<% if (current) { %>
+  <article class="focus">
+    <p class="kicker">Сейчас</p>
+    <h2><a href="/master/offers/<%= current.id %>"><%= current.address %></a></h2>
+    <p><span class="tag lg tag-<%= tone(current) %>"><%= offerLabel(current) %></span></p>
+    <p><%= current.summary %></p>
+    <p class="meta"><%= current.contact_name %> · <a class="tel" href="tel:+<%= current.contact_phone %>"><%= formatPhone(current.contact_phone) %></a></p>
+    <form method="post" action="/master/offers/<%= current.id %>/status" class="stack">
+      <%- include('../partials/csrf') %>
+      <fieldset>
+        <legend>Статус</legend>
+        <label class="choice"><input type="radio" name="job_status" value="accepted" <%= current.job_status === 'accepted' ? 'checked' : '' %>> Принят</label>
+        <label class="choice"><input type="radio" name="job_status" value="in_progress" <%= current.job_status === 'in_progress' ? 'checked' : '' %>> В работе</label>
+        <label class="choice"><input type="radio" name="job_status" value="done" <%= current.job_status === 'done' ? 'checked' : '' %>> Готово</label>
+      </fieldset>
+      <div class="field">
+        <label for="status_note">Заметка</label>
+        <textarea id="status_note" name="status_note" maxlength="500"><%= current.status_note || '' %></textarea>
+      </div>
+      <button class="btn" type="submit">Сохранить</button>
+    </form>
+  </article>
 <% } %>
 
-<% if (user.orders_opened_unpaid && user.accepting_orders) { %>
+<% var restMine = mine.filter(function (item) { return !current || item.id !== current.id; }); %>
+<% if (!mine.length) { %>
   <section class="sec">
-    <h2>Открытые</h2>
-    <% if (!openTasks.length) { %>
-      <p class="empty">Новых задач вашей специальности нет.</p>
-    <% } else { %>
-      <div class="rows">
-        <% openTasks.forEach(function (item) { %>
-          <a class="row" href="/master/tasks/<%= item.id %>">
-            <span class="row-title"><%= item.address %></span>
-            <span class="row-go">Отклик</span>
-            <span class="row-meta"><%= item.foreman_name %></span>
-            <span class="row-next"><%= item.summary %></span>
-          </a>
-        <% }) %>
-      </div>
-    <% } %>
+    <h2>Мои заказы</h2>
+    <p class="empty">Принятых заказов нет.</p>
   </section>
-<% } else if (user.orders_opened_unpaid) { %>
-  <p class="empty">Включите приём, чтобы видеть новые задачи.</p>
+<% } else if (restMine.length) { %>
+  <section class="sec">
+    <h2>Мои заказы</h2>
+    <div class="rows">
+      <% restMine.forEach(function (item) { %>
+        <a class="row" href="/master/offers/<%= item.id %>">
+          <span class="row-title"><%= item.address %></span>
+          <span class="tag tag-<%= tone(item) %>"><%= offerLabel(item) %></span>
+          <span class="row-next"><%= item.summary %></span>
+        </a>
+      <% }) %>
+    </div>
+  </section>
 <% } %>
 
 <section class="sec">
-  <h2>Мои отклики</h2>
-  <% if (!mine.length) { %>
-    <p class="empty">Вы ещё не откликались.</p>
+  <h2>Входящие</h2>
+  <% if (!user.accepting_orders) { %>
+    <p class="empty">Включите приём, чтобы видеть новые вызовы.</p>
+  <% } else if (!incoming.length) { %>
+    <p class="empty">Новых вызовов нет.</p>
   <% } else { %>
     <div class="rows">
-      <% mine.forEach(function (item) { %>
-        <a class="row" href="/master/tasks/<%= item.id %>">
+      <% incoming.forEach(function (item) { %>
+        <a class="row" href="/master/offers/<%= item.id %>">
           <span class="row-title"><%= item.address %></span>
-          <span class="row-go">Ваш</span>
+          <span class="row-go">Открыть</span>
+          <span class="row-meta"><%= item.contact_name %></span>
           <span class="row-next"><%= item.summary %></span>
         </a>
       <% }) %>

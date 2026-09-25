@@ -1,5 +1,7 @@
 <%- include('../partials/head', { title }) %>
-<p class="back"><a href="/foreman">Объекты</a></p>
+<% if (typeof cabinet === 'undefined' || !cabinet) { %>
+<p class="back"><a href="/foreman">Квартира</a></p>
+<% } %>
 <p class="kicker">Новый объект</p>
 <h1>Квартира</h1>
 <p class="price num"><%= formatMoney(price) %></p>

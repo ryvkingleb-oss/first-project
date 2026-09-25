@@ -6,7 +6,7 @@
   else if (offer.job_status === 'in_progress') tone = 'in_progress';
   else if (offer.job_status === 'done') tone = 'done';
 %>
-<p class="back"><a href="/master">Заказы</a></p>
+<p class="back"><a href="/master">Кабинет</a></p>
 <p class="kicker"><%= SPECIALTIES[offer.specialty] %> · <%= offer.object_id ? 'от прораба' : 'от клиента' %></p>
 <h1><%= offer.address %></h1>
 <p class="status-line">
