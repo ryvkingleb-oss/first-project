@@ -118,7 +118,7 @@ async function loginPost(req, res, next) {
 
 function registerForm(req, res) {
   if (res.locals.user) return res.redirect(303, homeFor(res.locals.user.role));
-  const role = ['client', 'foreman', 'master'].includes(req.query.role) ? req.query.role : 'client';
+  const role = req.query.role === 'master' ? 'master' : 'foreman';
   return render(res, 'register', {
     title: 'Регистрация',
     errors: {},
@@ -137,7 +137,7 @@ function readAccount(body) {
   if (fullName.length < 2 || fullName.length > 80) errors.full_name = 'Имя — от 2 до 80 символов.';
   if (!phone) errors.phone = 'Телефон в формате +7 900 000-00-00.';
   if (password.length < 8 || password.length > 72) errors.password = 'Пароль не короче 8 символов.';
-  if (!['client', 'foreman', 'master'].includes(role)) errors.role = 'Выберите роль.';
+  if (!['foreman', 'master'].includes(role)) errors.role = 'Выберите роль: прораб или мастер.';
   if (role === 'master' && !SPECIALTIES[specialty]) errors.specialty = 'Выберите специальность.';
   return {
     errors,
@@ -186,7 +186,11 @@ function logout(req, res) {
   });
 }
 
-async function clientList(req, res, next) {
+async function clientList(req, res) {
+  return render(res, 'client/closed', { title: 'Кабинет закрыт' });
+}
+
+async function clientListUnused(req, res, next) {
   try {
     const { rows } = await pool.query(
       `SELECT id, kind, address, status, created_at
@@ -323,45 +327,100 @@ async function clientCancel(req, res, next) {
 
 async function foremanHome(req, res, next) {
   try {
-    const openRequests = await pool.query(
-      `SELECT r.id, r.address, r.description, r.created_at, u.full_name, u.phone
-       FROM requests r
-       JOIN users u ON u.id = r.client_id
-       WHERE r.kind = 'apartment' AND r.status = 'new'
-         AND NOT EXISTS (SELECT 1 FROM objects o WHERE o.request_id = r.id)
-       ORDER BY r.created_at DESC`
-    );
-    const objects = await pool.query(
-      `SELECT o.id, o.address, o.client_name, o.status, o.created_at,
-              COALESCE((
-                SELECT SUM(p.amount_rub) FROM purchases p
-                WHERE p.object_id = o.id AND p.charged_to_client AND NOT p.settled
-              ), 0)::int AS debt,
-              (
-                SELECT json_build_object('title', s.title, 'status', s.status)
-                FROM stages s
-                WHERE s.object_id = o.id
-                ORDER BY CASE s.status WHEN 'in_progress' THEN 0 WHEN 'planned' THEN 1 ELSE 2 END,
-                         s.sort_order, s.id
-                LIMIT 1
-              ) AS stage_now
-       FROM objects o
-       WHERE o.foreman_id = $1
-       ORDER BY o.created_at DESC`,
+    const { rows } = await pool.query(
+      `SELECT t.id, t.address, t.summary, t.specialty, t.created_at,
+              (SELECT COUNT(*)::int FROM task_responses r WHERE r.task_id = t.id) AS responses
+       FROM tasks t
+       WHERE t.foreman_id = $1
+       ORDER BY t.created_at DESC`,
       [res.locals.user.id]
     );
-    const list = objects.rows.map((row) => {
-      let stage = row.stage_now;
-      if (typeof stage === 'string') {
-        try { stage = JSON.parse(stage); } catch (e) { stage = null; }
-      }
-      return { ...row, stage_now: stage };
-    });
     return render(res, 'foreman/home', {
-      title: 'Объекты',
-      openRequests: openRequests.rows,
-      objects: list,
+      title: 'Задачи',
+      tasks: rows,
       price: PRICES.objectRub,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+function readTask(body) {
+  const specialty = String(body.specialty || '');
+  const address = String(body.address || '').trim();
+  const summary = String(body.summary || '').trim();
+  const errors = {};
+  if (!SPECIALTIES[specialty]) errors.specialty = 'Выберите специальность мастера.';
+  if (address.length < 5 || address.length > 200) errors.address = 'Укажите адрес.';
+  if (summary.length < 5 || summary.length > 500) errors.summary = 'Опишите, что сделать: от 5 до 500 символов.';
+  if (body.confirm_unpaid !== '1') errors.confirm_unpaid = 'Подтвердите, что ставите задачу без оплаты. Деньги не списываются.';
+  return {
+    errors,
+    values: {
+      specialty: specialty || 'plumber',
+      address,
+      summary,
+      confirm_unpaid: body.confirm_unpaid === '1',
+    },
+  };
+}
+
+function taskForm(req, res) {
+  return render(res, 'foreman/task-new', {
+    title: 'Новая задача',
+    errors: {},
+    values: { specialty: 'plumber', address: '', summary: '', confirm_unpaid: false },
+    price: PRICES.objectRub,
+  });
+}
+
+async function createTask(req, res, next) {
+  const parsed = readTask(req.body);
+  if (Object.keys(parsed.errors).length) {
+    return render(res, 'foreman/task-new', {
+      title: 'Новая задача',
+      errors: parsed.errors,
+      values: parsed.values,
+      price: PRICES.objectRub,
+    });
+  }
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO tasks (foreman_id, specialty, address, summary)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id`,
+      [res.locals.user.id, parsed.values.specialty, parsed.values.address, parsed.values.summary]
+    );
+    flash(req, 'ok', 'Задача поставлена. Деньги не списаны.');
+    return res.redirect(303, `/foreman/tasks/${rows[0].id}`);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function foremanTask(req, res, next) {
+  const id = parseId(req.params.id);
+  if (!id) return res.status(404).render('error', { title: 'Нет задачи', message: 'Задача не найдена.' });
+  try {
+    const task = await pool.query(
+      'SELECT * FROM tasks WHERE id = $1 AND foreman_id = $2',
+      [id, res.locals.user.id]
+    );
+    if (!task.rows[0]) {
+      return res.status(404).render('error', { title: 'Нет задачи', message: 'Задача не найдена.' });
+    }
+    const responses = await pool.query(
+      `SELECT u.full_name, u.phone, u.specialty, r.created_at
+       FROM task_responses r
+       JOIN users u ON u.id = r.master_id
+       WHERE r.task_id = $1
+       ORDER BY r.created_at`,
+      [id]
+    );
+    return render(res, 'foreman/task', {
+      title: 'Задача',
+      task: task.rows[0],
+      responses: responses.rows,
     });
   } catch (error) {
     return next(error);
@@ -901,32 +960,99 @@ async function saveObjectNote(req, res, next) {
 async function masterHome(req, res, next) {
   const user = res.locals.user;
   try {
-    let incoming = [];
+    let openTasks = [];
     if (user.orders_opened_unpaid && user.accepting_orders) {
       const { rows } = await pool.query(
-        `SELECT id, address, summary, created_at, object_id, request_id, contact_name, contact_phone
-         FROM offers
-         WHERE status = 'open' AND specialty = $1
-         ORDER BY created_at DESC`,
-        [user.specialty]
+        `SELECT t.id, t.address, t.summary, t.created_at, u.full_name AS foreman_name
+         FROM tasks t
+         JOIN users u ON u.id = t.foreman_id
+         WHERE t.specialty = $1
+           AND NOT EXISTS (
+             SELECT 1 FROM task_responses r WHERE r.task_id = t.id AND r.master_id = $2
+           )
+         ORDER BY t.created_at DESC`,
+        [user.specialty, user.id]
       );
-      incoming = rows;
+      openTasks = rows;
     }
     const mine = await pool.query(
-      `SELECT id, address, summary, status, job_status, status_note, accepted_at, specialty,
-              contact_name, contact_phone
-       FROM offers
-       WHERE master_id = $1 AND status = 'accepted'
-       ORDER BY accepted_at DESC`,
+      `SELECT t.id, t.address, t.summary, r.created_at
+       FROM task_responses r
+       JOIN tasks t ON t.id = r.task_id
+       WHERE r.master_id = $1
+       ORDER BY r.created_at DESC`,
       [user.id]
     );
     return render(res, 'master/home', {
-      title: 'Заказы',
-      incoming,
+      title: 'Задачи',
+      openTasks,
       mine: mine.rows,
       price: PRICES.masterMonthRub,
-      offerLabel,
     });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function masterTask(req, res, next) {
+  const id = parseId(req.params.id);
+  const user = res.locals.user;
+  if (!id) return res.status(404).render('error', { title: 'Нет задачи', message: 'Задача не найдена.' });
+  try {
+    const { rows } = await pool.query(
+      `SELECT t.*, u.full_name AS foreman_name, u.phone AS foreman_phone,
+              EXISTS (
+                SELECT 1 FROM task_responses r WHERE r.task_id = t.id AND r.master_id = $2
+              ) AS responded
+       FROM tasks t
+       JOIN users u ON u.id = t.foreman_id
+       WHERE t.id = $1`,
+      [id, user.id]
+    );
+    const task = rows[0];
+    if (!task || task.specialty !== user.specialty) {
+      return res.status(404).render('error', { title: 'Нет задачи', message: 'Задача не найдена.' });
+    }
+    if (!task.responded && (!user.orders_opened_unpaid || !user.accepting_orders)) {
+      return res.redirect(303, '/master/subscription');
+    }
+    return render(res, 'master/task', { title: 'Задача', task });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function masterRespond(req, res, next) {
+  const id = parseId(req.params.id);
+  const user = res.locals.user;
+  if (!id) return res.status(404).render('error', { title: 'Нет задачи', message: 'Задача не найдена.' });
+  if (!user.orders_opened_unpaid || !user.accepting_orders) {
+    flash(req, 'error', 'Чтобы откликнуться, откройте входящие и включите приём. Деньги не списываются.');
+    return res.redirect(303, '/master/subscription');
+  }
+  try {
+    const inserted = await pool.query(
+      `INSERT INTO task_responses (task_id, master_id)
+       SELECT t.id, $2
+       FROM tasks t
+       WHERE t.id = $1 AND t.specialty = $3
+         AND NOT EXISTS (
+           SELECT 1 FROM task_responses r WHERE r.task_id = t.id AND r.master_id = $2
+         )
+       RETURNING id`,
+      [id, user.id, user.specialty]
+    );
+    if (!inserted.rowCount) {
+      const exists = await pool.query(
+        `SELECT 1 FROM task_responses WHERE task_id = $1 AND master_id = $2`,
+        [id, user.id]
+      );
+      if (!exists.rowCount) {
+        return res.status(404).render('error', { title: 'Нет задачи', message: 'Задача не найдена.' });
+      }
+    }
+    flash(req, 'ok', 'Отклик отправлен. Деньги не списаны.');
+    return res.redirect(303, `/master/tasks/${id}`);
   } catch (error) {
     return next(error);
   }
@@ -934,7 +1060,7 @@ async function masterHome(req, res, next) {
 
 function masterPaywall(req, res) {
   return render(res, 'master/paywall', {
-    title: 'Входящие заказы',
+    title: 'Входящие',
     price: PRICES.masterMonthRub,
     opened: res.locals.user.orders_opened_unpaid,
   });
@@ -1124,6 +1250,9 @@ function mount(app) {
   app.post('/client/requests/:id/cancel', requireRole('client'), clientCancel);
 
   app.get('/foreman', requireRole('foreman'), foremanHome);
+  app.get('/foreman/tasks/new', requireRole('foreman'), taskForm);
+  app.post('/foreman/tasks', requireRole('foreman'), createTask);
+  app.get('/foreman/tasks/:id', requireRole('foreman'), foremanTask);
   app.get('/foreman/objects/new', requireRole('foreman'), foremanPaywall);
   app.post('/foreman/objects', requireRole('foreman'), foremanCreateObject);
   app.get('/foreman/objects/:id', requireRole('foreman'), foremanObject);
@@ -1141,6 +1270,8 @@ function mount(app) {
   app.post('/foreman/objects/:id/note', requireRole('foreman'), saveObjectNote);
 
   app.get('/master', requireRole('master'), masterHome);
+  app.get('/master/tasks/:id', requireRole('master'), masterTask);
+  app.post('/master/tasks/:id/respond', requireRole('master'), masterRespond);
   app.get('/master/subscription', requireRole('master'), masterPaywall);
   app.post('/master/subscription/open', requireRole('master'), masterOpenUnpaid);
   app.post('/master/accepting', requireRole('master'), masterAccepting);

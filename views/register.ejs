@@ -1,14 +1,13 @@
 <%- include('partials/head', { title }) %>
 <h1>Регистрация</h1>
-<p class="lede">ИНН не нужен. Клиент не платит.</p>
+<p class="lede">ИНН не нужен. Оплата не подключена, деньги не списываются.</p>
 <% if (errors.form) { %><p class="banner is-error" role="alert"><%= errors.form %></p><% } %>
 <form method="post" action="/register" class="stack">
   <%- include('partials/csrf') %>
   <fieldset>
     <legend>Кто вы</legend>
-    <label class="choice"><input type="radio" name="role" value="client" <%= values.role === 'client' ? 'checked' : '' %>> Клиент — заявка</label>
-    <label class="choice"><input type="radio" name="role" value="foreman" <%= values.role === 'foreman' ? 'checked' : '' %>> Прораб — квартира</label>
-    <label class="choice"><input type="radio" name="role" value="master" <%= values.role === 'master' ? 'checked' : '' %>> Мастер — выезд</label>
+    <label class="choice"><input type="radio" name="role" value="foreman" <%= values.role === 'foreman' ? 'checked' : '' %>> Прораб — даёт задачи</label>
+    <label class="choice"><input type="radio" name="role" value="master" <%= values.role === 'master' ? 'checked' : '' %>> Мастер — откликается</label>
     <% if (errors.role) { %><p class="field-error" role="alert"><%= errors.role %></p><% } %>
   </fieldset>
   <div class="specialty field">

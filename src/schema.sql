@@ -96,6 +96,29 @@ CREATE TABLE IF NOT EXISTS offers (
   CONSTRAINT offers_source CHECK (request_id IS NOT NULL OR object_id IS NOT NULL)
 );
 
+CREATE TABLE IF NOT EXISTS tasks (
+  id SERIAL PRIMARY KEY,
+  foreman_id INTEGER NOT NULL REFERENCES users (id),
+  specialty TEXT NOT NULL CHECK (specialty IN ('plumber', 'electrician', 'washer')),
+  address TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS tasks_foreman_idx ON tasks (foreman_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS tasks_specialty_idx ON tasks (specialty, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS task_responses (
+  id SERIAL PRIMARY KEY,
+  task_id INTEGER NOT NULL REFERENCES tasks (id) ON DELETE CASCADE,
+  master_id INTEGER NOT NULL REFERENCES users (id),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (task_id, master_id)
+);
+
+CREATE INDEX IF NOT EXISTS task_responses_task_idx ON task_responses (task_id, created_at);
+CREATE INDEX IF NOT EXISTS task_responses_master_idx ON task_responses (master_id, created_at DESC);
+
 CREATE INDEX IF NOT EXISTS offers_open_idx ON offers (specialty, status, created_at DESC);
 CREATE INDEX IF NOT EXISTS offers_master_idx ON offers (master_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS offers_object_idx ON offers (object_id);

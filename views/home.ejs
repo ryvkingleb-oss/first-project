@@ -1,95 +1,47 @@
 <%- include('partials/head', { title, home: true }) %>
 <section class="home-hero">
   <div class="home-hero-copy">
-    <h1>Ремонт в одном наряде</h1>
-    <p class="home-lead">Клиент оставляет заявку, прораб ведёт квартиру, мастер берёт вызов.</p>
+    <h1>Задача и отклик</h1>
+    <p class="home-lead">Прораб описывает работу. Мастер своей специальности откликается.</p>
+  </div>
+</section>
+
+<section class="home-tiles" aria-label="Кто вы">
+  <article class="home-tile home-tile-foreman">
+    <p class="kicker">Прораб</p>
+    <h2>Я прораб</h2>
+    <p>Ищете мастера и даёте задачу: специальность, адрес и что сделать. Потом видите, кто откликнулся.</p>
+    <p class="home-price"><span class="num"><%= formatMoney(PRICES.objectRub) %></span> <span class="home-unit">за объект</span></p>
     <div class="home-actions">
-      <a class="btn" href="/register">Оставить заявку</a>
+      <a class="btn" href="/register?role=foreman">Регистрация</a>
       <a class="btn secondary" href="/login">Войти</a>
     </div>
-  </div>
-  <div class="home-hero-art" aria-hidden="true">
-    <span class="home-mark home-mark-request"></span>
-    <span class="home-mark home-mark-object"></span>
-    <span class="home-mark home-mark-master"></span>
-  </div>
-</section>
-
-<section class="home-how" aria-labelledby="how-title">
-  <h2 id="how-title">Как устроено</h2>
-  <ol>
-    <li>
-      <span class="home-mark home-mark-request" aria-hidden="true"></span>
-      <div>
-        <h3>Заявка</h3>
-        <p>Клиент пишет адрес и задачу.</p>
-      </div>
-    </li>
-    <li>
-      <span class="home-mark home-mark-object" aria-hidden="true"></span>
-      <div>
-        <h3>Объект</h3>
-        <p>Прораб ведёт квартиру: этапы, долг, фото.</p>
-      </div>
-    </li>
-    <li>
-      <span class="home-mark home-mark-master" aria-hidden="true"></span>
-      <div>
-        <h3>Мастер</h3>
-        <p>Берёт вызов своей специальности.</p>
-      </div>
-    </li>
-  </ol>
-</section>
-
-<section class="home-who" aria-labelledby="who-title">
-  <h2 id="who-title">Кому</h2>
-  <div class="home-roles">
-    <article class="home-role home-role-client">
-      <div class="home-role-art" aria-hidden="true"><span class="home-mark home-mark-request"></span></div>
-      <div class="home-role-copy">
-        <h3>Клиент</h3>
-        <p class="home-out">Заявка и статус.</p>
-        <p class="home-price"><span class="num">0 ₽</span></p>
-      </div>
-      <a class="btn" href="/register?role=client">Оставить заявку</a>
-    </article>
-    <article class="home-role home-role-foreman">
-      <div class="home-role-art" aria-hidden="true"><span class="home-mark home-mark-object"></span></div>
-      <div class="home-role-copy">
-        <h3>Прораб</h3>
-        <p class="home-out">Квартира: этапы, долг, фото.</p>
-        <p class="home-price"><span class="num"><%= formatMoney(PRICES.objectRub) %></span> <span class="home-unit">за квартиру</span></p>
-      </div>
-      <a class="btn secondary" href="/register?role=foreman">Вести квартиру</a>
-    </article>
-    <article class="home-role home-role-master">
-      <div class="home-role-art" aria-hidden="true"><span class="home-mark home-mark-master"></span></div>
-      <div class="home-role-copy">
-        <h3>Мастер</h3>
-        <p class="home-out">Входящие вызовы.</p>
-        <p class="home-price"><span class="num"><%= formatMoney(PRICES.masterMonthRub) %></span> <span class="home-unit">в месяц</span></p>
-      </div>
-      <a class="btn secondary" href="/register?role=master">Брать вызовы</a>
-    </article>
-  </div>
+  </article>
+  <article class="home-tile home-tile-master">
+    <p class="kicker">Мастер</p>
+    <h2>Я мастер</h2>
+    <p>Видите открытые задачи своей специальности и откликаетесь. Взятые задачи остаются в кабинете.</p>
+    <p class="home-price"><span class="num"><%= formatMoney(PRICES.masterMonthRub) %></span> <span class="home-unit">в месяц за входящие</span></p>
+    <div class="home-actions">
+      <a class="btn" href="/register?role=master">Регистрация</a>
+      <a class="btn secondary" href="/login">Войти</a>
+    </div>
+  </article>
 </section>
 
 <section class="home-trust" aria-labelledby="trust-title">
   <h2 id="trust-title">Деньги не списываются.</h2>
-  <p>Оплата не подключена. 0 ₽, <%= formatMoney(PRICES.objectRub) %> и <%= formatMoney(PRICES.masterMonthRub) %> — это цены на экране, не чек.</p>
+  <p>Оплата не подключена. <%= formatMoney(PRICES.objectRub) %> за объект и <%= formatMoney(PRICES.masterMonthRub) %> в месяц — это цены на экране, не чек.</p>
 </section>
 
 <section class="home-close" id="demo" aria-labelledby="demo-title">
   <h2 id="demo-title">Демо-кабинеты</h2>
   <p class="home-pass">Пароль <strong class="num">demo1234</strong></p>
   <ul class="home-people">
-    <li><a href="/login?phone=79001111111"><span class="home-person-role">Клиент</span><span class="home-person-name">Анна Соколова</span><span class="home-person-phone num">79001111111</span></a></li>
     <li><a href="/login?phone=79002222222"><span class="home-person-role">Прораб</span><span class="home-person-name">Игорь Павлов</span><span class="home-person-phone num">79002222222</span></a></li>
     <li><a href="/login?phone=79003333333"><span class="home-person-role">Сантехник</span><span class="home-person-name">Сергей Ким</span><span class="home-person-phone num">79003333333</span></a></li>
     <li><a href="/login?phone=79004444444"><span class="home-person-role">Электрик</span><span class="home-person-name">Павел Орлов</span><span class="home-person-phone num">79004444444</span></a></li>
     <li><a href="/login?phone=79005555555"><span class="home-person-role">Стиральные машины</span><span class="home-person-name">Марина Волкова</span><span class="home-person-phone num">79005555555</span></a></li>
   </ul>
-  <p class="home-actions"><a class="btn" href="/login">Войти</a></p>
 </section>
 <%- include('partials/foot') %>

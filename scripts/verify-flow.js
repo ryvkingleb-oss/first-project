@@ -112,167 +112,105 @@ async function main() {
   assert(missing.status === 404, 'unknown page status');
   assert((await missing.text()).includes('Такой страницы нет'), 'unknown page copy');
 
-  const client = await register('client', 'Клиент Проверка');
+  const landingNoClient = !landingHtml.includes('Анна')
+    && !/(?<!\d)0\s*₽/.test(landingHtml)
+    && !/клиент/i.test(landingHtml)
+    && !landingHtml.includes('value="client"');
+  assert(landingNoClient, 'landing has no client');
+  assert(landingHtml.includes('Я прораб'), 'landing foreman tile');
+  assert(landingHtml.includes('Я мастер'), 'landing master tile');
+
+  const regJar = jar();
+  const reg = await page(regJar, '/register?role=client');
+  assert(!reg.body.includes('value="client"'), 'register form has no client');
+  const rejected = await page(regJar, '/register', {
+    method: 'POST',
+    body: new URLSearchParams({
+      _csrf: csrfOf(reg.body),
+      role: 'client',
+      full_name: 'Клиент Проверка',
+      phone: '+7 900 111-22-33',
+      password: 'parol-naryad-1',
+    }),
+  });
+  assert(rejected.body.includes('прораб или мастер'), 'client registration refused');
+
   const foreman = await register('foreman', 'Прораб Проверка');
   const master = await register('master', 'Мастер Проверка', 'plumber');
   const locked = await register('master', 'Мастер Закрытый', 'plumber');
 
-  const forbidden = await page(client.client, '/foreman');
-  assert(forbidden.res.status === 403, 'client cannot open foreman cabinet');
+  const forbidden = await page(foreman.client, '/master');
+  assert(forbidden.res.status === 403, 'foreman cannot open master cabinet');
 
-  const form = await page(client.client, '/client/requests/new');
-  const empty = await page(client.client, '/client/requests', {
+  const form = await page(foreman.client, '/foreman/tasks/new');
+  assert(form.body.includes('690'), 'task form shows 690');
+  assert(form.body.includes('Деньги не списываются'), 'task form says money is not taken');
+  const refused = await page(foreman.client, '/foreman/tasks', {
     method: 'POST',
     body: new URLSearchParams({
       _csrf: csrfOf(form.body),
-      kind: 'apartment',
-      address: 'дом',
-      description: 'коротко',
-    }),
-  });
-  assert(empty.body.includes('Укажите адрес'), 'address validation');
-
-  const created = await page(client.client, '/client/requests', {
-    method: 'POST',
-    body: new URLSearchParams({
-      _csrf: csrfOf(empty.body),
-      kind: 'apartment',
-      address,
-      description: 'Нужен ремонт ванной и кухни, смеситель течёт второй месяц.',
-    }),
-  });
-  const requestMatch = created.url.match(/\/client\/requests\/(\d+)/);
-  assert(requestMatch, 'client request created');
-  const requestId = requestMatch[1];
-  assert(created.body.includes(address), 'client sees address');
-  assert(created.body.includes('Новая'), 'client sees new status');
-
-  const paywall = await page(foreman.client, `/foreman/objects/new?request=${requestId}`);
-  assert(paywall.body.includes('690'), 'paywall shows 690');
-  assert(paywall.body.includes('Деньги не списываются'), 'paywall says money is not taken');
-  assert(paywall.body.includes('Открыть объект без оплаты'), 'paywall button is honest');
-
-  const refused = await page(foreman.client, '/foreman/objects', {
-    method: 'POST',
-    body: new URLSearchParams({
-      _csrf: csrfOf(paywall.body),
-      request_id: requestId,
-      address,
-      client_name: 'Клиент Проверка',
-      client_phone: pretty(client.phone),
-    }),
-  });
-  assert(refused.body.includes('без оплаты'), 'object blocked without unpaid confirmation');
-  assert(!refused.url.includes('/foreman/objects/'), 'refused create stays on paywall');
-
-  const opened = await page(foreman.client, '/foreman/objects', {
-    method: 'POST',
-    body: new URLSearchParams({
-      _csrf: csrfOf(refused.body),
-      request_id: requestId,
-      address,
-      client_name: 'Клиент Проверка',
-      client_phone: pretty(client.phone),
-      confirm_unpaid: '1',
-    }),
-  });
-  const objectMatch = opened.url.match(/\/foreman\/objects\/(\d+)/);
-  assert(objectMatch, 'object created');
-  const objectId = objectMatch[1];
-  assert(opened.body.includes('Деньги не списаны'), 'object banner says money was not taken');
-  assert(opened.body.includes('Клиент должен'), 'debt label');
-
-  const withStage = await page(foreman.client, `/foreman/objects/${objectId}/stages`, {
-    method: 'POST',
-    body: new URLSearchParams({ _csrf: csrfOf(opened.body), title: stage }),
-  });
-  assert(withStage.body.includes(stage), 'stage saved');
-
-  const withPurchase = await page(foreman.client, `/foreman/objects/${objectId}/purchases`, {
-    method: 'POST',
-    body: new URLSearchParams({
-      _csrf: csrfOf(withStage.body),
-      title: purchase,
-      amount_rub: '1500',
-      charged_to_client: '1',
-    }),
-  });
-  assert(withPurchase.body.includes(purchase), 'purchase saved');
-  assert(withPurchase.body.includes('1'), 'debt amount visible');
-  assert(/1[\s\u00a0\u202f]?500\s?₽/.test(withPurchase.body), 'debt formatted in rubles');
-
-  const masterPrice = await page(master.client, '/master/subscription');
-  assert(masterPrice.body.includes('490'), 'master price 490');
-  assert(masterPrice.body.includes('Деньги не списываются'), 'master paywall is honest');
-  const masterHomeBefore = await page(master.client, '/master');
-  assert(!masterHomeBefore.body.includes(address), 'unopened master does not see the job');
-  const lockedHome = await page(locked.client, '/master');
-  assert(!lockedHome.body.includes(address), 'locked master does not see the job');
-
-  const openedOrders = await page(master.client, '/master/subscription/open', {
-    method: 'POST',
-    body: new URLSearchParams({ _csrf: csrfOf(masterPrice.body), confirm_unpaid: '1' }),
-  });
-  assert(openedOrders.body.includes('Деньги не списаны'), 'master cabinet keeps unpaid notice');
-  assert(!openedOrders.body.includes(address), 'offer not created yet');
-
-  const accepting = await page(master.client, '/master/accepting', {
-    method: 'POST',
-    body: new URLSearchParams({ _csrf: csrfOf(openedOrders.body), accepting_orders: '1' }),
-  });
-  assert(accepting.body.includes('Сейчас вы принимаете заказы'), 'master accepts orders toggle');
-
-  const offered = await page(foreman.client, `/foreman/objects/${objectId}/offers`, {
-    method: 'POST',
-    body: new URLSearchParams({
-      _csrf: csrfOf(withPurchase.body),
       specialty: 'plumber',
+      address,
       summary,
     }),
   });
-  assert(offered.body.includes(summary), 'foreman sees the offer');
+  assert(refused.body.includes('не списываются'), 'task blocked without unpaid confirmation');
+  assert(!/\/foreman\/tasks\/\d+/.test(refused.url), 'refused task stays on the form');
 
-  const incoming = await page(master.client, '/master');
-  assert(incoming.body.includes(address), 'subscribed master sees the offer');
-  const stillLocked = await page(locked.client, '/master');
-  assert(!stillLocked.body.includes(address), 'unsubscribed master still does not see the offer');
-
-  const offerPage = await page(master.client, incoming.body.match(/href="(\/master\/offers\/\d+)"/)[1]);
-  assert(offerPage.body.includes('Принять заказ'), 'accept button');
-  const accepted = await page(master.client, offerPage.url.replace(base, '') + '/accept', {
+  const created = await page(foreman.client, '/foreman/tasks', {
     method: 'POST',
-    body: new URLSearchParams({ _csrf: csrfOf(offerPage.body) }),
+    body: new URLSearchParams({
+      _csrf: csrfOf(refused.body),
+      specialty: 'plumber',
+      address,
+      summary,
+      confirm_unpaid: '1',
+    }),
   });
-  assert(accepted.body.includes('Принят'), 'master sees accepted');
-  assert(accepted.body.includes('Мастер Проверка'), 'acceptance note names the master');
+  const taskMatch = created.url.match(/\/foreman\/tasks\/(\d+)/);
+  assert(taskMatch, 'task created');
+  const taskId = taskMatch[1];
+  assert(created.body.includes('Деньги не списаны'), 'task says money was not taken');
+  assert(created.body.includes(address), 'foreman sees the address');
+  assert(created.body.includes('Откликов пока нет'), 'foreman sees an empty response list');
 
-  const clientView = await page(client.client, `/client/requests/${requestId}`);
-  assert(clientView.body.includes('Мастер Проверка'), 'client sees the master');
-  assert(clientView.body.includes('Принят'), 'client sees accepted call');
-  assert(clientView.body.includes(address), 'client still sees address');
-
-  const foremanView = await page(foreman.client, `/foreman/objects/${objectId}`);
-  assert(foremanView.body.includes('Мастер Проверка'), 'foreman sees who accepted');
-
-  const png = Buffer.from(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-    'base64'
-  );
-  const upload = new FormData();
-  upload.set('_csrf', csrfOf(foremanView.body));
-  upload.set('room', 'bathroom');
-  upload.set('photo', new Blob([png], { type: 'image/png' }), 'bath.png');
-  const uploaded = await page(foreman.client, `/foreman/objects/${objectId}/photos`, {
+  const hidden = await page(master.client, '/master');
+  assert(!hidden.body.includes(address), 'unopened master does not see the task');
+  const pay = await page(master.client, '/master/subscription');
+  assert(pay.body.includes('490'), 'master price 490');
+  assert(pay.body.includes('Деньги не списываются'), 'master paywall is honest');
+  const opened = await page(master.client, '/master/subscription/open', {
     method: 'POST',
-    body: upload,
+    body: new URLSearchParams({
+      _csrf: csrfOf(pay.body),
+      confirm_unpaid: '1',
+    }),
   });
-  const photo = uploaded.body.match(/src="(\/photos\/\d+)"/);
-  assert(photo, 'photo rendered');
-  const image = await foreman.client.fetch(new URL(photo[1], base));
-  assert(image.status === 200, 'photo file served');
-  assert((image.headers.get('content-type') || '').includes('image'), 'photo content type');
-  const stranger = await client.client.fetch(new URL(photo[1], base));
-  assert(stranger.status === 404, 'client cannot download foreman photo');
+  assert(opened.body.includes('Деньги не списаны'), 'master cabinet keeps unpaid notice');
+  const accepting = await page(master.client, '/master/accepting', {
+    method: 'POST',
+    body: new URLSearchParams({
+      _csrf: csrfOf(opened.body),
+      accepting_orders: '1',
+    }),
+  });
+  assert(accepting.body.includes(address), 'master sees the open task');
+
+  const lockedHome = await page(locked.client, '/master');
+  assert(!lockedHome.body.includes(address), 'locked master does not see the task');
+
+  const taskPage = await page(master.client, `/master/tasks/${taskId}`);
+  assert(taskPage.body.includes('Откликнуться'), 'respond button');
+  const responded = await page(master.client, `/master/tasks/${taskId}/respond`, {
+    method: 'POST',
+    body: new URLSearchParams({ _csrf: csrfOf(taskPage.body) }),
+  });
+  assert(responded.body.includes('Вы откликнулись'), 'master sees the response');
+  const mine = await page(master.client, '/master');
+  assert(mine.body.includes(address), 'master sees the task he took');
+
+  const seen = await page(foreman.client, `/foreman/tasks/${taskId}`);
+  assert(seen.body.includes('Мастер Проверка'), 'foreman sees who responded');
 
   console.log('FLOW OK');
 }

@@ -1,50 +1,28 @@
 <%- include('../partials/head', { title, board: true }) %>
 <div class="page-head">
   <div>
-    <h1>Объекты</h1>
-    <p class="lede"><span class="num"><%= formatMoney(price) %></span> за квартиру. Деньги не списываются.</p>
+    <h1>Задачи</h1>
+    <p class="lede"><span class="num"><%= formatMoney(price) %></span> за объект. Деньги не списываются.</p>
   </div>
-  <% if (!openRequests.length && !objects.length) { %>
-    <a class="btn" href="/foreman/objects/new">Новый объект</a>
-  <% } else { %>
-    <a class="text-btn" href="/foreman/objects/new">Новый объект</a>
+  <% if (tasks.length) { %>
+    <a class="btn" href="/foreman/tasks/new">Дать задачу</a>
   <% } %>
 </div>
-<% if (openRequests.length) { %><p class="next-note">Дальше: возьмите заявку.</p><% } %>
-
-<section class="sec">
-  <h2>Заявки</h2>
-  <% if (!openRequests.length) { %>
-    <p class="empty">Свободных заявок нет.</p>
-  <% } else { %>
-    <div class="rows">
-      <% openRequests.forEach(function (item) { %>
-        <a class="row" href="/foreman/objects/new?request=<%= item.id %>">
-          <span class="row-title"><%= item.address %></span>
-          <span class="row-go">Взять</span>
-          <span class="row-meta"><%= item.full_name %> · <%= formatPhone(item.phone) %></span>
-          <span class="row-next"><%= item.description %></span>
-        </a>
-      <% }) %>
-    </div>
-  <% } %>
-</section>
-
-<section class="sec">
-  <h2>Квартиры</h2>
-  <% if (!objects.length) { %>
-    <p class="empty">Квартир нет.<% if (!openRequests.length) { %> Откройте объект.<% } %></p>
-  <% } else { %>
-    <div class="rows">
-      <% objects.forEach(function (item) { %>
-        <a class="row" href="/foreman/objects/<%= item.id %>">
-          <span class="row-title"><%= item.address %></span>
-          <span class="money<%= item.debt > 0 ? ' is-due' : '' %>"><%= item.status === 'done' ? 'Готово' : formatMoney(item.debt) %></span>
-          <span class="row-meta"><%= item.client_name %><% if (item.stage_now && item.stage_now.title) { %> · <%= item.stage_now.title %><% } %></span>
-          <span class="row-next"><% if (item.stage_now && item.stage_now.status) { %><%= STAGE_STATUS[item.stage_now.status] || '' %><% } else { %>Этапа нет<% } %></span>
-        </a>
-      <% }) %>
-    </div>
-  <% } %>
-</section>
+<% if (!tasks.length) { %>
+  <div class="empty">
+    <p>Задач нет. Опишите работу — мастер своей специальности сможет откликнуться.</p>
+    <a class="btn" href="/foreman/tasks/new">Дать задачу</a>
+  </div>
+<% } else { %>
+  <div class="rows">
+    <% tasks.forEach(function (item) { %>
+      <a class="row" href="/foreman/tasks/<%= item.id %>">
+        <span class="row-title"><%= item.address %></span>
+        <span class="row-go"><%= item.responses ? item.responses + ' откл.' : 'Ждёт' %></span>
+        <span class="row-meta"><%= SPECIALTIES[item.specialty] %></span>
+        <span class="row-next"><%= item.summary %></span>
+      </a>
+    <% }) %>
+  </div>
+<% } %>
 <%- include('../partials/foot') %>
