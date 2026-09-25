@@ -972,10 +972,25 @@ a.tel { text-underline-offset: 0.15em; }
 }
 .draw {
   display: block;
-  width: min(100%, 16rem);
+  width: 100%;
   height: auto;
+  aspect-ratio: 6 / 5;
+  min-height: 280px;
+  object-fit: cover;
+  background: #3f6b24;
 }
-.home-tile .draw { width: min(100%, 15rem); margin-bottom: var(--space-4); }
+.draw-master { background: #9a3412; }
+.home-tile,
+.role-choice { overflow: hidden; }
+.home-tile .draw,
+.role-choice .draw {
+  width: calc(100% + var(--space-5) + var(--space-5));
+  max-width: none;
+  height: auto;
+  aspect-ratio: 6 / 5;
+  min-height: 280px;
+  margin: calc(var(--space-5) * -1) calc(var(--space-5) * -1) var(--space-4);
+}
 .role-pick {
   display: grid;
   gap: var(--space-4);
@@ -1005,13 +1020,19 @@ a.tel { text-underline-offset: 0.15em; }
   line-height: 1.1;
 }
 .role-choice p { margin-top: var(--space-3); }
-.role-choice .draw { margin-bottom: var(--space-4); }
 .role-screen {
   display: grid;
   gap: var(--space-5);
   align-items: start;
 }
-.role-figure .draw { width: min(100%, 16rem); }
+.role-figure .draw {
+  width: min(100%, 36rem);
+  max-width: none;
+  height: auto;
+  aspect-ratio: 6 / 5;
+  min-height: 280px;
+  border-radius: var(--radius-panel);
+}
 
 @media (max-width: 799px) {
   .home-actions .btn { width: 100%; }
@@ -1070,10 +1091,6 @@ a.tel { text-underline-offset: 0.15em; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
     gap: var(--space-5);
-  }
-  .role-screen {
-    grid-template-columns: minmax(12rem, 18rem) minmax(0, 28rem);
-    gap: var(--space-6);
   }
   .home-people a { grid-template-columns: 14rem minmax(0, 1fr) auto; }
   .home-person-role {
