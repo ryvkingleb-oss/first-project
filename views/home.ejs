@@ -5,7 +5,7 @@
     <%- include('partials/drawing', { role: 'foreman' }) %>
     <p class="kicker">Прораб</p>
     <h2>Я прораб</h2>
-    <p>Ищете мастера и даёте задачу: специальность, адрес и что сделать. Потом видите, кто откликнулся.</p>
+    <p>В кабинете ведёте объект и предлагаете работу мастеру нужной специальности.</p>
     <p class="home-price"><span class="num"><%= formatMoney(PRICES.objectRub) %></span> <span class="home-unit">за объект</span></p>
     <div class="home-actions">
       <a class="btn" href="/register/foreman">Регистрация</a>
@@ -16,12 +16,48 @@
     <%- include('partials/drawing', { role: 'master' }) %>
     <p class="kicker">Мастер</p>
     <h2>Я мастер</h2>
-    <p>Видите открытые задачи своей специальности и откликаетесь. Взятые задачи остаются в кабинете.</p>
+    <p>Видите предложения от прорабов по своей специальности и откликаетесь в кабинете.</p>
     <p class="home-price"><span class="num"><%= formatMoney(PRICES.masterMonthRub) %></span> <span class="home-unit">в месяц за входящие</span></p>
     <div class="home-actions">
       <a class="btn" href="/register/master">Регистрация</a>
       <a class="btn secondary" href="/login/master">Войти</a>
     </div>
   </article>
+</section>
+
+<section class="home-story" aria-labelledby="story-title">
+  <p class="kicker">Что это</p>
+  <h2 id="story-title">Работа из кабинета, а не из чата</h2>
+  <p class="home-story-lead">Прораб предлагает работу мастеру через админку. Мастер видит задачу своей специальности и отвечает. Всё по объекту — в одном месте, без переписки и таблиц.</p>
+</section>
+
+<section class="home-help" aria-labelledby="help-title">
+  <div class="home-help-head">
+    <p class="kicker">Как помогает</p>
+    <h2 id="help-title">Кабинет под вашу роль</h2>
+  </div>
+  <div class="home-help-grid">
+    <article class="home-help-block home-help-foreman">
+      <p class="kicker">Прорабу</p>
+      <h3>Объект под контролем</h3>
+      <p>Ведёте ремонт квартиры и предлагаете работу мастеру прямо из кабинета.</p>
+      <ul>
+        <li>Этапы работ</li>
+        <li>Закупки</li>
+        <li>Долг заказчика</li>
+        <li>Фото по комнатам</li>
+      </ul>
+    </article>
+    <article class="home-help-block home-help-master">
+      <p class="kicker">Частному мастеру</p>
+      <h3>Заявки и ясность по деньгам</h3>
+      <p>Для клиентов частного мастера и его выездов — порядок без мессенджера.</p>
+      <ul>
+        <li>Заявки</li>
+        <li>Гарантия на работу</li>
+        <li>Кто должен доплатить</li>
+      </ul>
+    </article>
+  </div>
 </section>
 <%- include('partials/foot') %>
