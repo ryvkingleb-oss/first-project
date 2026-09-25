@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Наряд — что делать дальше</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600;700&family=Unbounded:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #e4e9e5;
+      --surface: #f7f9f7;
+      --text: #111814;
+      --muted: #4a554e;
+      --accent: #0c6b54;
+      --warn: #9c3d12;
+      --line: #c8d2cb;
+      --font: "Golos Text", "Segoe UI", sans-serif;
+      --display: Unbounded, "Golos Text", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        linear-gradient(rgba(17,24,20,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17,24,20,.04) 1px, transparent 1px),
+        var(--bg);
+      background-size: 28px 28px, 28px 28px, auto;
+    }
+    .deck { height: 100%; position: relative; overflow: hidden; }
+    .slide {
+      position: absolute; inset: 0;
+      display: none;
+      padding: clamp(1.5rem, 5vw, 4rem);
+      align-content: center;
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+    .slide.on { display: grid; gap: 1.1rem; animation: in .35s ease both; }
+    @keyframes in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .kicker { color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .75rem; }
+    h1, h2 { font-family: var(--display); font-weight: 500; letter-spacing: -.04em; margin: 0; line-height: 1.1; }
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
+    h2 { font-size: clamp(1.5rem, 3.5vw, 2.3rem); }
+    p, li { font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.5; color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 1.2rem; display: grid; gap: .45rem; }
+    .lead { color: var(--text); font-size: clamp(1.1rem, 2.4vw, 1.4rem); max-width: 36rem; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+    }
+    .card.warn { border-left-color: var(--warn); }
+    .card strong { display: block; color: var(--text); margin-bottom: .35rem; font-family: var(--display); font-weight: 500; }
+    .bar {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; padding: .75rem 1.25rem;
+      background: color-mix(in srgb, var(--bg) 90%, white);
+      border-top: 1px solid var(--line);
+      font-size: .9rem; color: var(--muted);
+    }
+    .bar button {
+      min-height: 40px; padding: 0 .9rem; border-radius: 10px;
+      border: 1px solid var(--text); background: var(--text); color: #f4f7f5;
+      font: inherit; font-weight: 600; cursor: pointer;
+    }
+    .bar button.ghost { background: transparent; color: var(--text); }
+    .num { color: var(--accent); font-family: var(--display); font-size: 2.5rem; line-height: 1; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; }
+    th, td { text-align: left; padding: .7rem .85rem; border-top: 1px solid var(--line); vertical-align: top; }
+    th { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-top: 0; background: #eef2ef; }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <section class="slide on">
+      <p class="kicker">Наряд · план</p>
+      <h1>Что делать дальше</h1>
+      <p class="lead">Продукт уже есть. Дальше — оплата, первые платящие клиенты, цифры. Инвесторы — после этого.</p>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Сейчас</p>
+      <h2>Где мы стоим</h2>
+      <div class="grid">
+        <div class="card"><strong>Есть</strong><p>Сайт, кабинеты прораба и мастера, заявки, гарантии, долги</p></div>
+        <div class="card warn"><strong>Нет</strong><p>Живая ЮKassa и реальная выручка</p></div>
+        <div class="card warn"><strong>Рано</strong><p>Идти к фондам без платящих пользователей</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Цель</p>
+      <h2>Ближайшая победа</h2>
+      <p class="num">20</p>
+      <p class="lead">платящих в одном городе: примерно 10 прорабов и 10 мастеров, которые реально пользуются кабинетом.</p>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Порядок</p>
+      <h2>5 шагов</h2>
+      <ul>
+        <li>Подключить ЮKassa (690 ₽ объект / 490 ₽ мес мастеру)</li>
+        <li>Выбрать 1 город и лично привести первых людей</li>
+        <li>2 недели реальной работы в кабинетах</li>
+        <li>Считать: кто заплатил, кто остался, откуда пришёл</li>
+        <li>Собрать питч + демо и только тогда идти к деньгам</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Календарь</p>
+      <h2>По неделям</h2>
+      <div class="grid">
+        <div class="card"><strong>1–2</strong><p>Оплата и короткие инструкции «как начать»</p></div>
+        <div class="card"><strong>3–4</strong><p>Личный набор прорабов и мастеров</p></div>
+        <div class="card"><strong>5–6</strong><p>Смотреть использование, править продукт</p></div>
+        <div class="card"><strong>Дальше</strong><p>Питч к ангелам / акселераторам с цифрами</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Инвесторы</p>
+      <h2>С чем идти</h2>
+      <table>
+        <tr><th>Блок</th><th>Содержание</th></tr>
+        <tr><td>Проблема</td><td>Ремонт в чатах: нет этапов, долгов, гарантий</td></tr>
+        <tr><td>Решение</td><td>«Наряд» — кабинет прораба и мастера</td></tr>
+        <tr><td>Модель</td><td>690 ₽ / объект + 490 ₽ / мес</td></tr>
+        <tr><td>Сейчас</td><td>N платящих, выручка, удержание</td></tr>
+        <tr><td>Запрос</td><td>Сумма и на что именно</td></tr>
+      </table>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Где искать</p>
+      <h2>Куда стучаться</h2>
+      <div class="grid">
+        <div class="card"><strong>Сейчас</strong><p>ФРИИ и акселераторы, бизнес-ангелы, знакомые из ремонта/отделки</p></div>
+        <div class="card warn"><strong>Позже</strong><p>Seed-фонды — когда есть рост выручки. Холодный спам в VC без цифр — нет.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Как писать</p>
+      <h2>Формула сообщения</h2>
+      <p class="lead">«Мы уже берём деньги с прорабов и мастеров в [город]. Вот цифры. Хотим ускорить набор. Есть 15 минут на демо?»</p>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Итог</p>
+      <h1>Сначала выручка — потом инвесторы</h1>
+      <p class="lead">Оплата → 20 платящих в одном городе → цифры → питч. Продукт уже готов к этому шагу.</p>
+    </section>
+  </div>
+
+  <div class="bar">
+    <button class="ghost" type="button" id="prev">Назад</button>
+    <span id="pos">1 / 1</span>
+    <button type="button" id="next">Далее</button>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    let i = 0;
+    const pos = document.getElementById('pos');
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, idx) => s.classList.toggle('on', idx === i));
+      pos.textContent = (i + 1) + ' / ' + slides.length;
+    }
+    document.getElementById('prev').onclick = () => show(i - 1);
+    document.getElementById('next').onclick = () => show(i + 1);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(i - 1); }
+    });
+    show(0);
+  </script>
+</body>
+</html>
