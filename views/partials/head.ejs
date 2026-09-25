@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> — Наряд</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/app.css?v=11">
-  <meta name="theme-color" content="#f7f4ee">
+  <link rel="stylesheet" href="/app.css?v=12">
+  <meta name="theme-color" content="#e4e9e5">
 </head>
-<body>
+<body class="<%= user ? 'role-' + user.role : 'role-guest' %><%= (typeof home !== 'undefined' && home) ? ' page-home' : '' %>">
   <a class="skip" href="#content">К содержанию</a>
   <header class="top">
-    <a class="mark" href="<%= user ? HOME[user.role] : '/' %>">Наряд</a>
+    <a class="mark" href="<%= user ? HOME[user.role] : '/' %>"><span class="mark-stamp" aria-hidden="true"></span><span class="mark-word">Наряд</span></a>
     <% if (user) { %>
       <div class="who">
         <p class="who-role" title="<%= ROLES[user.role] %><% if (user.role === 'master' && user.specialty) { %> · <%= SPECIALTIES[user.specialty] %><% } %> <%= user.full_name %>">
@@ -25,8 +25,8 @@
       </div>
     <% } else { %>
       <nav class="who" aria-label="Вход">
-        <a href="/login">Войти</a>
-        <a href="/register">Регистрация</a>
+        <a class="nav-link" href="/login">Войти</a>
+        <a class="nav-cta" href="/register">Регистрация</a>
       </nav>
     <% } %>
   </header>
