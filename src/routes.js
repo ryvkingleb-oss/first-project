@@ -65,34 +65,50 @@ async function publicHome(req, res) {
   return render(res, 'home', { title: 'Заявки на ремонт' });
 }
 
+function askedRole(req) {
+  const role = req.params.role || '';
+  return role === 'foreman' || role === 'master' ? role : '';
+}
+
+function showLogin(res, role, errors, values) {
+  if (!role) return render(res, 'login-choose', { title: 'Вход', errors });
+  return render(res, 'login-role', {
+    title: role === 'foreman' ? 'Вход прораба' : 'Вход мастера',
+    role,
+    errors,
+    values,
+  });
+}
+
+function showRegister(res, values, errors) {
+  const role = values.role === 'foreman' || values.role === 'master' ? values.role : '';
+  if (!role) return render(res, 'register-choose', { title: 'Регистрация', errors });
+  return render(res, 'register-role', {
+    title: role === 'foreman' ? 'Регистрация прораба' : 'Регистрация мастера',
+    errors,
+    values,
+  });
+}
+
 function loginForm(req, res) {
   if (res.locals.user) return res.redirect(303, homeFor(res.locals.user.role));
-  return render(res, 'login', {
-    title: 'Вход',
-    errors: {},
-    values: { phone: String(req.query.phone || '').trim() },
-  });
+  if (req.params.role && !askedRole(req)) return res.redirect(303, '/login');
+  const role = askedRole(req);
+  return showLogin(res, role, {}, { phone: String(req.query.phone || '').trim() });
 }
 
 async function loginPost(req, res, next) {
   const phone = normalizePhone(req.body.phone);
   const password = String(req.body.password || '');
   const values = { phone: String(req.body.phone || '').trim() };
+  const role = askedRole(req) || (req.body.role === 'foreman' || req.body.role === 'master' ? req.body.role : '');
   const key = loginKey(phone || values.phone, req);
   if (tooManyLogins(key)) {
-    return render(res, 'login', {
-      title: 'Вход',
-      errors: { form: 'Слишком много попыток. Подождите четверть часа.' },
-      values,
-    });
+    return showLogin(res, role, { form: 'Слишком много попыток. Подождите четверть часа.' }, values);
   }
   if (!phone || !password) {
     markLoginFail(key);
-    return render(res, 'login', {
-      title: 'Вход',
-      errors: { form: 'Неверный телефон или пароль.' },
-      values,
-    });
+    return showLogin(res, role, { form: 'Неверный телефон или пароль.' }, values);
   }
   try {
     const { rows } = await pool.query(
@@ -103,11 +119,7 @@ async function loginPost(req, res, next) {
     const ok = user && (await checkPassword(password, user.password_hash));
     if (!ok) {
       markLoginFail(key);
-      return render(res, 'login', {
-        title: 'Вход',
-        errors: { form: 'Неверный телефон или пароль.' },
-        values,
-      });
+      return showLogin(res, role, { form: 'Неверный телефон или пароль.' }, values);
     }
     clearLoginFail(key);
     return startSession(req, res, next, user.id, homeFor(user.role));
@@ -118,12 +130,13 @@ async function loginPost(req, res, next) {
 
 function registerForm(req, res) {
   if (res.locals.user) return res.redirect(303, homeFor(res.locals.user.role));
-  const role = req.query.role === 'master' ? 'master' : 'foreman';
-  return render(res, 'register', {
-    title: 'Регистрация',
-    errors: {},
-    values: { full_name: '', phone: '', role, specialty: 'plumber' },
-  });
+  if (!req.params.role && (req.query.role === 'foreman' || req.query.role === 'master')) {
+    return res.redirect(303, `/register/${req.query.role}`);
+  }
+  if (req.params.role && !askedRole(req)) return res.redirect(303, '/register');
+  const role = askedRole(req);
+  if (!role) return render(res, 'register-choose', { title: 'Регистрация', errors: {} });
+  return showRegister(res, { full_name: '', phone: '', role, specialty: 'plumber' }, {});
 }
 
 function readAccount(body) {
@@ -155,7 +168,7 @@ function readAccount(body) {
 async function registerPost(req, res, next) {
   const parsed = readAccount(req.body);
   if (Object.keys(parsed.errors).length) {
-    return render(res, 'register', { title: 'Регистрация', errors: parsed.errors, values: parsed.values });
+    return showRegister(res, parsed.values, parsed.errors);
   }
   try {
     const passwordHash = await hashPassword(parsed.data.password);
@@ -169,11 +182,7 @@ async function registerPost(req, res, next) {
     return startSession(req, res, next, user.id, homeFor(user.role));
   } catch (error) {
     if (error.code === '23505') {
-      return render(res, 'register', {
-        title: 'Регистрация',
-        errors: { phone: 'Этот телефон уже зарегистрирован.' },
-        values: parsed.values,
-      });
+      return showRegister(res, parsed.values, { phone: 'Этот телефон уже зарегистрирован.' });
     }
     return next(error);
   }
@@ -1258,9 +1267,13 @@ async function masterJobStatus(req, res, next) {
 function mount(app) {
   app.get('/', publicHome);
   app.get('/login', loginForm);
+  app.get('/login/:role', loginForm);
   app.post('/login', loginPost);
+  app.post('/login/:role', loginPost);
   app.get('/register', registerForm);
+  app.get('/register/:role', registerForm);
   app.post('/register', registerPost);
+  app.post('/register/:role', registerPost);
   app.post('/logout', logout);
 
   app.get('/client', requireRole('client'), clientList);

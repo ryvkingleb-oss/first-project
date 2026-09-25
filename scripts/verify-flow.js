@@ -68,7 +68,7 @@ function nextPhone() {
 async function register(role, name, specialty) {
   const client = jar();
   const phone = nextPhone();
-  const first = await page(client, '/register');
+  const first = await page(client, `/register/${role}`);
   assert(first.res.status === 200, `register form ${role}`);
   const body = new URLSearchParams({
     _csrf: csrfOf(first.body),
@@ -78,7 +78,7 @@ async function register(role, name, specialty) {
     phone: pretty(phone),
     password: 'parol-naryad-1',
   });
-  const done = await page(client, '/register', { method: 'POST', body });
+  const done = await page(client, `/register/${role}`, { method: 'POST', body });
   assert(done.res.status === 200, `registered ${role} landed`);
   assert(done.body.includes(name), `cabinet shows ${name}`);
   return { client, phone, name };
@@ -97,8 +97,8 @@ async function main() {
   assert(!/оплата прошла|успешно оплачен/i.test(landingHtml), 'landing does not fake a charge');
 
   const anon = jar();
-  const bad = await page(anon, '/login');
-  const badPost = await page(anon, '/login', {
+  const bad = await page(anon, '/login/foreman');
+  const badPost = await page(anon, '/login/foreman', {
     method: 'POST',
     body: new URLSearchParams({
       _csrf: csrfOf(bad.body),
@@ -119,14 +119,24 @@ async function main() {
   assert(landingNoClient, 'landing has no client');
   assert(landingHtml.includes('Я прораб'), 'landing foreman tile');
   assert(landingHtml.includes('Я мастер'), 'landing master tile');
+  assert(landingHtml.includes('/drawings/foreman.svg') && landingHtml.includes('/drawings/master.svg'), 'landing has two drawings');
+  assert(landingHtml.includes('/login/foreman') && landingHtml.includes('/login/master'), 'landing login paths are separate');
 
   const regJar = jar();
   const reg = await page(regJar, '/register?role=client');
   assert(!reg.body.includes('value="client"'), 'register form has no client');
+  assert(reg.body.includes('/register/foreman') && reg.body.includes('/register/master'), 'register chooser has two paths');
+  const foremanReg = await page(regJar, '/register/foreman');
+  assert(!foremanReg.body.includes('name="specialty"'), 'foreman registration has no specialty');
+  assert(foremanReg.body.includes('/drawings/foreman.svg'), 'foreman registration has his drawing');
+  assert(!foremanReg.body.includes('/drawings/master.svg'), 'foreman registration has no master drawing');
+  const masterReg = await page(jar(), '/register/master');
+  assert(masterReg.body.includes('name="specialty"'), 'master registration has specialty');
+  assert(masterReg.body.includes('/drawings/master.svg'), 'master registration has his drawing');
   const rejected = await page(regJar, '/register', {
     method: 'POST',
     body: new URLSearchParams({
-      _csrf: csrfOf(reg.body),
+      _csrf: csrfOf(foremanReg.body),
       role: 'client',
       full_name: 'Клиент Проверка',
       phone: '+7 900 111-22-33',

@@ -8,23 +8,25 @@
 
 <section class="home-tiles" aria-label="Кто вы">
   <article class="home-tile home-tile-foreman">
+    <%- include('partials/drawing', { role: 'foreman' }) %>
     <p class="kicker">Прораб</p>
     <h2>Я прораб</h2>
     <p>Ищете мастера и даёте задачу: специальность, адрес и что сделать. Потом видите, кто откликнулся.</p>
     <p class="home-price"><span class="num"><%= formatMoney(PRICES.objectRub) %></span> <span class="home-unit">за объект</span></p>
     <div class="home-actions">
-      <a class="btn" href="/register?role=foreman">Регистрация</a>
-      <a class="btn secondary" href="/login">Войти</a>
+      <a class="btn" href="/register/foreman">Регистрация</a>
+      <a class="btn secondary" href="/login/foreman">Войти</a>
     </div>
   </article>
   <article class="home-tile home-tile-master">
+    <%- include('partials/drawing', { role: 'master' }) %>
     <p class="kicker">Мастер</p>
     <h2>Я мастер</h2>
     <p>Видите открытые задачи своей специальности и откликаетесь. Взятые задачи остаются в кабинете.</p>
     <p class="home-price"><span class="num"><%= formatMoney(PRICES.masterMonthRub) %></span> <span class="home-unit">в месяц за входящие</span></p>
     <div class="home-actions">
-      <a class="btn" href="/register?role=master">Регистрация</a>
-      <a class="btn secondary" href="/login">Войти</a>
+      <a class="btn" href="/register/master">Регистрация</a>
+      <a class="btn secondary" href="/login/master">Войти</a>
     </div>
   </article>
 </section>
@@ -38,10 +40,10 @@
   <h2 id="demo-title">Демо-кабинеты</h2>
   <p class="home-pass">Пароль <strong class="num">demo1234</strong></p>
   <ul class="home-people">
-    <li><a href="/login?phone=79002222222"><span class="home-person-role">Прораб</span><span class="home-person-name">Игорь Павлов</span><span class="home-person-phone num">79002222222</span></a></li>
-    <li><a href="/login?phone=79003333333"><span class="home-person-role">Сантехник</span><span class="home-person-name">Сергей Ким</span><span class="home-person-phone num">79003333333</span></a></li>
-    <li><a href="/login?phone=79004444444"><span class="home-person-role">Электрик</span><span class="home-person-name">Павел Орлов</span><span class="home-person-phone num">79004444444</span></a></li>
-    <li><a href="/login?phone=79005555555"><span class="home-person-role">Стиральные машины</span><span class="home-person-name">Марина Волкова</span><span class="home-person-phone num">79005555555</span></a></li>
+    <li><a href="/login/foreman?phone=79002222222"><span class="home-person-role">Прораб</span><span class="home-person-name">Игорь Павлов</span><span class="home-person-phone num">79002222222</span></a></li>
+    <li><a href="/login/master?phone=79003333333"><span class="home-person-role">Сантехник</span><span class="home-person-name">Сергей Ким</span><span class="home-person-phone num">79003333333</span></a></li>
+    <li><a href="/login/master?phone=79004444444"><span class="home-person-role">Электрик</span><span class="home-person-name">Павел Орлов</span><span class="home-person-phone num">79004444444</span></a></li>
+    <li><a href="/login/master?phone=79005555555"><span class="home-person-role">Стиральные машины</span><span class="home-person-name">Марина Волкова</span><span class="home-person-phone num">79005555555</span></a></li>
   </ul>
 </section>
 <%- include('partials/foot') %>

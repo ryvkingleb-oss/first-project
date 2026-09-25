@@ -970,6 +970,48 @@ a.tel { text-underline-offset: 0.15em; }
   padding-top: var(--space-5);
   width: 100%;
 }
+.draw {
+  display: block;
+  width: min(100%, 16rem);
+  height: auto;
+}
+.home-tile .draw { width: min(100%, 15rem); margin-bottom: var(--space-4); }
+.role-pick {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+.role-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: var(--space-5);
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--tile, var(--text));
+  border-radius: var(--radius-panel);
+}
+.role-choice-foreman { --tile: var(--ok); }
+.role-choice-master { --tile: var(--warn); }
+.role-choice:hover { background: var(--fill); }
+.role-choice:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.role-choice h2 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: var(--text-2xl);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.role-choice p { margin-top: var(--space-3); }
+.role-choice .draw { margin-bottom: var(--space-4); }
+.role-screen {
+  display: grid;
+  gap: var(--space-5);
+  align-items: start;
+}
+.role-figure .draw { width: min(100%, 16rem); }
 
 @media (max-width: 799px) {
   .home-actions .btn { width: 100%; }
@@ -1023,6 +1065,15 @@ a.tel { text-underline-offset: 0.15em; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
     gap: var(--space-5);
+  }
+  .role-pick {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: var(--space-5);
+  }
+  .role-screen {
+    grid-template-columns: minmax(12rem, 18rem) minmax(0, 28rem);
+    gap: var(--space-6);
   }
   .home-people a { grid-template-columns: 14rem minmax(0, 1fr) auto; }
   .home-person-role {

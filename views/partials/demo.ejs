@@ -1,26 +1,24 @@
+<%
+  var people = [
+    { role: 'foreman', href: '/login/foreman?phone=79002222222', label: 'Прораб', name: 'Игорь Павлов', phone: '79002222222' },
+    { role: 'master', href: '/login/master?phone=79003333333', label: 'Сантехник', name: 'Сергей Ким', phone: '79003333333' },
+    { role: 'master', href: '/login/master?phone=79004444444', label: 'Электрик', name: 'Павел Орлов', phone: '79004444444' },
+    { role: 'master', href: '/login/master?phone=79005555555', label: 'Стиральные машины', name: 'Марина Волкова', phone: '79005555555' },
+  ];
+  if (typeof demoRole !== 'undefined' && demoRole) {
+    people = people.filter(function (person) { return person.role === demoRole; });
+  }
+%>
 <section class="demo" aria-labelledby="demo-title">
   <h2 id="demo-title">Демо</h2>
   <p class="demo-pass">Пароль <strong class="num">demo1234</strong></p>
   <div class="demo-list">
-    <a class="demo-row" href="/login?phone=79002222222">
-      <span class="demo-role">Прораб</span>
-      <span class="demo-name">Игорь Павлов</span>
-      <span class="demo-phone num">79002222222</span>
-    </a>
-    <a class="demo-row" href="/login?phone=79003333333">
-      <span class="demo-role">Сантехник</span>
-      <span class="demo-name">Сергей Ким</span>
-      <span class="demo-phone num">79003333333</span>
-    </a>
-    <a class="demo-row" href="/login?phone=79004444444">
-      <span class="demo-role">Электрик</span>
-      <span class="demo-name">Павел Орлов</span>
-      <span class="demo-phone num">79004444444</span>
-    </a>
-    <a class="demo-row" href="/login?phone=79005555555">
-      <span class="demo-role">Стиральные машины</span>
-      <span class="demo-name">Марина Волкова</span>
-      <span class="demo-phone num">79005555555</span>
-    </a>
+    <% people.forEach(function (person) { %>
+      <a class="demo-row" href="<%= person.href %>">
+        <span class="demo-role"><%= person.label %></span>
+        <span class="demo-name"><%= person.name %></span>
+        <span class="demo-phone num"><%= person.phone %></span>
+      </a>
+    <% }) %>
   </div>
 </section>
