@@ -119,7 +119,7 @@ async function main() {
   assert(landingNoClient, 'landing has no client');
   assert(landingHtml.includes('Я прораб'), 'landing foreman tile');
   assert(landingHtml.includes('Я мастер'), 'landing master tile');
-  assert(landingHtml.includes('/drawings/foreman.svg') && landingHtml.includes('/drawings/master.svg'), 'landing has two drawings');
+  assert(landingHtml.includes('/drawings/foreman.webp') && landingHtml.includes('/drawings/master.webp'), 'landing has two drawings');
   assert(landingHtml.includes('/login/foreman') && landingHtml.includes('/login/master'), 'landing login paths are separate');
 
   const regJar = jar();
@@ -128,11 +128,11 @@ async function main() {
   assert(reg.body.includes('/register/foreman') && reg.body.includes('/register/master'), 'register chooser has two paths');
   const foremanReg = await page(regJar, '/register/foreman');
   assert(!foremanReg.body.includes('name="specialty"'), 'foreman registration has no specialty');
-  assert(foremanReg.body.includes('/drawings/foreman.svg'), 'foreman registration has his drawing');
-  assert(!foremanReg.body.includes('/drawings/master.svg'), 'foreman registration has no master drawing');
+  assert(foremanReg.body.includes('/drawings/foreman.webp'), 'foreman registration has his drawing');
+  assert(!foremanReg.body.includes('/drawings/master.webp'), 'foreman registration has no master drawing');
   const masterReg = await page(jar(), '/register/master');
   assert(masterReg.body.includes('name="specialty"'), 'master registration has specialty');
-  assert(masterReg.body.includes('/drawings/master.svg'), 'master registration has his drawing');
+  assert(masterReg.body.includes('/drawings/master.webp'), 'master registration has his drawing');
   const rejected = await page(regJar, '/register', {
     method: 'POST',
     body: new URLSearchParams({

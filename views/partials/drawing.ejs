@@ -1,1 +1,4 @@
-<img class="draw draw-<%= role %>" src="/drawings/<%= role %>.svg" width="600" height="500" alt="<%= role === 'foreman' ? 'Прораб у дома с планшетом' : 'Мастер с разводным ключом' %>">
+<picture class="draw draw-<%= role %>">
+  <source type="image/webp" srcset="/drawings/<%= role %>.webp">
+  <img src="/drawings/<%= role %>.jpg" width="600" height="500" alt="<%= role === 'foreman' ? 'Прораб у дома с планшетом' : 'Мастер с инструментом' %>" decoding="async">
+</picture>
