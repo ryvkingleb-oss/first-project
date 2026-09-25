@@ -1,8 +1,31 @@
 {
-	email {$ACME_EMAIL:internal@localhost}
+	email admin@masterprorab.ru
+	default_sni 109.172.37.155
 }
 
-{$SITE_ADDRESS::80} {
+109.172.37.155 {
+	encode gzip
+	tls {
+		issuer acme {
+			profile shortlived
+		}
+	}
+	reverse_proxy app:3000
+}
+
+masterprorab.ru, www.masterprorab.ru {
 	encode gzip
 	reverse_proxy app:3000
+}
+
+# documentmigrant.ru: HTTP until DNS exists. After the A records answer, drop the http:// prefix and reload Caddy so it can get a certificate.
+documentmigrant.ru, www.documentmigrant.ru {
+	encode gzip
+	reverse_proxy 172.18.0.1:8787
+}
+
+# Migrant documents. Port 80 on the bare IP stays with the repair site.
+http://:8080 {
+	encode gzip
+	reverse_proxy 172.18.0.1:8787
 }
