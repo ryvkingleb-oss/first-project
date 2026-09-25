@@ -1193,3 +1193,100 @@ a.tel { text-underline-offset: 0.15em; }
     grid-template-columns: minmax(0, 1fr) auto;
   }
 }
+
+.cabinet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.85rem;
+  margin: var(--space-4) 0 var(--space-3);
+}
+.cabinet-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 0.15rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--accent);
+  border-bottom: 2px solid transparent;
+}
+.cabinet-nav a:hover { border-bottom-color: var(--accent); }
+.master-panel { scroll-margin-top: 4.5rem; }
+.master-subhead {
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-3);
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+.master-form {
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}
+.master-form h3 { margin-bottom: 0.15rem; }
+.cal-nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+  margin-top: var(--space-4);
+}
+.cal-nav .btn { min-width: 3rem; padding-inline: 0.7rem; }
+.cal-month {
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 1.15rem;
+  letter-spacing: -0.03em;
+}
+.cal-grid {
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+.cal-grid > span:nth-child(-n+7) {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0;
+}
+.cal-empty { min-height: 3rem; }
+.cal-day {
+  display: grid;
+  place-content: center;
+  gap: 0.15rem;
+  min-height: 3.1rem;
+  padding: 0.35rem 0.2rem;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  text-align: center;
+}
+.cal-day:hover { background: var(--fill); }
+.cal-day.is-today { border-color: var(--accent); }
+.cal-day.is-on {
+  background: var(--text);
+  border-color: var(--text);
+  color: #f4f7f5;
+}
+.cal-day.has-items .cal-num { font-weight: 700; }
+.cal-num { font-variant-numeric: tabular-nums; line-height: 1; }
+.cal-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--warn);
+}
+.cal-day.is-on .cal-count { color: #f6d7a8; }
+
+@media (min-width: 800px) {
+  .master-panel .split { grid-template-columns: 1fr 1fr; }
+}
