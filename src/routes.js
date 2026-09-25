@@ -67,7 +67,11 @@ async function publicHome(req, res) {
 
 function loginForm(req, res) {
   if (res.locals.user) return res.redirect(303, homeFor(res.locals.user.role));
-  return render(res, 'login', { title: 'Вход', errors: {}, values: { phone: '' } });
+  return render(res, 'login', {
+    title: 'Вход',
+    errors: {},
+    values: { phone: String(req.query.phone || '').trim() },
+  });
 }
 
 async function loginPost(req, res, next) {
@@ -114,10 +118,11 @@ async function loginPost(req, res, next) {
 
 function registerForm(req, res) {
   if (res.locals.user) return res.redirect(303, homeFor(res.locals.user.role));
+  const role = ['client', 'foreman', 'master'].includes(req.query.role) ? req.query.role : 'client';
   return render(res, 'register', {
     title: 'Регистрация',
     errors: {},
-    values: { full_name: '', phone: '', role: 'client', specialty: 'plumber' },
+    values: { full_name: '', phone: '', role, specialty: 'plumber' },
   });
 }
 
@@ -331,16 +336,31 @@ async function foremanHome(req, res, next) {
               COALESCE((
                 SELECT SUM(p.amount_rub) FROM purchases p
                 WHERE p.object_id = o.id AND p.charged_to_client AND NOT p.settled
-              ), 0)::int AS debt
+              ), 0)::int AS debt,
+              (
+                SELECT json_build_object('title', s.title, 'status', s.status)
+                FROM stages s
+                WHERE s.object_id = o.id
+                ORDER BY CASE s.status WHEN 'in_progress' THEN 0 WHEN 'planned' THEN 1 ELSE 2 END,
+                         s.sort_order, s.id
+                LIMIT 1
+              ) AS stage_now
        FROM objects o
        WHERE o.foreman_id = $1
        ORDER BY o.created_at DESC`,
       [res.locals.user.id]
     );
+    const list = objects.rows.map((row) => {
+      let stage = row.stage_now;
+      if (typeof stage === 'string') {
+        try { stage = JSON.parse(stage); } catch (e) { stage = null; }
+      }
+      return { ...row, stage_now: stage };
+    });
     return render(res, 'foreman/home', {
       title: 'Объекты',
       openRequests: openRequests.rows,
-      objects: objects.rows,
+      objects: list,
       price: PRICES.objectRub,
     });
   } catch (error) {
@@ -411,6 +431,7 @@ async function foremanCreateObject(req, res, next) {
     address,
     client_name: clientName,
     client_phone: phoneRaw,
+    confirm_unpaid: req.body.confirm_unpaid === '1',
   };
   if (Object.keys(errors).length) {
     return render(res, 'foreman/paywall', { title: 'Новый объект', errors, values, price: PRICES.objectRub });
@@ -883,7 +904,7 @@ async function masterHome(req, res, next) {
     let incoming = [];
     if (user.orders_opened_unpaid && user.accepting_orders) {
       const { rows } = await pool.query(
-        `SELECT id, address, summary, created_at, object_id, request_id
+        `SELECT id, address, summary, created_at, object_id, request_id, contact_name, contact_phone
          FROM offers
          WHERE status = 'open' AND specialty = $1
          ORDER BY created_at DESC`,
@@ -892,7 +913,8 @@ async function masterHome(req, res, next) {
       incoming = rows;
     }
     const mine = await pool.query(
-      `SELECT id, address, summary, status, job_status, accepted_at, specialty
+      `SELECT id, address, summary, status, job_status, status_note, accepted_at, specialty,
+              contact_name, contact_phone
        FROM offers
        WHERE master_id = $1 AND status = 'accepted'
        ORDER BY accepted_at DESC`,

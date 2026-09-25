@@ -1,43 +1,47 @@
-<%- include('../partials/head', { title }) %>
+<%- include('../partials/head', { title, board: true }) %>
 <div class="page-head">
   <div>
-    <p class="kicker">Прораб</p>
     <h1>Объекты</h1>
+    <p class="lede"><span class="num"><%= formatMoney(price) %></span> за квартиру. Деньги не списываются.</p>
   </div>
-  <a class="btn" href="/foreman/objects/new">Новый объект</a>
+  <% if (!openRequests.length && !objects.length) { %>
+    <a class="btn" href="/foreman/objects/new">Новый объект</a>
+  <% } else { %>
+    <a class="text-btn" href="/foreman/objects/new">Новый объект</a>
+  <% } %>
 </div>
-<p class="aside">Один объект — одна квартира. <%= formatMoney(price) %>, оплата пока не проводится.</p>
+<% if (openRequests.length) { %><p class="next-note">Дальше: возьмите заявку.</p><% } %>
 
-<section class="section">
-  <h2><span class="num">01</span> Заявки на ремонт</h2>
+<section class="sec">
+  <h2>Заявки</h2>
   <% if (!openRequests.length) { %>
-    <p class="empty">Свободных заявок на ремонт квартиры нет.</p>
+    <p class="empty">Свободных заявок нет.</p>
   <% } else { %>
     <div class="rows">
       <% openRequests.forEach(function (item) { %>
         <a class="row" href="/foreman/objects/new?request=<%= item.id %>">
           <span class="row-title"><%= item.address %></span>
-          <span class="row-status">Взять</span>
+          <span class="row-go">Взять</span>
           <span class="row-meta"><%= item.full_name %> · <%= formatPhone(item.phone) %></span>
-          <span class="row-date"><%= formatDate(item.created_at) %></span>
+          <span class="row-next"><%= item.description %></span>
         </a>
       <% }) %>
     </div>
   <% } %>
 </section>
 
-<section class="section">
-  <h2><span class="num">02</span> Мои квартиры</h2>
+<section class="sec">
+  <h2>Квартиры</h2>
   <% if (!objects.length) { %>
-    <p class="empty">Объектов пока нет. Возьмите заявку или откройте квартиру сами.</p>
+    <p class="empty">Квартир нет.<% if (!openRequests.length) { %> Откройте объект.<% } %></p>
   <% } else { %>
     <div class="rows">
       <% objects.forEach(function (item) { %>
         <a class="row" href="/foreman/objects/<%= item.id %>">
           <span class="row-title"><%= item.address %></span>
-          <span class="row-status"><%= item.status === 'done' ? 'Готово' : formatMoney(item.debt) %></span>
-          <span class="row-meta"><%= item.client_name %></span>
-          <span class="row-date">№ <%= item.id %></span>
+          <span class="money<%= item.debt > 0 ? ' is-due' : '' %>"><%= item.status === 'done' ? 'Готово' : formatMoney(item.debt) %></span>
+          <span class="row-meta"><%= item.client_name %><% if (item.stage_now && item.stage_now.title) { %> · <%= item.stage_now.title %><% } %></span>
+          <span class="row-next"><% if (item.stage_now && item.stage_now.status) { %><%= STAGE_STATUS[item.stage_now.status] || '' %><% } else { %>Этапа нет<% } %></span>
         </a>
       <% }) %>
     </div>

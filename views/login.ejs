@@ -1,18 +1,21 @@
-<%- include('partials/head', { title }) %>
-<p class="kicker">Вход</p>
-<h1>Телефон и пароль</h1>
+<%- include('partials/head', { title, wide: true }) %>
+<h1>Вход</h1>
 <% if (errors.form) { %><p class="banner is-error" role="alert"><%= errors.form %></p><% } %>
-<form method="post" action="/login" class="stack">
-  <%- include('partials/csrf') %>
-  <div class="field">
-    <label for="phone">Телефон</label>
-    <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="+7 900 000-00-00" value="<%= values.phone %>">
-  </div>
-  <div class="field">
-    <label for="password">Пароль</label>
-    <input id="password" name="password" type="password" autocomplete="current-password" required>
-  </div>
-  <button class="btn" type="submit">Войти</button>
-</form>
-<p class="aside">Нет кабинета? <a href="/register">Регистрация</a></p>
+<div class="auth">
+  <form method="post" action="/login" class="stack">
+    <%- include('partials/csrf') %>
+    <div class="field">
+      <label for="phone">Телефон</label>
+      <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="+7 900 000-00-00" value="<%= values.phone %>" <%= values.phone ? '' : 'autofocus' %>>
+    </div>
+    <div class="field">
+      <label for="password">Пароль</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required <%= values.phone ? 'autofocus' : '' %>>
+      <p class="hint">Демо: demo1234</p>
+    </div>
+    <button class="btn" type="submit">Войти</button>
+    <p class="hint">Нет кабинета? <a href="/register">Регистрация</a></p>
+  </form>
+  <%- include('partials/demo') %>
+</div>
 <%- include('partials/foot') %>

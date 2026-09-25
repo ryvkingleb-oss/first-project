@@ -1,28 +1,53 @@
 <%- include('partials/head', { title, wide: true }) %>
-<section class="cover">
-  <div>
-    <p class="kicker">Заказы на ремонт</p>
-    <h1>Квартира, сантехник, электрик — в одном наряде.</h1>
-    <p class="lede">Клиент оставляет заявку и смотрит статус. Прораб ведёт квартиру. Мастер забирает вызов, если включил приём заказов.</p>
-    <p class="actions">
-      <a class="btn" href="/register">Создать кабинет</a>
-      <a class="btn secondary" href="/login">Войти</a>
-    </p>
-  </div>
-  <dl class="roles">
-    <div>
-      <dt>Клиент</dt>
-      <dd>Заявка, адрес, описание. Без оплаты.</dd>
-    </div>
-    <div>
-      <dt>Прораб</dt>
-      <dd>Один объект — одна квартира: этапы, закупки, долг, фото по комнатам. <span class="num"><%= formatMoney(PRICES.objectRub) %></span> за объект.</dd>
-    </div>
-    <div>
-      <dt>Мастер</dt>
-      <dd>Сантехник, электрик, ремонт стиральных машин. <span class="num"><%= formatMoney(PRICES.masterMonthRub) %></span> в месяц за входящие заказы.</dd>
-    </div>
-  </dl>
+<section class="intro">
+  <p class="kicker">Наряд</p>
+  <h1>Клиент оставляет заявку, прораб ведёт квартиру, мастер берёт вызов.</h1>
 </section>
-<p class="colophon">Оплата пока не подключена. Суммы на экранах цены не списываются.</p>
+
+<ol class="steps">
+  <li>
+    <span class="step-n">1</span>
+    <span class="step-name">Заявка</span>
+    <span class="step-note">Клиент пишет</span>
+  </li>
+  <li>
+    <span class="step-n">2</span>
+    <span class="step-name">Объект</span>
+    <span class="step-note">Прораб ведёт</span>
+  </li>
+  <li>
+    <span class="step-n">3</span>
+    <span class="step-name">Мастер</span>
+    <span class="step-note">Берёт вызов</span>
+  </li>
+</ol>
+
+<div class="catalog">
+  <section class="entry">
+    <div class="entry-top">
+      <h2>Клиент</h2>
+      <p class="entry-price num">0 ₽</p>
+    </div>
+    <p class="entry-out">Заявка и статус</p>
+    <a class="btn" href="/register?role=client">Оставить заявку</a>
+  </section>
+  <section class="entry">
+    <div class="entry-top">
+      <h2>Прораб</h2>
+      <p class="entry-price num"><%= formatMoney(PRICES.objectRub) %> <span>за квартиру</span></p>
+    </div>
+    <p class="entry-out">Этапы, долг, фото</p>
+    <a class="btn" href="/register?role=foreman">Вести квартиру</a>
+  </section>
+  <section class="entry">
+    <div class="entry-top">
+      <h2>Мастер</h2>
+      <p class="entry-price num"><%= formatMoney(PRICES.masterMonthRub) %> <span>в месяц</span></p>
+    </div>
+    <p class="entry-out">Входящие вызовы.</p>
+    <a class="btn" href="/register?role=master">Брать вызовы</a>
+  </section>
+</div>
+<p class="pay-note">Оплата не подключена. Деньги не списываются.</p>
+<%- include('partials/demo') %>
 <%- include('partials/foot') %>

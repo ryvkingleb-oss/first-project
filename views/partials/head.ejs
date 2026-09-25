@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> — Наряд</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/app.css">
-  <meta name="theme-color" content="#ebe6dc">
+  <link rel="stylesheet" href="/app.css?v=3">
+  <meta name="theme-color" content="#f3efe6">
 </head>
 <body>
   <a class="skip" href="#content">К содержанию</a>
@@ -14,8 +14,8 @@
     <a class="mark" href="<%= user ? HOME[user.role] : '/' %>">Наряд</a>
     <% if (user) { %>
       <div class="who">
-        <p class="who-role">
-          <%= ROLES[user.role] %><% if (user.role === 'master' && user.specialty) { %> · <%= SPECIALTIES[user.specialty] %><% } %>
+        <p class="who-role" title="<%= ROLES[user.role] %><% if (user.role === 'master' && user.specialty) { %> · <%= SPECIALTIES[user.specialty] %><% } %> <%= user.full_name %>">
+          <span class="role-label"><%= ROLES[user.role] %><% if (user.role === 'master' && user.specialty) { %> · <%= SPECIALTIES[user.specialty] %><% } %></span>
           <span class="who-name"><%= user.full_name %></span>
         </p>
         <form method="post" action="/logout">
@@ -26,11 +26,11 @@
     <% } else { %>
       <nav class="who" aria-label="Вход">
         <a href="/login">Войти</a>
-        <a class="btn" href="/register">Регистрация</a>
+        <a href="/register">Регистрация</a>
       </nav>
     <% } %>
   </header>
-  <main id="content" class="wrap<%= typeof wide !== 'undefined' && wide ? ' wide' : '' %>">
+  <main id="content" class="wrap<% if (typeof wide !== 'undefined' && wide) { %> wide<% } else if (typeof board !== 'undefined' && board) { %> board<% } %>">
     <% if (flash) { %>
       <p class="banner <%= flash.type === 'error' ? 'is-error' : 'is-ok' %>" role="status"><%= flash.text %></p>
     <% } %>
