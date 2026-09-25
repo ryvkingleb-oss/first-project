@@ -1,16 +1,11 @@
 {
 	email admin@masterprorab.ru
-	default_sni 109.172.37.155
+	default_sni masterprorab.ru
 }
 
-109.172.37.155 {
+http://109.172.37.155, documentmigrant.ru, www.documentmigrant.ru {
 	encode gzip
-	tls {
-		issuer acme {
-			profile shortlived
-		}
-	}
-	reverse_proxy app:3000
+	reverse_proxy 172.18.0.1:8787
 }
 
 masterprorab.ru, www.masterprorab.ru {
