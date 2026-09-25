@@ -852,12 +852,17 @@ a.tel { text-underline-offset: 0.15em; }
 }
 .home-how p { margin-top: var(--space-1); color: var(--text-muted); }
 
-.home-roles { margin-top: var(--space-2); }
+.home-roles {
+  display: grid;
+  gap: 0;
+  margin-top: var(--space-2);
+}
 .home-role {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: var(--space-1) var(--space-3);
   align-items: center;
+  min-width: 0;
   padding: var(--space-4) 0;
   border-top: 1px solid var(--border);
 }
@@ -872,6 +877,7 @@ a.tel { text-underline-offset: 0.15em; }
   line-height: 1.1;
   letter-spacing: -0.03em;
 }
+.home-price .num { white-space: nowrap; }
 .home-role-client .home-price { color: var(--ok); }
 .home-unit {
   font-family: var(--font);
@@ -949,13 +955,14 @@ a.tel { text-underline-offset: 0.15em; }
   .home-how h3 { margin-top: var(--space-3); }
   .home-roles {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
     margin-top: var(--space-4);
   }
   .home-role,
   .home-role:last-child {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0;
     padding: 0 var(--space-5) 0 0;
     border: 0;
@@ -964,9 +971,19 @@ a.tel { text-underline-offset: 0.15em; }
     padding-left: var(--space-5);
     border-left: 1px solid var(--border);
   }
-  .home-role-copy { display: grid; gap: var(--space-1); }
-  .home-role .btn { margin-top: auto; align-self: flex-start; }
-  .home-role-copy { margin-bottom: var(--space-4); }
+  .home-role-copy {
+    display: grid;
+    gap: var(--space-1);
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 0;
+  }
+  .home-role .btn {
+    position: static;
+    grid-column: auto;
+    margin-top: var(--space-4);
+    align-self: flex-start;
+  }
   .home-price { margin-top: var(--space-3); }
   .home-people a { grid-template-columns: 14rem minmax(0, 1fr) auto; }
   .home-person-role {
