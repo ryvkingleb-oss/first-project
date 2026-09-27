@@ -65,6 +65,10 @@ WantedBy=multi-user.target
 
 Caddy уже проксирует `documentmigrant.ru` на `HOST:PORT` из `.env` (часто `172.18.0.1:8787`).
 
+## Статус бланков
+
+Актуальная таблица ready / stub: [`docs/STATUS.md`](docs/STATUS.md). Источник в коде: `server/catalog.mjs`.
+
 ## Волна A (готово)
 
 | Документ | URL |
