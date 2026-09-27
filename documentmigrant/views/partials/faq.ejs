@@ -1,0 +1,16 @@
+<% if (faq && faq.length) { %>
+<section class="section" id="faq">
+  <div class="section-head">
+    <h2>Частые вопросы</h2>
+    <p class="muted">Коротко и по делу</p>
+  </div>
+  <div class="faq">
+    <% faq.forEach(function (item) { %>
+      <details>
+        <summary><%= item.q %></summary>
+        <p><%= item.a %></p>
+      </details>
+    <% }) %>
+  </div>
+</section>
+<% } %>

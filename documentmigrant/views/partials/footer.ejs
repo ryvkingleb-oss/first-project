@@ -1,0 +1,21 @@
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <p><strong><%= brand.name %></strong></p>
+      <p class="muted">Помогаем заполнить бланк МВД для печати. Мы не сайт МВД и документы за вас не относим.</p>
+    </div>
+    <div>
+      <p><strong>Разделы</strong></p>
+      <% nav.forEach(function (item) { %>
+        <p><a href="<%= item.href %>"><%= item.label %></a></p>
+      <% }) %>
+    </div>
+    <div>
+      <p><strong>Документы</strong></p>
+      <% footerLegal.forEach(function (item) { %>
+        <p><a href="<%= item.href %>"><%= item.label %></a></p>
+      <% }) %>
+      <p><a href="/kontakty">Контакты</a></p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,46 @@
+<nav class="breadcrumbs" aria-label="Навигация">
+  <a href="/">Главная</a><span>/</span>
+  <a href="/uslugi">Услуги</a><span>/</span>
+  <span><%= service.title %></span>
+</nav>
+
+<section class="hero">
+  <p class="kicker">Услуга</p>
+  <h1><%= service.h1 %></h1>
+  <p class="lead"><%= service.lead %></p>
+  <div class="actions">
+    <% if (service.ready) { %>
+      <a class="btn" href="<%= service.ctaHref %>">Заполнить онлайн</a>
+    <% } else { %>
+      <a class="btn" href="/kontakty">Оставить запрос</a>
+    <% } %>
+    <% if (service.blankSlug) { %>
+      <a class="btn-quiet" href="/blanki/<%= service.blankSlug %>">Пустой бланк</a>
+    <% } %>
+  </div>
+  <% if (service.ready) { %>
+    <p class="price-tag">от <%= priceRub %> ₽</p>
+    <p class="muted">Это плата за заполнение файла на сайте. Не путайте с пошлиной в МВД.</p>
+  <% } %>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>Что вы получите</h2></div>
+  <ul class="list">
+    <% service.whatYouGet.forEach(function (item) { %>
+      <li><%= item %></li>
+    <% }) %>
+  </ul>
+</section>
+
+<%- include('../partials/faq', { faq: service.faq }) %>
+
+<%- include('../partials/cta', {
+  ctaHref: service.ctaHref,
+  ctaLabel: service.ready ? 'Заполнить сейчас' : 'Написать нам',
+  ctaText: service.ready
+    ? 'Дальше — вопросы по шагам, проверка и скачивание PDF после оплаты.'
+    : 'Онлайн-заполнение этой формы ещё готовим. Напишите — скажем, когда откроем.',
+  secondaryHref: service.blankSlug ? '/blanki/' + service.blankSlug : '/uslugi',
+  secondaryLabel: service.blankSlug ? 'Скачать пустой бланк' : 'Все услуги'
+}) %>

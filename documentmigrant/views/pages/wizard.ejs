@@ -1,0 +1,22 @@
+<nav class="breadcrumbs" aria-label="Навигация">
+  <a href="/">Главная</a><span>/</span>
+  <a href="/uslugi/<%= schema.slug %>">Услуга</a><span>/</span>
+  <span>Заполнение</span>
+</nav>
+
+<section class="hero">
+  <p class="kicker">Заполнение</p>
+  <h1>Заполнить: <%= schema.title %></h1>
+  <p class="lead">Отвечайте по шагам. Пишите как в паспорте. Можно сохранить и вернуться. Перед оплатой проверите ответы.</p>
+</section>
+
+<div id="wizard" class="sheet stack"
+  data-price="<%= priceRub %>"
+  data-authed="<%= user ? '1' : '0' %>"
+  data-procedure="<%= schema.procedureId %>"
+  data-slug="<%= schema.slug %>">
+  <p class="muted">Загружаем форму…</p>
+</div>
+
+<script type="application/json" id="wizard-schema"><%- JSON.stringify(schema) %></script>
+<script src="/js/wizard-pribytie.js" defer></script>

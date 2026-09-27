@@ -1,0 +1,56 @@
+<section class="hero">
+  <p class="kicker"><%= brand.name %></p>
+  <h1>Заполните бланк МВД онлайн — распечатайте и отнесите</h1>
+  <p class="lead">Уведомление о прибытии, патент, ВНЖ, гражданство. Ответьте на вопросы — получите файл для печати. Это не сайт МВД: документы в ведомство несёте сами.</p>
+  <div class="actions">
+    <a class="btn" href="/uslugi/uvedomlenie-o-pribytii">Заполнить уведомление о прибытии</a>
+    <a class="btn-quiet" href="/blanki">Скачать пустой бланк</a>
+  </div>
+</section>
+
+<section class="section" id="uslugi">
+  <div class="section-head">
+    <h2>Какой документ нужен</h2>
+    <p class="muted">Выберите свой случай. Сейчас онлайн можно заполнить уведомление о прибытии.</p>
+  </div>
+  <div class="grid grid-2">
+    <% services.forEach(function (item) { %>
+      <a class="card" href="/uslugi/<%= item.slug %>">
+        <h3><%= item.title %></h3>
+        <p class="meta"><%= item.short %></p>
+        <p><%= item.ready ? 'Можно заполнить сейчас' : 'Скоро можно будет заполнить онлайн' %></p>
+      </a>
+    <% }) %>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Как это работает</h2>
+  </div>
+  <div class="grid grid-3">
+    <div class="card"><h3>1. Выберите бланк</h3><p class="muted">Например, уведомление о прибытии — уже можно заполнить.</p></div>
+    <div class="card"><h3>2. Ответьте на вопросы</h3><p class="muted">Простыми словами, как в паспорте. Можно сохранить и вернуться.</p></div>
+    <div class="card"><h3>3. Оплатите и скачайте</h3><p class="muted">Распечатайте, подпишите ручкой, отнесите сами. Плата в МВД — отдельно.</p></div>
+  </div>
+  <div class="actions">
+    <a class="btn-quiet" href="/kak-eto-rabotaet">Подробнее</a>
+    <a class="btn" href="/ceny">Сколько стоит</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Полезные статьи</h2>
+    <p class="muted">Объясняем простым языком.</p>
+  </div>
+  <div class="grid grid-2">
+    <% articles.slice(0, 4).forEach(function (item) { %>
+      <a class="card" href="/statyi/<%= item.slug %>">
+        <h3><%= item.title %></h3>
+        <p class="meta"><%= item.lead %></p>
+      </a>
+    <% }) %>
+  </div>
+  <div class="actions"><a class="btn-quiet" href="/statyi">Все статьи</a></div>
+</section>

@@ -1,0 +1,12 @@
+<section class="section">
+  <div class="sheet stack">
+    <h2><%= typeof ctaTitle !== 'undefined' ? ctaTitle : 'Заполнить сейчас' %></h2>
+    <p class="muted"><%= typeof ctaText !== 'undefined' ? ctaText : 'Ответьте на вопросы, оплатите и скачайте файл для печати.' %></p>
+    <div class="actions">
+      <a class="btn" href="<%= ctaHref %>"><%= typeof ctaLabel !== 'undefined' ? ctaLabel : 'Заполнить сейчас' %></a>
+      <% if (typeof secondaryHref !== 'undefined' && secondaryHref) { %>
+        <a class="btn-quiet" href="<%= secondaryHref %>"><%= secondaryLabel || 'Подробнее' %></a>
+      <% } %>
+    </div>
+  </div>
+</section>

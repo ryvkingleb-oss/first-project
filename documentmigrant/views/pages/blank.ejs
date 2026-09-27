@@ -1,0 +1,23 @@
+<nav class="breadcrumbs" aria-label="Навигация">
+  <a href="/">Главная</a><span>/</span>
+  <a href="/blanki">Бланки</a><span>/</span>
+  <span><%= blank.title %></span>
+</nav>
+<section class="hero">
+  <p class="kicker">Бланк и образец</p>
+  <h1><%= blank.title %></h1>
+  <p class="lead"><%= blank.lead %></p>
+  <div class="actions">
+    <% if (blank.file) { %>
+      <a class="btn" href="/api/blanks/<%= blank.slug %>">Скачать пустой PDF</a>
+    <% } %>
+    <% if (blank.serviceSlug) { %>
+      <a class="btn-quiet" href="/uslugi/<%= blank.serviceSlug %>">Заполнить онлайн</a>
+    <% } %>
+  </div>
+</section>
+<section class="section">
+  <div class="note">
+    <p>Пустой бланк — если хотите писать сами. Проще: <a href="/uslugi/<%= blank.serviceSlug || '' %>">заполнить онлайн</a> и распечатать готовый файл.</p>
+  </div>
+</section>

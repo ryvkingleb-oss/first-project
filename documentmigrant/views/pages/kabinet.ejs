@@ -1,0 +1,32 @@
+<section class="hero">
+  <p class="kicker">Кабинет</p>
+  <h1>Здравствуйте, <%= user.name %></h1>
+  <p class="lead">Здесь ваши черновики и оплаченные файлы. Оплаченный документ можно скачать снова.</p>
+  <div class="actions">
+    <a class="btn" href="/zapolnit/uvedomlenie-o-pribytii">Заполнить новое уведомление</a>
+    <form method="post" action="/vyhod" style="display:inline"><button class="btn-quiet" type="submit">Выйти</button></form>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Документы</h2>
+  <% if (!documents.length) { %>
+    <p class="muted">Пока пусто. Начните заполнение уведомления о прибытии.</p>
+  <% } else { %>
+    <div class="grid">
+      <% documents.forEach(function (doc) { %>
+        <div class="card">
+          <h3><%= titles[doc.procedureId] || doc.procedureId %></h3>
+          <p class="meta">Обновлён <%= new Date(doc.updatedAt).toLocaleString('ru-RU') %></p>
+          <p><%= doc.paid ? 'Оплачен — можно скачать PDF' : 'Черновик — ещё не оплачен' %></p>
+          <div class="actions">
+            <a class="btn-quiet" href="/zapolnit/uvedomlenie-o-pribytii?doc=<%= doc.id %>">Открыть</a>
+            <% if (doc.paid) { %>
+              <a class="btn" href="/api/documents/<%= doc.id %>/file.pdf">Скачать PDF</a>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>

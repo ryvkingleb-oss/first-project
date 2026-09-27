@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>" />
+  <link rel="canonical" href="<%= canonical %>" />
+  <meta name="robots" content="<%= typeof robots !== 'undefined' ? robots : 'index,follow' %>" />
+  <meta name="theme-color" content="#0f4c5c" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="<%= brand.name %>" />
+  <meta property="og:url" content="<%= canonical %>" />
+  <meta property="og:title" content="<%= title %>" />
+  <meta property="og:description" content="<%= description %>" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="<%= title %>" />
+  <meta name="twitter:description" content="<%= description %>" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/site.css" />
+  <% if (typeof jsonLd !== 'undefined' && jsonLd) { %>
+  <script type="application/ld+json"><%- JSON.stringify(jsonLd) %></script>
+  <% } %>
+  <%- include('partials/metrika') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <main class="main">
+    <div class="wrap">
+      <%- body %>
+    </div>
+  </main>
+  <%- include('partials/footer') %>
+  <script>
+    (function () {
+      var btn = document.querySelector('[data-nav-toggle]');
+      var nav = document.querySelector('[data-nav]');
+      if (!btn || !nav) return;
+      btn.addEventListener('click', function () {
+        var open = nav.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+  <%- typeof scripts !== 'undefined' ? scripts : '' %>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/"><%= brand.name %></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Меню</button>
+    <nav class="nav" id="site-nav" data-nav>
+      <% nav.forEach(function (item) { %>
+        <a href="<%= item.href %>"<%= currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/')) ? ' aria-current="page"' : '' %>><%= item.label %></a>
+      <% }) %>
+      <% if (user) { %>
+        <a href="/kabinet">Кабинет</a>
+      <% } else { %>
+        <a href="/vhod">Войти</a>
+      <% } %>
+    </nav>
+  </div>
+</header>

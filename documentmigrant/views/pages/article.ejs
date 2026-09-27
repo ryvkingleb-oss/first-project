@@ -1,0 +1,24 @@
+<nav class="breadcrumbs" aria-label="Навигация">
+  <a href="/">Главная</a><span>/</span>
+  <a href="/statyi">Статьи</a><span>/</span>
+  <span><%= article.title %></span>
+</nav>
+<article class="stack">
+  <header class="hero">
+    <p class="kicker">Статья · <%= article.date %></p>
+    <h1><%= article.title %></h1>
+    <p class="lead"><%= article.lead %></p>
+  </header>
+  <% article.body.forEach(function (p) { %>
+    <p><%= p %></p>
+  <% }) %>
+</article>
+<% if (article.ctaSlug) { %>
+  <%- include('../partials/cta', {
+    ctaHref: '/uslugi/' + article.ctaSlug,
+    ctaTitle: 'Нужен готовый бланк?',
+    ctaText: 'Заполните онлайн — скачаете файл для печати.',
+    secondaryHref: '/statyi',
+    secondaryLabel: 'Все статьи'
+  }) %>
+<% } %>

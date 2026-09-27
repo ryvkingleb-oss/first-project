@@ -1,0 +1,15 @@
+<section class="hero">
+  <p class="kicker"><%= kicker %></p>
+  <h1><%= h1 %></h1>
+  <p class="lead"><%= lead %></p>
+</section>
+<section class="section">
+  <div class="grid grid-2">
+    <% items.forEach(function (item) { %>
+      <a class="card" href="<%= basePath %>/<%= item.slug %>">
+        <h3><%= item.title %></h3>
+        <p class="meta"><%= item.short || item.lead || '' %></p>
+      </a>
+    <% }) %>
+  </div>
+</section>
