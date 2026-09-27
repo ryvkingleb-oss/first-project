@@ -19,29 +19,14 @@ import { paymentModeWarning, paymentProvider } from "./payment.mjs";
 import { mailer } from "./mailer.mjs";
 import { layoutFor, renderFormPdf } from "./form-pdf.mjs";
 import { htmlStatus, injectIndexHtml, redirectTarget, robotsTxt, sitemapXml } from "./seo-pages.mjs";
+import { DOCUMENTS, READY_IDS } from "./catalog.mjs";
 
 const app = express();
 const port = Number(process.env.PORT || 8787);
-const procedures = new Set([
-  "pribytie",
-  "ubytie",
-  "patent",
-  "rvp",
-  "vnzh",
-  "vnzh-podtverzhdenie",
-  "rvp-podtverzhdenie",
-  "grazhdanstvo",
-]);
-const titles = {
-  pribytie: "Уведомление о прибытии",
-  ubytie: "Уведомление об убытии",
-  patent: "Заявление на патент",
-  rvp: "Заявление на РВП",
-  vnzh: "Заявление на вид на жительство",
-  "vnzh-podtverzhdenie": "Подтверждение проживания по ВНЖ",
-  "rvp-podtverzhdenie": "Подтверждение проживания по РВП",
-  grazhdanstvo: "Заявление на гражданство",
-};
+const procedures = READY_IDS;
+const titles = Object.fromEntries(
+  DOCUMENTS.filter((d) => d.status === "ready").map((d) => [d.id, d.shortTitle]),
+);
 
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
@@ -63,16 +48,16 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-const emptyBlanks = {
-  pribytie: { file: "pribytie-blank.pdf", name: "Бланк уведомления о прибытии.pdf" },
-  ubytie: { file: "ubytie-blank.pdf", name: "Бланк уведомления об убытии.pdf", generate: true },
-  patent: { file: "patent-blank.pdf", name: "Бланк заявления на патент.pdf" },
-  rvp: { file: "rvp-blank.pdf", name: "Бланк заявления на РВП.pdf", generate: true },
-  vnzh: { file: "vnzh-blank.pdf", name: "Бланк заявления о виде на жительство.pdf" },
-  "vnzh-podtverzhdenie": { file: "vnzh-podtverzhdenie-blank.pdf", name: "Бланк подтверждения проживания по ВНЖ.pdf", generate: true },
-  "rvp-podtverzhdenie": { file: "rvp-podtverzhdenie-blank.pdf", name: "Бланк подтверждения проживания по РВП.pdf", generate: true },
-  grazhdanstvo: { file: "grazhdanstvo-blank.pdf", name: "Бланк заявления о приеме в гражданство.pdf" },
-};
+const emptyBlanks = Object.fromEntries(
+  DOCUMENTS.filter((d) => d.status === "ready" && d.blankFile).map((d) => [
+    d.id,
+    {
+      file: d.blankFile,
+      name: `Бланк: ${d.shortTitle}.pdf`,
+      generate: d.pdfMode === "layout",
+    },
+  ]),
+);
 
 app.get("/api/blanks/:procedureId", async (req, res) => {
   const blank = emptyBlanks[req.params.procedureId];

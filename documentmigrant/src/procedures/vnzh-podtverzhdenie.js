@@ -4,6 +4,7 @@ export const vnzhPodtverzhdenie = {
   title: "Уведомление о подтверждении проживания в Российской Федерации по виду на жительство",
   summary: "Ежегодное подтверждение проживания для обладателя ВНЖ. Файл для печати, в МВД сам не уходит.",
   status: "ready",
+  pdfMode: "layout",
   official: {
     pageUrl: "https://мвд.рф",
     pageTitle: "Бланки МВД",

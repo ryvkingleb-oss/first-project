@@ -1,3 +1,4 @@
+import { USLUGI_REDIRECTS } from "./catalog.mjs";
 /**
  * Public pages for documentmigrant.ru.
  * Search volumes are not stored here: they go stale and must not be invented.
@@ -9,16 +10,7 @@ export const SITE_ORIGIN = "https://documentmigrant.ru";
 const UPDATED = "2026-09-27";
 
 /** @type {Record<string, string>} */
-export const redirects = {
-  "/uslugi/pribytie": "/dokument/pribytie",
-  "/uslugi/ubytie": "/dokument/ubytie",
-  "/uslugi/patent": "/dokument/patent",
-  "/uslugi/rvp": "/dokument/rvp",
-  "/uslugi/vnzh": "/dokument/vnzh",
-  "/uslugi/vnzh-podtverzhdenie": "/dokument/vnzh-podtverzhdenie",
-  "/uslugi/rvp-podtverzhdenie": "/dokument/rvp-podtverzhdenie",
-  "/uslugi/grazhdanstvo": "/dokument/grazhdanstvo",
-};
+export const redirects = { ...USLUGI_REDIRECTS };
 
 /** @type {PublicPage[]} */
 const marketingPages = [
@@ -26,7 +18,7 @@ const marketingPages = [
     path: "/",
     title: "Уведомление о прибытии и бланки МВД — заполнить онлайн",
     description:
-      "Онлайн-заполнение бланков МВД: уведомление о прибытии, патент на работу, вид на жительство и гражданство. Пустой бланк бесплатно. Готовый файл — после тестовой оплаты, деньги не списываются.",
+      "Онлайн-заполнение бланков МВД: прибытие (и на ребёнка), убытие, патент, РВП, ВНЖ, подтверждение проживания и гражданство. Пустой бланк бесплатно. Готовый файл — после тестовой оплаты, деньги не списываются.",
     h1: "Уведомление о прибытии и бланки МВД: заполните онлайн и скачайте файл",
     lead:
       "Сервис подставляет ваши ответы в официальный бланк. В МВД и на Госуслуги файл не уходит. Подпись ставите от руки и несёте документ сами.",
@@ -535,7 +527,7 @@ const procedurePages = [
       },
     ],
     cta: { to: "/dokument/pribytie", label: "Остаться на бланке" },
-    priority: "0.9",
+    priority: "0.95",
     changefreq: "weekly",
   },
   {
@@ -555,7 +547,7 @@ const procedurePages = [
         ],
       },
     ],
-    priority: "0.8",
+    priority: "0.85",
     changefreq: "weekly",
   },
   {
@@ -567,7 +559,7 @@ const procedurePages = [
     lead: "Бланк взрослого со страницы МВД. Заявление ребёнка, замена и дубликат здесь не собираются.",
     blocks: [],
     supplements: [],
-    priority: "0.7",
+    priority: "0.8",
     changefreq: "weekly",
   },
   {
@@ -579,7 +571,7 @@ const procedurePages = [
     lead: "Заявление взрослого по приложению № 1 к Положению о гражданстве. Документы зависят от статьи закона.",
     blocks: [],
     supplements: [],
-    priority: "0.7",
+    priority: "0.75",
     changefreq: "weekly",
   },
   {
@@ -592,13 +584,13 @@ const procedurePages = [
     blocks: [],
     supplements: [
       {
-        warn: "Файл в МВД сам не уходит. Юридические тексты — заглушки «для юриста». Не обещаем приём без замечаний.",
+        warn: "Файл в МВД сам не уходит. PDF — макет полей сервиса: перед подачей сверьте с бланком на сайте МВД. Юридические тексты — заглушки «для юриста».",
         paragraphs: [
-          "Пустой бланк: [скачать](/api/blanks/ubytie). Короткая статья: [уведомление об убытии](/statyi/uvedomlenie-ob-ubytii).",
+          "Мастер заполнения открыт. Пустой бланк: [скачать](/api/blanks/ubytie). Статья: [уведомление об убытии](/statyi/uvedomlenie-ob-ubytii).",
         ],
       },
     ],
-    priority: "0.85",
+    priority: "0.9",
     changefreq: "weekly",
   },
   {
@@ -607,7 +599,7 @@ const procedurePages = [
     description:
       "Заявление о выдаче разрешения на временное проживание (взрослый). Пустой бланк и онлайн-заполнение. Файл для печати вы несёте сами.",
     h1: "Заявление о выдаче разрешения на временное проживание",
-    lead: "Бланк взрослого. РВП ребёнку — в разделе «Скоро».",
+    lead: "Мастер взрослого открыт. РВП ребёнку — отдельная страница «Скоро».",
     blocks: [],
     supplements: [
       {
@@ -615,7 +607,7 @@ const procedurePages = [
         paragraphs: ["Статья-якорь: [заявление на РВП](/statyi/zayavlenie-na-rvp). Пустой бланк: [/api/blanks/rvp](/api/blanks/rvp)."],
       },
     ],
-    priority: "0.8",
+    priority: "0.85",
     changefreq: "weekly",
   },
   {
@@ -633,7 +625,7 @@ const procedurePages = [
         ],
       },
     ],
-    priority: "0.75",
+    priority: "0.8",
     changefreq: "weekly",
   },
   {
@@ -651,7 +643,7 @@ const procedurePages = [
         ],
       },
     ],
-    priority: "0.75",
+    priority: "0.8",
     changefreq: "weekly",
   },
   {
@@ -661,7 +653,7 @@ const procedurePages = [
     h1: "Уведомление о заключении трудового договора — скоро",
     lead: "Страница-заглушка волны B. Мастер заполнения ещё не открыт.",
     blocks: [{ warn: "Скоро. Файл в МВД сам не уходит.", paragraphs: ["Вернитесь к [доступным бланкам](/uslugi)."] }],
-    priority: "0.3",
+    priority: "0.25",
     changefreq: "monthly",
   },
   {
@@ -671,7 +663,7 @@ const procedurePages = [
     h1: "Уведомление о расторжении трудового договора — скоро",
     lead: "Страница-заглушка волны B.",
     blocks: [{ warn: "Скоро.", paragraphs: ["Смотрите [услуги](/uslugi)."] }],
-    priority: "0.3",
+    priority: "0.25",
     changefreq: "monthly",
   },
   {
@@ -681,7 +673,7 @@ const procedurePages = [
     h1: "Продление / переоформление патента — скоро",
     lead: "Отдельные бланки. Пока доступно только первичное [заявление на патент](/dokument/patent).",
     blocks: [{ warn: "Скоро. Патент на работу ≠ патент ИП.", paragraphs: [] }],
-    priority: "0.3",
+    priority: "0.25",
     changefreq: "monthly",
   },
   {
@@ -691,7 +683,7 @@ const procedurePages = [
     h1: "РВП ребёнку — скоро",
     lead: "Пока доступно [РВП взрослому](/dokument/rvp).",
     blocks: [{ warn: "Скоро.", paragraphs: [] }],
-    priority: "0.3",
+    priority: "0.25",
     changefreq: "monthly",
   },
   {
@@ -701,7 +693,7 @@ const procedurePages = [
     h1: "ВНЖ ребёнку — скоро",
     lead: "Пока доступно [ВНЖ взрослому](/dokument/vnzh).",
     blocks: [{ warn: "Скоро.", paragraphs: [] }],
-    priority: "0.3",
+    priority: "0.25",
     changefreq: "monthly",
   },
   {
@@ -711,7 +703,7 @@ const procedurePages = [
     h1: "Гражданство ребёнку — скоро",
     lead: "Пока доступно [гражданство взрослому](/dokument/grazhdanstvo).",
     blocks: [{ warn: "Скоро.", paragraphs: [] }],
-    priority: "0.3",
+    priority: "0.25",
     changefreq: "monthly",
   },
 ];
