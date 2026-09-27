@@ -1,9 +1,13 @@
+import { portalPages } from "../shared/portal-pages.mjs";
 import { USLUGI_REDIRECTS } from "./catalog.mjs";
 /**
  * Public pages for documentmigrant.ru.
  * Search volumes are not stored here: they go stale and must not be invented.
  * Cluster choice follows the Wordstat export of 27 Sep 2026 (Russia, all regions).
+ * Hubs/articles live in shared/portal-pages.mjs (SSR + React).
  */
+
+const ADS_ENABLED = String(process.env.ADS_ENABLED || "false").toLowerCase() === "true";
 
 export const SITE_NAME = "Документ мигранта";
 export const SITE_ORIGIN = "https://documentmigrant.ru";
@@ -234,266 +238,6 @@ const marketingPages = [
     priority: "0.2",
     changefreq: "yearly",
   },
-  {
-    path: "/migracionnyj-uchet",
-    title: "Миграционный учёт иностранного гражданина: уведомление о прибытии",
-    description:
-      "Миграционный учёт по месту пребывания — это уведомление о прибытии. Кто подаёт, куда несут бланк и где заполнить его онлайн.",
-    kicker: "Миграционный учёт",
-    h1: "Миграционный учёт по месту пребывания",
-    lead: "В законе это не отдельная «регистрация» пропиской, а уведомление о прибытии иностранного гражданина или лица без гражданства.",
-    blocks: [
-      {
-        paragraphs: [
-          "По общему правилу уведомление подаёт принимающая сторона. Сам иностранец подаёт его только в случаях, которые прямо названы в законе № 109-ФЗ. Подробности и оговорки — на странице [уведомления о прибытии](/dokument/pribytie).",
-          "Обычный срок — 7 рабочих дней со дня прибытия в место пребывания. Исключения для гостиниц, высококвалифицированных специалистов и участников госпрограммы перечислены в статье [о сроках миграционного учёта](/statyi/sroki-migracionnogo-ucheta).",
-        ],
-      },
-      {
-        heading: "Что сделать на этом сайте",
-        items: [
-          "Скачать [пустой бланк уведомления](/api/blanks/pribytie).",
-          "Посмотреть, [как заполняют клетки](/statyi/kak-zapolnit-uvedomlenie-o-pribytii).",
-          "[Заполнить онлайн](/dokument/pribytie) и скачать файл для печати после тестовой оплаты.",
-        ],
-      },
-      {
-        paragraphs: [
-          "Если вы искали «[регистрацию иностранного гражданина](/registraciya-inostrannogo-grazhdanina)», для места пребывания речь обычно о том же уведомлении. Учёт по месту жительства и регистрация гражданина России — другие процедуры, их бланки здесь не заполняются.",
-        ],
-      },
-    ],
-    cta: { to: "/dokument/pribytie", label: "Заполнить уведомление о прибытии" },
-    priority: "0.9",
-    changefreq: "weekly",
-  },
-  {
-    path: "/registraciya-inostrannogo-grazhdanina",
-    title: "Регистрация иностранного гражданина по месту пребывания",
-    description:
-      "Запрос «регистрация иностранного гражданина» для места пребывания — это миграционный учёт и бланк уведомления о прибытии. Сервис заполняет бланк и не подаёт его в МВД.",
-    kicker: "Регистрация",
-    h1: "Регистрация иностранного гражданина по месту пребывания",
-    lead: "В разговоре говорят «регистрация» и «временная регистрация». Для места пребывания подают уведомление о прибытии.",
-    blocks: [
-      {
-        paragraphs: [
-          "Бланк этой процедуры — [уведомление о прибытии](/dokument/pribytie). Хаб с формулировкой закона: [миграционный учёт](/migracionnyj-uchet).",
-          "Госуслуги — отдельный способ направить уведомление, если он доступен в вашем случае. Этот сервис электронную подачу не выполняет и личный кабинет Госуслуг не заменяет.",
-          "Продление пребывания, учёт по месту жительства и постановка гражданина России здесь не оформляются. Если нужен другой бланк, сверьте его в подразделении.",
-        ],
-      },
-      {
-        items: [
-          "[Бланк уведомления о прибытии](/blanki) — пустой файл.",
-          "[Образец и порядок клеток](/statyi/kak-zapolnit-uvedomlenie-o-pribytii).",
-          "[Сроки](/statyi/sroki-migracionnogo-ucheta), в которые уведомление обычно подают.",
-        ],
-      },
-    ],
-    cta: { to: "/dokument/pribytie", label: "Открыть бланк и заполнить онлайн" },
-    priority: "0.9",
-    changefreq: "weekly",
-  },
-  {
-    path: "/statyi",
-    title: "Статьи: как заполнить уведомление, сроки учёта, патент",
-    description:
-      "Короткие инструкции: как заполнить уведомление о прибытии, сроки миграционного учёта и какие документы просят на патент иностранцу. Патент на работу не равен патенту ИП.",
-    kicker: "Статьи",
-    h1: "Как заполнять и в какие сроки",
-    lead: "Три инструкции к бланкам. Это не консультация и не замена текста на сайте МВД.",
-    blocks: [
-      {
-        items: [
-          "[Как заполнить уведомление о прибытии](/statyi/kak-zapolnit-uvedomlenie-o-pribytii).",
-          "[Сроки миграционного учёта](/statyi/sroki-migracionnogo-ucheta).",
-          "[Документы на патент для иностранных граждан](/statyi/dokumenty-na-patent-dlya-inostrannyh-grazhdan).",
-          "[Уведомление об убытии](/statyi/uvedomlenie-ob-ubytii).",
-          "[Заявление на РВП](/statyi/zayavlenie-na-rvp).",
-          "[Подтверждение проживания по РВП и ВНЖ](/statyi/podtverzhdenie-prozhivaniya).",
-        ],
-      },
-    ],
-    cta: { to: "/uslugi", label: "Перейти к бланкам" },
-    priority: "0.7",
-    changefreq: "weekly",
-  },
-  {
-    path: "/statyi/kak-zapolnit-uvedomlenie-o-pribytii",
-    title: "Как заполнить уведомление о прибытии иностранного гражданина",
-    description:
-      "Кто подаёт уведомление о прибытии, из каких частей состоит бланк и чем пустой образец отличается от файла с ответами. Заполнить онлайн можно на странице документа.",
-    kicker: "Статья",
-    h1: "Как заполнить уведомление о прибытии",
-    lead: "Бланк — приложение № 4 к приказу МВД от 10.12.2020 № 856, в той редакции, которая выложена на странице образцов. Заполняют по-русски.",
-    blocks: [
-      {
-        heading: "Кто вписывает сведения",
-        paragraphs: [
-          "Обычно это принимающая сторона: гражданин России, иностранец с видом на жительство или РВП, либо организация. Иностранец подаёт уведомление сам только в случаях, прямо названных в частях 3–3.5 и 4 статьи 22 закона № 109-ФЗ.",
-          "На бланке подпись ставят от руки уже на бумаге. В файле место подписи пустое. Отметку на отрывной части ставит орган, МФЦ, гостиница или почта — не этот сервис.",
-        ],
-      },
-      {
-        heading: "Какие блоки есть в форме",
-        items: [
-          "Кто подаёт уведомление.",
-          "Сведения о лице, которого ставят на учёт, и документ, удостоверяющий личность.",
-          "Место пребывания и заявленный срок по этому адресу.",
-          "Сведения о принимающей стороне.",
-          "Отрывная часть. Её отдают иностранцу после отметки о приёме.",
-        ],
-      },
-      {
-        heading: "Бланк, образец и заполнение онлайн",
-        paragraphs: [
-          "[Пустой бланк](/api/blanks/pribytie) — образец формы без ваших ответов. Рядом на сайте МВД лежит и образец заполнения; ссылка есть на странице документа.",
-          "Онлайн-заполнение повторяет клетки этого бланка и собирает PDF с вашими ответами. Начать: [уведомление о прибытии](/dokument/pribytie). Срок подачи разобран отдельно: [сроки миграционного учёта](/statyi/sroki-migracionnogo-ucheta).",
-        ],
-      },
-    ],
-    cta: { to: "/dokument/pribytie", label: "Заполнить бланк онлайн" },
-    secondaryCta: { to: "/api/blanks/pribytie", label: "Скачать пустой бланк" },
-    priority: "0.8",
-    changefreq: "monthly",
-  },
-  {
-    path: "/statyi/sroki-migracionnogo-ucheta",
-    title: "Сроки миграционного учёта: когда подать уведомление о прибытии",
-    description:
-      "Обычный срок уведомления о прибытии — 7 рабочих дней. Отдельно указаны гостиницы, высококвалифицированные специалисты и госпрограмма. Срок для ЕАЭС здесь не утверждается.",
-    kicker: "Статья",
-    h1: "Сроки миграционного учёта",
-    lead: "Ниже сроки из статьи 20 закона № 109-ФЗ в той редакции, на которую опирается страница уведомления. Штрафы здесь не пересказываются: их сверяйте в подразделении.",
-    blocks: [
-      {
-        items: [
-          "Обычный срок — 7 рабочих дней со дня прибытия в место пребывания (часть 3 статьи 20).",
-          "Гостиница и иное средство размещения, организация отдыха детей, стационар, организация социального обслуживания, вахта по части 2 статьи 21, учреждение с административным наказанием — 1 рабочий день, следующий за днём прибытия. Если прибытие пришлось на нерабочий день, срок сдвигается на ближайшие рабочие сутки (часть 3.1).",
-          "Учреждение, исполняющее уголовное наказание, — 7 рабочих дней (часть 3.2).",
-          "Высококвалифицированный специалист и члены семьи: до 90 дней со дня въезда действия по учёту можно не выполнять; при переезде внутри России на срок до 30 дней — тоже, затем 7 рабочих дней (часть 4.1).",
-          "Участник госпрограммы переселения соотечественников и члены семьи: 30 дней со дня прибытия, затем 7 рабочих дней (часть 4.2).",
-        ],
-      },
-      {
-        paragraphs: [
-          "Отдельный срок для граждан государств ЕАЭС в статье 20 этой редакции не выделен. Если вам называют другой срок по международному договору, сверьте его в подразделении. Это не установленное здесь правило.",
-          "Заполнить сам бланк: [уведомление о прибытии](/dokument/pribytie). Общий разбор процедуры: [миграционный учёт](/migracionnyj-uchet).",
-        ],
-      },
-    ],
-    cta: { to: "/dokument/pribytie", label: "Перейти к бланку уведомления" },
-    priority: "0.8",
-    changefreq: "monthly",
-  },
-  {
-    path: "/statyi/dokumenty-na-patent-dlya-inostrannyh-grazhdan",
-    title: "Документы на патент для иностранных граждан",
-    description:
-      "Патент на работу иностранца в МВД — не патент для ИП и не заявление в налоговую. Какой бланк заполняет сервис и что сверить перед подачей.",
-    kicker: "Статья",
-    h1: "Документы на патент для иностранных граждан",
-    lead: "Речь о патенте, который позволяет работать без визы у компании, предпринимателя или гражданина России.",
-    blocks: [
-      {
-        warn:
-          "Это не патент для ИП. Заявление на патент в налоговую, патентная система налогообложения и уменьшение патента на страховые взносы относятся к налоговому режиму предпринимателя. Их этот сервис не заполняет. Слово «патент» в поиске смешивает две разные процедуры.",
-        paragraphs: [
-          "Здесь собирается [заявление об оформлении патента](/dokument/patent) — первый бланк, если патент в этом регионе просят впервые. Переоформление, дубликат и исправление уже выданного патента — другие бланки, их сервис не собирает.",
-        ],
-      },
-      {
-        heading: "Что уже можно сказать про комплект",
-        items: [
-          "Само заявление по бланку со страницы «Бланки и образцы заявлений» МВД. Фотография 30×40 мм наклеивается на бланк.",
-          "Остальной перечень лежит в административном регламенте на той же линейке страниц МВД. Текст регламента при сверке 25.09.2026 построчно не разбирался, поэтому полный список копий здесь не пересказывается.",
-          "На странице МВД, с которой взят бланк, указаны суммы госпошлины за выдачу, переоформление, дубликат и изменение сведений. Квитанцию сверьте перед оплатой в казну. 490 ₽ сервиса к госпошлине не относятся и сейчас не списываются.",
-        ],
-      },
-      {
-        paragraphs: [
-          "Перед окном в подразделении откройте регламент по ссылке на странице заявления. Отметка на самом бланке в сервисе так и подписана: нужна сверка.",
-        ],
-      },
-    ],
-    cta: { to: "/dokument/patent", label: "Открыть заявление на патент" },
-    priority: "0.8",
-    changefreq: "monthly",
-  },
-  {
-    path: "/statyi/uvedomlenie-ob-ubytii",
-    title: "Уведомление об убытии иностранного гражданина",
-    description:
-      "Зачем нужно уведомление об убытии, кто обычно подаёт и где заполнить бланк онлайн. Файл в МВД сам не уходит.",
-    kicker: "Статья",
-    h1: "Уведомление об убытии",
-    lead: "Когда иностранец уезжает с адреса учёта, подают уведомление об убытии. Это не то же самое, что уведомление о прибытии.",
-    blocks: [
-      {
-        paragraphs: [
-          "Обычно уведомление подаёт принимающая сторона. Срок и комплект документов сверьте в подразделении.",
-          "На этом сайте можно [заполнить уведомление об убытии онлайн](/dokument/ubytie) и скачать файл для печати после тестовой оплаты.",
-        ],
-      },
-      {
-        warn: "Сервис не подаёт документ в МВД и не гарантирует приём без замечаний. Юридический текст — заглушка «для юриста».",
-        paragraphs: [],
-      },
-    ],
-    cta: { to: "/dokument/ubytie", label: "Заполнить уведомление об убытии" },
-    priority: "0.7",
-    changefreq: "monthly",
-  },
-  {
-    path: "/statyi/zayavlenie-na-rvp",
-    title: "Заявление на РВП: бланк и заполнение",
-    description:
-      "Коротко о заявлении на разрешение на временное проживание для взрослого. Где заполнить онлайн. РВП ребёнку — отдельно, скоро.",
-    kicker: "Статья",
-    h1: "Заявление на РВП",
-    lead: "РВП даёт право временно проживать в России. Здесь собирается бланк взрослого.",
-    blocks: [
-      {
-        paragraphs: [
-          "Основание, квота и список приложений зависят от вашей ситуации — сверьте регламент МВД.",
-          "Заполнить онлайн: [заявление на РВП](/dokument/rvp). Пустой бланк: [/api/blanks/rvp](/api/blanks/rvp).",
-        ],
-      },
-      {
-        warn: "Файл в МВД сам не уходит. Тексты — заглушки «для юриста».",
-        paragraphs: [],
-      },
-    ],
-    cta: { to: "/dokument/rvp", label: "Открыть заявление на РВП" },
-    priority: "0.7",
-    changefreq: "monthly",
-  },
-  {
-    path: "/statyi/podtverzhdenie-prozhivaniya",
-    title: "Подтверждение проживания по РВП и ВНЖ",
-    description:
-      "Ежегодное уведомление о подтверждении проживания для РВП и ВНЖ. Где заполнить бланк онлайн.",
-    kicker: "Статья",
-    h1: "Подтверждение проживания",
-    lead: "Обладатели РВП и ВНЖ подтверждают проживание уведомлением. Это разные бланки.",
-    blocks: [
-      {
-        items: [
-          "[Подтверждение по ВНЖ](/dokument/vnzh-podtverzhdenie).",
-          "[Подтверждение по РВП](/dokument/rvp-podtverzhdenie).",
-        ],
-      },
-      {
-        paragraphs: [
-          "Срок отсчёта и способ подачи сверьте в подразделении. Сервис только готовит файл для печати.",
-        ],
-      },
-    ],
-    cta: { to: "/dokument/vnzh-podtverzhdenie", label: "Открыть подтверждение по ВНЖ" },
-    priority: "0.7",
-    changefreq: "monthly",
-  },
 ];
 
 /** @type {PublicPage[]} */
@@ -711,7 +455,69 @@ const procedurePages = [
 const privatePaths = new Set(["/kabinet", "/vhod", "/registraciya"]);
 
 export function indexablePages() {
-  return [...marketingPages, ...procedurePages];
+  return [...marketingPages, ...portalPages, ...procedurePages];
+}
+
+function collectFaq(page) {
+  const out = [...(page.faq || [])];
+  for (const block of page.blocks || []) {
+    for (const item of block.faq || []) out.push(item);
+  }
+  return out;
+}
+
+function breadcrumbsHtml(page) {
+  const crumbs = page.breadcrumbs || [];
+  if (!crumbs.length) return "";
+  const items = crumbs
+    .map((crumb, i) => {
+      const last = i === crumbs.length - 1;
+      if (crumb.path && !last) {
+        return `<li><a href="${esc(crumb.path)}">${esc(crumb.name)}</a></li>`;
+      }
+      return `<li><span${last ? ' aria-current="page"' : ""}>${esc(crumb.name)}</span></li>`;
+    })
+    .join("");
+  return `<nav class="breadcrumbs" aria-label="Хлебные крошки"><ol>${items}</ol></nav>`;
+}
+
+function adSlotHtml(placement) {
+  const on = ADS_ENABLED ? "true" : "false";
+  const cls = `ad-slot ad-slot--${placement}${ADS_ENABLED ? "" : " ad-slot--off"}`;
+  return `<aside class="${cls}" data-ad-slot="${esc(placement)}" data-ads-enabled="${on}" aria-hidden="${ADS_ENABLED ? "false" : "true"}"></aside>`;
+}
+
+function jsonLdForPage(page) {
+  if (!page || !["hub", "article", "index"].includes(page.type)) return "";
+  const scripts = [];
+  const crumb = page.breadcrumbs || [];
+  if (crumb.length) {
+    scripts.push({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: crumb.map((c, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: c.name,
+        ...(c.path ? { item: `${SITE_ORIGIN}${c.path === "/" ? "/" : c.path}` } : {}),
+      })),
+    });
+  }
+  const faq = collectFaq(page);
+  if (faq.length) {
+    scripts.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faq.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+  }
+  return scripts
+    .map((obj) => `<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, "\\u003c")}</script>`)
+    .join("\n");
 }
 
 export function stripPath(pathname) {
@@ -807,15 +613,29 @@ function inlineHtml(text) {
   return html;
 }
 
-function blocksHtml(blocks) {
+function paragraphHtml(text) {
+  const bold = /^\*\*(.+?)\*\*\s*(.*)$/.exec(String(text || ""));
+  if (bold) return `<p><strong>${esc(bold[1])}</strong> ${inlineHtml(bold[2])}</p>`;
+  return `<p>${inlineHtml(text)}</p>`;
+}
+
+function blocksHtml(blocks, { injectAdAt } = {}) {
   return (blocks || [])
-    .map((block) => {
+    .map((block, index) => {
       const parts = [];
+      if (injectAdAt != null && index === injectAdAt) parts.push(adSlotHtml("in-article"));
       if (block.heading) parts.push(`<h2>${esc(block.heading)}</h2>`);
       if (block.warn) parts.push(`<p class="warn">${esc(block.warn)}</p>`);
-      for (const paragraph of block.paragraphs || []) parts.push(`<p>${inlineHtml(paragraph)}</p>`);
+      for (const paragraph of block.paragraphs || []) parts.push(paragraphHtml(paragraph));
       if (block.items?.length) {
         parts.push(`<ul>${block.items.map((item) => `<li>${inlineHtml(item)}</li>`).join("")}</ul>`);
+      }
+      if (block.faq?.length) {
+        parts.push(
+          `<dl class="portal-faq">${block.faq
+            .map((f) => `<dt>${esc(f.q)}</dt><dd>${inlineHtml(f.a)}</dd>`)
+            .join("")}</dl>`,
+        );
       }
       return parts.join("");
     })
@@ -824,17 +644,22 @@ function blocksHtml(blocks) {
 
 export function fallbackInnerHtml(page) {
   if (!page) return "<h1>Страница не найдена</h1><p>Такой страницы на сервисе нет.</p>";
+  const portal = page.type === "hub" || page.type === "article" || page.type === "index";
+  const mid = Math.max(1, Math.floor((page.blocks || []).length / 2));
   const cta = page.cta && page.path !== page.cta.to
-    ? `<p><a href="${esc(page.cta.to)}">${esc(page.cta.label)}</a></p>`
+    ? `<p class="portal-cta"><a class="btn" href="${esc(page.cta.to)}">${esc(page.cta.label)}</a></p>`
     : "";
-  return [
-    page.kicker ? `<p>${esc(page.kicker)}</p>` : "",
+  const article = [
+    breadcrumbsHtml(page),
+    page.kicker ? `<p class="kicker">${esc(page.kicker)}</p>` : "",
     `<h1>${esc(page.h1)}</h1>`,
-    page.lead ? `<p>${inlineHtml(page.lead)}</p>` : "",
-    blocksHtml(page.blocks),
+    page.lead ? `<p class="lead">${inlineHtml(page.lead)}</p>` : "",
+    blocksHtml(page.blocks, portal ? { injectAdAt: mid } : undefined),
     blocksHtml(page.supplements),
     cta,
   ].join("");
+  if (!portal) return article;
+  return `<div class="portal-layout"><article class="portal-article">${article}</article><div class="portal-aside">${adSlotHtml("aside")}</div></div>`;
 }
 
 export function injectIndexHtml(template, pathname) {
@@ -852,6 +677,8 @@ export function injectIndexHtml(template, pathname) {
       html = html.replace("</head>", `<link rel="canonical" href="${esc(meta.canonical)}" />\n</head>`);
     }
   }
+  const ld = jsonLdForPage(page);
+  if (ld) html = html.replace("</head>", `${ld}\n</head>`);
   const fallback = fallbackInnerHtml(page);
   html = html.replace(/<div id="root">\s*<\/div>/, `<div id="root">${fallback}</div>`);
   return html;

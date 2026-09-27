@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./auth.jsx";
+import { PortalPage } from "./components/PortalPage.jsx";
 import {
   AuthPage,
   DocumentPage,
@@ -204,27 +205,13 @@ export default function App() {
                 />
               }
             />
+            <Route path="/migracionnyj-uchet" element={<PortalPage path="/migracionnyj-uchet" />} />
             <Route
-              path="/statyi"
-              element={
-                <SimplePublicPage
-                  title="Статьи"
-                  lead="Короткие инструкции. Это не консультация юриста."
-                  blocks={[
-                    {
-                      items: [
-                        "Как заполнить уведомление о прибытии — /statyi/kak-zapolnit-uvedomlenie-o-pribytii",
-                        "Сроки миграционного учёта — /statyi/sroki-migracionnogo-ucheta",
-                        "Документы на патент — /statyi/dokumenty-na-patent-dlya-inostrannyh-grazhdan",
-                        "Уведомление об убытии — /statyi/uvedomlenie-ob-ubytii",
-                        "Заявление на РВП — /statyi/zayavlenie-na-rvp",
-                        "Подтверждение проживания — /statyi/podtverzhdenie-prozhivaniya",
-                      ],
-                    },
-                  ]}
-                />
-              }
+              path="/registraciya-inostrannogo-grazhdanina"
+              element={<PortalPage path="/registraciya-inostrannogo-grazhdanina" />}
             />
+            <Route path="/statyi" element={<PortalPage path="/statyi" />} />
+            <Route path="/statyi/:slug" element={<PortalPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Shell>

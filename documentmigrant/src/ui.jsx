@@ -18,7 +18,25 @@ export function Shell({ children }) {
       <main className="main" id="content">
         {children}
       </main>
+      <SiteFooter />
     </div>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <nav className="foot-links" aria-label="Подвал">
+        <Link to="/statyi">Статьи</Link>
+        <Link to="/migracionnyj-uchet">Миграционный учёт</Link>
+        <Link to="/registraciya-inostrannogo-grazhdanina">Регистрация иностранного гражданина</Link>
+        <Link to="/ceny">Цены</Link>
+        <Link to="/kontakty">Контакты</Link>
+        <Link to="/oferta">Оферта</Link>
+        <Link to="/politika">Политика</Link>
+      </nav>
+      <p className="muted">Сервис готовит файл бланка МВД для печати и не подаёт документы в ведомство.</p>
+    </footer>
   );
 }
 
@@ -32,6 +50,7 @@ function TopNav() {
         <Link to="/#dokumenty">Документы</Link>
         <Link to="/uslugi">Услуги</Link>
         <Link to="/blanki">Бланки</Link>
+        <Link to="/statyi">Статьи</Link>
         <Link to="/kabinet">{user.name}</Link>
         <button
           className="text-btn"
@@ -53,6 +72,7 @@ function TopNav() {
       <Link to="/#dokumenty">Документы</Link>
       <Link to="/uslugi">Услуги</Link>
       <Link to="/blanki">Бланки</Link>
+      <Link to="/statyi">Статьи</Link>
       <Link to="/vhod">Войти</Link>
     </nav>
   );

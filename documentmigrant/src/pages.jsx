@@ -104,14 +104,12 @@ export function DocumentPage() {
           <h1>{soon.title}</h1>
           <p className="lead">{soon.summary}</p>
         </header>
-        <p className="note">
-          Мастер заполнения ещё не открыт. Страница-заглушка волны B: маршрут уже есть, чтобы его можно было найти в меню и sitemap.
-        </p>
+        <p className="note">Скоро. Мастер заполнения ещё не открыт — это заглушка волны B без кнопки заполнения.</p>
         <p className="warn">
           Файл в МВД сам не уходит. Юридические тексты — заглушки «для юриста». Не обещаем одобрение ведомства.
         </p>
         <div className="row">
-          <Link className="btn" to="/#dokumenty">
+          <Link className="btn-quiet" to="/#dokumenty">
             К доступным бланкам
           </Link>
           <Link className="btn-quiet" to="/uslugi">
