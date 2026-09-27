@@ -14,56 +14,6 @@ import {
 } from "./pages.jsx";
 import { Shell } from "./ui.jsx";
 
-const uslugiBlocks = [
-  {
-    items: [
-      "Уведомление о прибытии — /dokument/pribytie (есть режим на ребёнка).",
-      "Уведомление об убытии — /dokument/ubytie.",
-      "Заявление на патент — /dokument/patent (патент на работу, не патент ИП).",
-      "Заявление на РВП (взрослый) — /dokument/rvp.",
-      "Заявление на ВНЖ — /dokument/vnzh.",
-      "Подтверждение проживания по ВНЖ — /dokument/vnzh-podtverzhdenie.",
-      "Подтверждение проживания по РВП — /dokument/rvp-podtverzhdenie.",
-      "Заявление на гражданство — /dokument/grazhdanstvo.",
-    ],
-  },
-  {
-    heading: "Скоро",
-    items: [
-      "Уведомления работодателя о заключении и расторжении ТД.",
-      "Продление / переоформление патента.",
-      "РВП, ВНЖ и гражданство ребёнку.",
-    ],
-  },
-  {
-    warn: "Файл в МВД сам не уходит. Юридические тексты — заглушки «для юриста».",
-    paragraphs: [
-      "Список и пустой бланк бесплатны. Готовый файл — после тестовой оплаты 490 ₽: деньги не списываются.",
-    ],
-  },
-];
-
-const blankiBlocks = [
-  {
-    heading: "Скачать пустой бланк",
-    items: [
-      "Прибытие — /api/blanks/pribytie",
-      "Убытие — /api/blanks/ubytie",
-      "Патент — /api/blanks/patent",
-      "РВП — /api/blanks/rvp",
-      "ВНЖ — /api/blanks/vnzh",
-      "Подтверждение ВНЖ — /api/blanks/vnzh-podtverzhdenie",
-      "Подтверждение РВП — /api/blanks/rvp-podtverzhdenie",
-      "Гражданство — /api/blanks/grazhdanstvo",
-    ],
-  },
-  {
-    paragraphs: [
-      "В пустом файле нет ваших ответов. Заполненный PDF собирается на странице документа после тестовой оплаты.",
-    ],
-  },
-];
-
 export default function App() {
   return (
     <AuthProvider>
@@ -98,28 +48,8 @@ export default function App() {
                 </RequireAuth>
               }
             />
-            <Route
-              path="/uslugi"
-              element={
-                <SimplePublicPage
-                  title="Какие бланки можно заполнить"
-                  lead="Каждая услуга открывается по адресу /dokument/… Файл в МВД сам не уходит."
-                  blocks={uslugiBlocks}
-                  cta={{ to: "/#dokumenty", label: "К документам" }}
-                />
-              }
-            />
-            <Route
-              path="/blanki"
-              element={
-                <SimplePublicPage
-                  title="Пустые бланки МВД"
-                  lead="Кнопка скачивает пустой бланк без ваших ответов."
-                  blocks={blankiBlocks}
-                  cta={{ to: "/dokument/pribytie", label: "Заполнить уведомление" }}
-                />
-              }
-            />
+            <Route path="/uslugi" element={<PortalPage path="/uslugi" />} />
+            <Route path="/blanki" element={<PortalPage path="/blanki" />} />
             <Route
               path="/ceny"
               element={

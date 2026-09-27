@@ -51,78 +51,6 @@ const marketingPages = [
     changefreq: "weekly",
   },
   {
-    path: "/uslugi",
-    title: "Услуги: заполнение бланков МВД онлайн",
-    description:
-      "Бланки МВД онлайн: прибытие, убытие, патент, РВП, ВНЖ, подтверждение проживания и гражданство. Адреса услуг совпадают с /dokument/…",
-    kicker: "Услуги",
-    h1: "Какие бланки можно заполнить",
-    lead: "Каждая услуга открывается по адресу /dokument/…. Короткие адреса /uslugi/… ведут туда же. Файл в МВД сам не уходит.",
-    blocks: [
-      {
-        items: [
-          "[Уведомление о прибытии](/dokument/pribytie) — есть режим «на ребёнка».",
-          "[Уведомление об убытии](/dokument/ubytie).",
-          "[Заявление об оформлении патента](/dokument/patent) — не патент ИП.",
-          "[Заявление на РВП](/dokument/rvp) — взрослый.",
-          "[Заявление о выдаче вида на жительство](/dokument/vnzh).",
-          "[Подтверждение проживания по ВНЖ](/dokument/vnzh-podtverzhdenie).",
-          "[Подтверждение проживания по РВП](/dokument/rvp-podtverzhdenie).",
-          "[Заявление о приёме в гражданство](/dokument/grazhdanstvo).",
-        ],
-      },
-      {
-        heading: "Скоро",
-        items: [
-          "[Уведомление работодателя: заключение ТД](/dokument/rabotodatel-td-zaklyuchenie).",
-          "[Уведомление работодателя: расторжение ТД](/dokument/rabotodatel-td-rastorzhenie).",
-          "[Продление / переоформление патента](/dokument/patent-prodlenie).",
-          "[РВП ребёнку](/dokument/rvp-rebenok), [ВНЖ ребёнку](/dokument/vnzh-rebenok), [гражданство ребёнку](/dokument/grazhdanstvo-rebenok).",
-        ],
-      },
-      {
-        paragraphs: [
-          "Список документов и пустой бланк бесплатны. Файл с вашими ответами открывается после тестовой оплаты 490 ₽: деньги не списываются. Это плата сервиса, не госпошлина.",
-        ],
-      },
-    ],
-    cta: { to: "/ceny", label: "Сколько стоит файл" },
-    priority: "0.8",
-    changefreq: "weekly",
-  },
-  {
-    path: "/blanki",
-    title: "Бланки МВД: уведомление о прибытии, патент, ВНЖ, гражданство",
-    description:
-      "Пустые бланки уведомления о прибытии, заявления на патент, вид на жительство и гражданство. В файле нет ваших ответов. Образец с ответами собирается отдельно.",
-    kicker: "Бланки",
-    h1: "Пустые бланки МВД",
-    lead: "Кнопка скачивает пустой бланк со страницы МВД, без ваших ответов. Заполненный файл — на странице документа, после тестовой оплаты.",
-    blocks: [
-      {
-        heading: "Скачать пустой бланк",
-        items: [
-          "[Бланк уведомления о прибытии](/api/blanks/pribytie) — приложение № 4 к приказу МВД № 856. Сверка 25.09.2026.",
-          "[Бланк уведомления об убытии](/api/blanks/ubytie).",
-          "[Бланк заявления об оформлении патента](/api/blanks/patent).",
-          "[Бланк заявления на РВП](/api/blanks/rvp).",
-          "[Бланк заявления о выдаче вида на жительство](/api/blanks/vnzh).",
-          "[Бланк подтверждения проживания по ВНЖ](/api/blanks/vnzh-podtverzhdenie).",
-          "[Бланк подтверждения проживания по РВП](/api/blanks/rvp-podtverzhdenie).",
-          "[Бланк заявления о приёме в гражданство](/api/blanks/grazhdanstvo).",
-        ],
-      },
-      {
-        paragraphs: [
-          "Образец с вашими ответами — это не пустой файл. Его собирает [заполнение уведомления о прибытии](/dokument/pribytie) или другая страница документа. Как устроены клетки прибытия: [как заполнить уведомление](/statyi/kak-zapolnit-uvedomlenie-o-pribytii).",
-        ],
-      },
-    ],
-    cta: { to: "/dokument/pribytie", label: "Заполнить уведомление онлайн" },
-    priority: "0.8",
-    changefreq: "monthly",
-  },
-  {
     path: "/ceny",
     title: "Цены: готовый файл бланка МВД — 490 ₽",
     description:
@@ -488,7 +416,7 @@ function adSlotHtml(placement) {
 }
 
 function jsonLdForPage(page) {
-  if (!page || !["hub", "article", "index"].includes(page.type)) return "";
+  if (!page || !["hub", "article", "index", "catalog"].includes(page.type)) return "";
   const scripts = [];
   const crumb = page.breadcrumbs || [];
   if (crumb.length) {
@@ -644,7 +572,8 @@ function blocksHtml(blocks, { injectAdAt } = {}) {
 
 export function fallbackInnerHtml(page) {
   if (!page) return "<h1>Страница не найдена</h1><p>Такой страницы на сервисе нет.</p>";
-  const portal = page.type === "hub" || page.type === "article" || page.type === "index";
+  const withAds = page.type === "hub" || page.type === "article" || page.type === "index";
+  const rich = withAds || page.type === "catalog";
   const mid = Math.max(1, Math.floor((page.blocks || []).length / 2));
   const cta = page.cta && page.path !== page.cta.to
     ? `<p class="portal-cta"><a class="btn" href="${esc(page.cta.to)}">${esc(page.cta.label)}</a></p>`
@@ -654,11 +583,12 @@ export function fallbackInnerHtml(page) {
     page.kicker ? `<p class="kicker">${esc(page.kicker)}</p>` : "",
     `<h1>${esc(page.h1)}</h1>`,
     page.lead ? `<p class="lead">${inlineHtml(page.lead)}</p>` : "",
-    blocksHtml(page.blocks, portal ? { injectAdAt: mid } : undefined),
+    blocksHtml(page.blocks, withAds ? { injectAdAt: mid } : undefined),
     blocksHtml(page.supplements),
     cta,
   ].join("");
-  if (!portal) return article;
+  if (!rich) return article;
+  if (!withAds) return `<div class="portal-layout"><article class="portal-article">${article}</article></div>`;
   return `<div class="portal-layout"><article class="portal-article">${article}</article><div class="portal-aside">${adSlotHtml("aside")}</div></div>`;
 }
 
