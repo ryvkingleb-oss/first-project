@@ -51,6 +51,7 @@ function TopNav() {
         <Link to="/uslugi">Услуги</Link>
         <Link to="/blanki">Бланки</Link>
         <Link to="/statyi">Статьи</Link>
+        <Link to="/ceny">Цены</Link>
         <Link to="/kabinet">{user.name}</Link>
         <button
           className="text-btn"
@@ -73,6 +74,7 @@ function TopNav() {
       <Link to="/uslugi">Услуги</Link>
       <Link to="/blanki">Бланки</Link>
       <Link to="/statyi">Статьи</Link>
+      <Link to="/ceny">Цены</Link>
       <Link to="/vhod">Войти</Link>
     </nav>
   );

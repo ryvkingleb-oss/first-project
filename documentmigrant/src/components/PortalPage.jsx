@@ -101,6 +101,76 @@ export function PortalPage({ path: fixedPath }) {
     );
   }
 
+  if (page.groups?.length) {
+    return (
+      <div className="catalog-page">
+        <nav className="breadcrumbs" aria-label="Хлебные крошки">
+          <ol>
+            {(page.breadcrumbs || []).map((crumb, i, arr) => (
+              <li key={`${crumb.name}-${i}`}>
+                {crumb.path && i < arr.length - 1 ? (
+                  <Link to={crumb.path}>{crumb.name}</Link>
+                ) : (
+                  <span aria-current={i === arr.length - 1 ? "page" : undefined}>{crumb.name}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <header className="stack">
+          {page.kicker ? <p className="kicker">{page.kicker}</p> : null}
+          <h1>{page.h1}</h1>
+          {page.lead ? <p className="lead">{page.lead}</p> : null}
+        </header>
+        {page.groups.map((group) => (
+          <section key={group.heading} className="catalog-group" aria-labelledby={`g-${group.heading}`}>
+            <h2 id={`g-${group.heading}`}>{group.heading}</h2>
+            <div className="cards">
+              {group.cards.map((card) =>
+                card.soon ? (
+                  <article key={card.title} className="card card-soon">
+                    <p className="tag">Скоро</p>
+                    <h3>{card.title}</h3>
+                    <p>{card.text}</p>
+                  </article>
+                ) : (
+                  <article key={card.title} className="card offer-card">
+                    <h3>{card.title}</h3>
+                    <p>{card.text}</p>
+                    <div className="offer-actions">
+                      {card.download ? (
+                        <a className="btn" href={card.download}>
+                          Скачать
+                        </a>
+                      ) : null}
+                      {card.to ? (
+                        <Link className={card.download ? "btn-quiet" : "btn"} to={card.to}>
+                          {card.action || "Заполнить онлайн"}
+                        </Link>
+                      ) : null}
+                      {card.blank ? (
+                        <a className="btn-quiet" href={card.blank}>
+                          Пустой бланк
+                        </a>
+                      ) : null}
+                    </div>
+                  </article>
+                ),
+              )}
+            </div>
+          </section>
+        ))}
+        {page.cta ? (
+          <p className="portal-cta">
+            <Link className="btn-quiet" to={page.cta.to}>
+              {page.cta.label}
+            </Link>
+          </p>
+        ) : null}
+      </div>
+    );
+  }
+
   const showAds = page.type === "hub" || page.type === "article" || page.type === "index";
   const mid = Math.max(1, Math.floor((page.blocks || []).length / 2));
 

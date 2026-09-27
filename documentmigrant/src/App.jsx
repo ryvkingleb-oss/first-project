@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./auth.jsx";
 import { PortalPage } from "./components/PortalPage.jsx";
+import { PriceOffer } from "./components/PriceOffer.jsx";
 import {
   AuthPage,
   DocumentPage,
@@ -53,19 +54,43 @@ export default function App() {
             <Route
               path="/ceny"
               element={
-                <SimplePublicPage
-                  title="490 ₽ за готовый файл"
-                  lead="Сейчас оплата тестовая: деньги не списываются. Это не госпошлина."
-                  blocks={[
-                    {
-                      paragraphs: [
-                        "Пустой бланк и чек-лист бесплатны. Платный шаг — скачать бланк с вашими ответами.",
-                        "Касса в режиме заглушки. Живая оплата не подключена.",
-                      ],
-                    },
-                  ]}
-                  cta={{ to: "/#dokumenty", label: "Выбрать документ" }}
-                />
+                <div className="stack-lg">
+                  <header className="stack">
+                    <p className="kicker">Цены</p>
+                    <h1>Готовый файл бланка — 490 ₽</h1>
+                    <p className="lead">
+                      Мы продаём заполненный бланк: ваши ответы уже стоят в форме, файл можно скачать и распечатать.
+                    </p>
+                  </header>
+                  <PriceOffer />
+                  <section className="stack">
+                    <h2>Что входит в 490 ₽</h2>
+                    <ul className="list">
+                      <li>Один бланк с вашими ответами: прибытие, убытие, патент, РВП, ВНЖ, подтверждение проживания или гражданство.</li>
+                      <li>Файл хранится в кабинете, его можно скачать снова.</li>
+                    </ul>
+                  </section>
+                  <section className="stack">
+                    <h2>Что бесплатно</h2>
+                    <ul className="list">
+                      <li>Пустой бланк без ваших данных.</li>
+                      <li>Список документов и короткие инструкции.</li>
+                    </ul>
+                  </section>
+                  <section className="stack">
+                    <h2>Чего в цене нет</h2>
+                    <ul className="list">
+                      <li>Госпошлина и платежи в казну — их платят отдельно, если они нужны.</li>
+                      <li>Подача в МВД, МФЦ или на Госуслуги. Документ несёте сами.</li>
+                      <li>Подпись и отметка подразделения.</li>
+                    </ul>
+                  </section>
+                  <p>
+                    <a className="btn" href="/#dokumenty">
+                      Выбрать документ
+                    </a>
+                  </p>
+                </div>
               }
             />
             <Route

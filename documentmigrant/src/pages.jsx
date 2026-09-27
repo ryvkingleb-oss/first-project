@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { api } from "./api.js";
 import { useAuth } from "./auth.jsx";
 import { comingSoon, getProcedure, homeBlurbs, procedures } from "./procedures/index.js";
+import { PriceOffer } from "./components/PriceOffer.jsx";
 import { Field, RequireAuth, visibleField } from "./ui.jsx";
 
 const needLabel = { always: "Обычно нужно", if: "Не всем", check: "Нужна сверка" };
@@ -10,7 +11,7 @@ const needLabel = { always: "Обычно нужно", if: "Не всем", chec
 const processSteps = [
   { title: "Регистрация", text: "Создаёте кабинет. Без него список можно читать, а свой файл — нет." },
   { title: "Заполнение", text: "Вписываете те же поля, что на бланке МВД. Пустой бланк можно скачать сразу." },
-  { title: "Проверка", text: "Сверяете ответы и сразу скачиваете готовый файл для печати." },
+  { title: "Файл за 490 ₽", text: "Готовый бланк с вашими ответами — 490 ₽. Сейчас оплата тестовая: деньги не списываются." },
   { title: "Скачивание и печать", text: "Получаете бланк с вашими ответами. Подпись ставите от руки и несёте сами." },
 ];
 
@@ -27,14 +28,11 @@ export function HomePage() {
           <a className="btn" href="#dokumenty">
             Выбрать документ
           </a>
-          <Link className="btn-quiet" to="/vhod">
-            Войти
+          <Link className="btn-quiet" to="/ceny">
+            490 ₽ за файл
           </Link>
         </div>
-        <p className="note">
-          <strong>Сейчас</strong> доступны списки, чек-листы, пустые бланки и готовый файл. В подразделение несёте сами — подпись от руки.
-          Файл в МВД сам не уходит. Патент на работу ≠ патент ИП.
-        </p>
+        <PriceOffer />
       </section>
 
       <section id="dokumenty" className="home-block" aria-labelledby="docs-title">
@@ -151,12 +149,12 @@ export function DocumentPage() {
         <p className="lead">{procedure.summary}</p>
       </header>
 
+      <PriceOffer compact />
       <section className="sample">
         <a className="btn-quiet" href={`/api/blanks/${procedure.id}`}>
-          Скачать бланк
+          Скачать пустой бланк бесплатно
         </a>
-        <p>Пустой образец бланка МВД. Ваших ответов в этом файле нет.</p>
-        <p className="muted">Заполненный файл скачивается после тестовой оплаты на шаге оплаты.</p>
+        <p>В пустом файле нет ваших ответов. Заполненный бланк — 490 ₽, сейчас без списания.</p>
       </section>
 
       {(procedure.about || []).map((p) => (

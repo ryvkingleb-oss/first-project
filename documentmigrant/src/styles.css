@@ -153,6 +153,26 @@ dl{margin:0}dt{font-weight:700;margin-top:12px}dd{margin:2px 0 0;color:var(--mut
   border:1px solid var(--line);
 }
 .price strong{font-family:var(--display);font-size:1.35rem;line-height:1.1;color:var(--primary)}
+.offer{
+  display:grid;gap:10px;max-width:40rem;margin:0;
+  padding:16px 18px;border-radius:16px;
+  background:var(--paper);border:1px solid var(--line);
+}
+.offer .kicker{margin:0}
+.offer-price{display:grid;gap:2px;margin:0}
+.offer-price strong{font-family:var(--display);font-size:clamp(1.8rem,4vw,2.4rem);line-height:1;color:var(--primary);letter-spacing:-.03em}
+.offer-price span{color:var(--ink);font-weight:600}
+.offer-list{margin:0;padding-left:1.1rem;display:grid;gap:4px}
+.offer-list li{color:var(--muted)}
+.offer--compact{padding:14px 16px}
+.offer--compact .offer-price strong{font-size:1.6rem}
+.catalog-page{display:grid;gap:28px}
+.catalog-group{display:grid;gap:12px}
+.catalog-group h2{font-size:1.2rem}
+.offer-card h3{font-size:1.12rem}
+.offer-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.card-soon{background:transparent}
+.card-soon h3{color:var(--muted)}
 
 .home-block{display:grid;gap:14px;scroll-margin-top:72px}
 .home-block h2{font-size:clamp(1.4rem,3vw,1.85rem)}
