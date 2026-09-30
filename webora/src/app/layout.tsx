@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geologica, Onest } from "next/font/google";
 import { CookieBanner } from "@/components/CookieBanner";
 import { Footer, Header } from "@/components/Shell";
+import { YandexMetrika } from "@/components/YandexMetrika";
 import { site } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo";
 import "./globals.css";
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Footer />
         </div>
         <CookieBanner />
+        <YandexMetrika />
       </body>
     </html>
   );
