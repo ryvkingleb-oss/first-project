@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Hero } from "@/components/Hero";
 import { CtaBlock, JsonLd } from "@/components/ui";
 import { getAllArticles, articlePath } from "@/lib/articles";
 import { categories, cmsServices, coreServices } from "@/lib/catalog";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
-import { site } from "@/lib/site";
 
 const serviceImages: Record<string, { src: string; alt: string }> = {
   "sozdanie-saitov": {
@@ -36,32 +36,7 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
-      <section className="hero">
-        <Image
-          className="hero-photo"
-          src="/images/hero.jpg"
-          alt="Рабочее место студии: сайт на экране и SEO-аналитика"
-          fill
-          priority
-          sizes="100vw"
-        />
-        <div className="hero-visual" aria-hidden />
-        <div className="hero-content">
-          <span className="brand-inline">{site.name}</span>
-          <h1>{site.tagline}</h1>
-          <p className="lead">
-            Создаём, дорабатываем и продвигаем сайты под семантическое ядро — от первой услуги до тысяч статей в блоге.
-          </p>
-          <div className="btn-row">
-            <Link className="btn" href="/kontakty">
-              Обсудить задачу
-            </Link>
-            <Link className="btn btn-ghost" href="/uslugi">
-              Смотреть услуги
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       <section className="section">
         <div className="section-head">
