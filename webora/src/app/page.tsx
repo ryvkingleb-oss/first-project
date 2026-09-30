@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CtaBlock, JsonLd } from "@/components/ui";
 import { getAllArticles, articlePath } from "@/lib/articles";
@@ -5,14 +6,79 @@ import { categories, services } from "@/lib/catalog";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
+const serviceVisuals: Record<
+  string,
+  { src: string; alt: string; points: string[] }
+> = {
+  "sozdanie-saitov": {
+    src: "/images/service-create.jpg",
+    alt: "Разработка сайта на ноутбуке: от макета к готовой странице",
+    points: [
+      "Прототип и карта URL под семантику",
+      "Дизайн, вёрстка, CMS и формы",
+      "Базовое SEO на старте",
+    ],
+  },
+  "dorabotka-saitov": {
+    src: "/images/service-refine.jpg",
+    alt: "Доработка сайта: сравнение старой и новой версии на мониторах",
+    points: [
+      "Скорость, формы, мобильная версия",
+      "Редизайн без поломки индекса",
+      "Новые разделы и шаблоны",
+    ],
+  },
+  "seo-prodvizhenie": {
+    src: "/images/service-seo.jpg",
+    alt: "SEO-продвижение: аналитика, семантика и рост трафика",
+    points: [
+      "Семантическое ядро и кластеры",
+      "Хабы, статьи, перелинковка",
+      "Техничка и рост заявок",
+    ],
+  },
+};
+
+const processSteps = [
+  {
+    n: "01",
+    title: "Бриф и ядро",
+    text: "Цели, оффер, черновая семантика — понимаем, какие страницы реально нужны.",
+  },
+  {
+    n: "02",
+    title: "Структура",
+    text: "Карта URL: услуги, хабы, статьи. Чтобы потом масштабировать без переделки.",
+  },
+  {
+    n: "03",
+    title: "Сборка",
+    text: "Дизайн, код, контентные шаблоны, формы и аналитика.",
+  },
+  {
+    n: "04",
+    title: "Рост",
+    text: "Индекс, доработки, контент-план — от первых страниц до тысяч статей.",
+  },
+];
+
 export default function HomePage() {
   const latest = getAllArticles().slice(0, 6);
 
   return (
     <>
       <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
+
       <section className="hero">
-        <div className="hero-visual" aria-hidden />
+        <Image
+          className="hero-photo"
+          src="/images/hero.jpg"
+          alt="Рабочее место студии Вебора: монитор с сайтом и аналитикой SEO"
+          fill
+          priority
+          sizes="100vw"
+        />
+        <div className="hero-scrim" aria-hidden />
         <div className="hero-content">
           <p className="brand-inline">{site.name}</p>
           <h1>{site.tagline}</h1>
@@ -33,18 +99,68 @@ export default function HomePage() {
       <section className="section">
         <div className="section-head">
           <p className="kicker">Услуги</p>
-          <h2>Три направления — одна система роста</h2>
-          <p className="muted">Разработка, доработка и SEO связаны: структура под спрос, техника и контент.</p>
+          <h2>Что делаем — наглядно</h2>
+          <p className="muted">
+            Три направления одной системы: сайт → доработка → поиск. У каждого — свой результат и цена от.
+          </p>
         </div>
-        <div className="service-list">
-          {services.map((service) => (
-            <Link key={service.slug} className="service-row" href={`/uslugi/${service.slug}`}>
-              <h3>{service.name}</h3>
-              <p>{service.lead}</p>
-              <span className="price">{service.priceFrom}</span>
-            </Link>
+
+        <div className="service-showcase">
+          {services.map((service, index) => {
+            const visual = serviceVisuals[service.slug];
+            return (
+              <article
+                key={service.slug}
+                className={`service-showcase-item${index % 2 === 1 ? " is-flip" : ""}`}
+              >
+                <Link href={`/uslugi/${service.slug}`} className="service-showcase-media">
+                  <Image
+                    src={visual.src}
+                    alt={visual.alt}
+                    width={960}
+                    height={720}
+                    sizes="(max-width: 900px) 100vw, 52vw"
+                  />
+                </Link>
+                <div className="service-showcase-body">
+                  <p className="kicker">{service.priceFrom}</p>
+                  <h3>{service.name}</h3>
+                  <p className="muted">{service.lead}</p>
+                  <ul className="service-points">
+                    {visual.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                  <div className="btn-row">
+                    <Link className="btn" href={`/uslugi/${service.slug}`}>
+                      Подробнее
+                    </Link>
+                    <Link className="btn btn-ghost" href="/kontakty">
+                      Заявка
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="section process-section">
+        <div className="section-head">
+          <p className="kicker">Как работаем</p>
+          <h2>От брифа до роста в поиске</h2>
+          <p className="muted">Понятный порядок — чтобы не платить дважды за переделку структуры.</p>
+        </div>
+        <ol className="process-grid">
+          {processSteps.map((step) => (
+            <li key={step.n}>
+              <span className="process-n">{step.n}</span>
+              <h3>{step.title}</h3>
+              <p className="muted">{step.text}</p>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
 
       <section className="section" style={{ paddingTop: 0 }}>
