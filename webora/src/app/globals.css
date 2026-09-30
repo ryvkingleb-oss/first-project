@@ -253,7 +253,17 @@ p {
 }
 
 .messenger-icon.is-max {
-  background: #7b61ff;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+  padding: 0;
+}
+
+.messenger-icon.is-max img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .messenger-icon:hover {

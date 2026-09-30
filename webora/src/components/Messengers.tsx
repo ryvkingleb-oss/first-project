@@ -20,13 +20,10 @@ const icons: Record<MessengerKey, ReactNode> = {
       />
     </svg>
   ),
+  // Official mark from https://go.max.ru/brandbook (Max colored)
   max: (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M4.2 5.2h3.1l2.6 6.4h.1L12.7 5.2h3.1v13.6h-2.7V10.4h-.1l-2.8 8.4H9.1L6.3 10.4h-.1v8.4H3.5V5.2h.7Zm13.4 0H20v13.6h-2.4V5.2Z"
-      />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src="/icons/max.png" alt="" width={40} height={40} decoding="async" />
   ),
 };
 
