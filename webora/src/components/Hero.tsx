@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { MessengerIcons } from "@/components/Messengers";
 import { site } from "@/lib/site";
 
 export function Hero() {
@@ -36,18 +36,9 @@ export function Hero() {
       <div className="hero-layout">
         <div className="hero-copy">
           <p className="brand-inline">{site.name}</p>
-          <h1>{site.tagline}</h1>
-          <p className="lead">
-            Создаём, дорабатываем и продвигаем сайты под семантическое ядро — от первой услуги до тысяч статей.
-          </p>
-          <div className="btn-row">
-            <Link className="btn" href="/kontakty">
-              Обсудить задачу
-            </Link>
-            <Link className="btn btn-ghost" href="/uslugi">
-              Смотреть услуги
-            </Link>
-          </div>
+          <h1>Создание и доработка сайтов</h1>
+          <p className="lead">Свяжитесь со мной любым удобным методом</p>
+          <MessengerIcons size="lg" className="hero-messengers" />
         </div>
 
         <div className="hero-scene" aria-hidden="true">

@@ -495,32 +495,14 @@ main {
   animation-delay: 0.14s;
 }
 
-.hero-copy .btn-row {
-  margin-top: 28px;
+.hero-messengers {
+  margin-top: 26px;
   animation: rise 0.95s ease both;
   animation-delay: 0.22s;
 }
 
-.hero-copy .btn:not(.btn-ghost) {
-  background: var(--primary);
-  color: var(--primary-ink);
-  border-color: var(--primary);
-}
-
-.hero-copy .btn:not(.btn-ghost):hover {
-  background: #183d2e;
-  border-color: #183d2e;
-}
-
-.hero-copy a.btn.btn-ghost {
-  background: transparent;
-  color: var(--ink);
-  border-color: color-mix(in srgb, var(--ink) 35%, transparent);
-}
-
-.hero-copy a.btn.btn-ghost:hover {
-  background: rgba(20, 32, 26, 0.06);
-  border-color: var(--ink);
+.hero-copy h1 {
+  max-width: 14ch;
 }
 
 .hero-scene {
