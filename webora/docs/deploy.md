@@ -1,9 +1,9 @@
 # Деплой Сигнала (cignalpro.ru)
 
-Продакшен-домен: **https://cignalpro.ru**  
-Превью по IP (пока нет DNS/Caddy): http://109.172.37.155:8792/
+Продакшен-домен: **https://cignalpro.ru** (Let's Encrypt через Caddy)  
+Прямой доступ по IP (без TLS): http://109.172.37.155:8792/
 
-Сайт слушает **порт 8792** и **не трогает** Caddy, documentmigrant (:8787) и naryad.
+Сайт слушает **порт 8792**. TLS и прокси — в Docker Caddy `/opt/naryad`; блоки documentmigrant и masterprorab не трогать.
 
 ## Яндекс.Вебмастер
 
@@ -42,4 +42,26 @@ curl -fsS -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8792/
 EOF
 ```
 
-Когда DNS на cignalpro.ru готов — добавить в Caddy отдельный блок `reverse_proxy` на `:8792` **рядом** с migrant, не меняя его.
+## SSL (Caddy в Docker naryad)
+
+В `/opt/naryad/Caddyfile` добавлены блоки:
+
+```caddy
+www.cignalpro.ru {
+	redir https://cignalpro.ru{uri} permanent
+}
+
+cignalpro.ru {
+	encode gzip
+	reverse_proxy 172.18.0.1:8792
+}
+```
+
+Сертификат Let's Encrypt выпускается автоматически. После правок:
+
+```bash
+docker exec naryad-caddy-1 caddy validate --config /etc/caddy/Caddyfile
+docker exec naryad-caddy-1 caddy reload --config /etc/caddy/Caddyfile
+```
+
+Не менять блоки `documentmigrant.ru` и `masterprorab.ru`.
