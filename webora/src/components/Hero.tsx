@@ -4,141 +4,133 @@ import { site } from "@/lib/site";
 export function Hero() {
   return (
     <section className="hero" aria-label="Сигнал — главная">
-      <div className="hero-stage" aria-hidden="true">
-        <div className="hero-atmosphere" />
-        <div className="hero-mesh" />
-
-        <svg className="hero-net" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+      <div className="hero-bg" aria-hidden="true">
+        <div className="hero-bg-wash" />
+        <div className="hero-bg-grid" />
+        <svg className="hero-bg-signal" viewBox="0 0 800 600" preserveAspectRatio="xMaxYMid slice">
           <defs>
-            <linearGradient id="netStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(243,250,246,0.55)" />
-              <stop offset="55%" stopColor="rgba(196,92,38,0.45)" />
-              <stop offset="100%" stopColor="rgba(243,250,246,0.2)" />
+            <linearGradient id="sigLine" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#c45c26" stopOpacity="0.15" />
+              <stop offset="40%" stopColor="#1f4d3a" stopOpacity="0.55" />
+              <stop offset="100%" stopColor="#f3faf6" stopOpacity="0.35" />
             </linearGradient>
-            <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(243,250,246,0.9)" />
-              <stop offset="100%" stopColor="rgba(243,250,246,0)" />
-            </radialGradient>
           </defs>
-
-          <g className="hero-net-lines" fill="none" stroke="url(#netStroke)" strokeWidth="1.25">
-            <path className="net-line net-line-a" d="M180 520 C320 420, 420 380, 560 360 S820 300, 980 220" />
-            <path className="net-line net-line-b" d="M120 280 C280 300, 400 420, 560 360 S780 240, 1040 340" />
-            <path className="net-line net-line-c" d="M260 160 C380 240, 480 300, 560 360 S700 520, 900 620" />
-            <path className="net-line net-line-d" d="M80 640 C240 580, 420 500, 560 360 S760 160, 1100 120" />
-            <path className="net-line net-line-e" d="M340 700 C460 560, 520 440, 560 360 S640 280, 860 180" />
+          <g fill="none" stroke="url(#sigLine)" strokeWidth="1.6">
+            <path className="sig-path" d="M40 480 C180 420 260 300 400 280 C540 260 620 180 760 120" />
+            <path className="sig-path sig-path-2" d="M80 120 C220 160 300 260 400 280 C520 310 640 420 760 500" />
+            <path className="sig-path sig-path-3" d="M20 300 C160 280 280 240 400 280 C560 340 680 300 780 260" />
           </g>
-
-          <g className="hero-net-nodes">
-            {[
-              [180, 520],
-              [120, 280],
-              [260, 160],
-              [560, 360],
-              [980, 220],
-              [1040, 340],
-              [900, 620],
-              [860, 180],
-              [1100, 120],
-              [340, 700],
-            ].map(([x, y], i) => (
-              <g key={`${x}-${y}`} className={`net-node net-node-${i}`} transform={`translate(${x} ${y})`}>
-                <circle className="net-node-halo" r="18" fill="url(#nodeGlow)" />
-                <circle className="net-node-core" r="4.5" />
-              </g>
-            ))}
-          </g>
-
-          <g className="hero-packets">
-            <circle className="packet packet-a" r="3.5" />
-            <circle className="packet packet-b" r="3" />
-            <circle className="packet packet-c" r="2.5" />
-          </g>
+          {[
+            [400, 280],
+            [760, 120],
+            [760, 500],
+            [80, 120],
+            [40, 480],
+            [780, 260],
+          ].map(([x, y], i) => (
+            <circle key={i} className={`sig-node sig-node-${i}`} cx={x} cy={y} r="5" />
+          ))}
         </svg>
-
-        <div className="hero-sites">
-          <article className="site-frame site-frame-a">
-            <header className="site-chrome">
-              <span />
-              <span />
-              <span />
-              <em>signal.pro</em>
-            </header>
-            <div className="site-body">
-              <div className="site-nav-bar" />
-              <div className="site-hero-block" />
-              <div className="site-cols">
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-          </article>
-
-          <article className="site-frame site-frame-b">
-            <header className="site-chrome">
-              <span />
-              <span />
-              <span />
-              <em>/uslugi</em>
-            </header>
-            <div className="site-body site-body-list">
-              <div className="site-row" />
-              <div className="site-row" />
-              <div className="site-row short" />
-              <div className="site-graph">
-                <b />
-                <b />
-                <b />
-                <b />
-                <b />
-              </div>
-            </div>
-          </article>
-
-          <article className="site-frame site-frame-c">
-            <header className="site-chrome">
-              <span />
-              <span />
-              <span />
-              <em>/blog · SEO</em>
-            </header>
-            <div className="site-body">
-              <div className="site-map">
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <div className="hero-orbit">
-          <span className="orbit-ring" />
-          <span className="orbit-arm">
-            <span className="orbit-dot" />
-          </span>
-        </div>
       </div>
 
-      <div className="hero-scrim" aria-hidden="true" />
+      <div className="hero-layout">
+        <div className="hero-copy">
+          <p className="brand-inline">{site.name}</p>
+          <h1>{site.tagline}</h1>
+          <p className="lead">
+            Создаём, дорабатываем и продвигаем сайты под семантическое ядро — от первой услуги до тысяч статей.
+          </p>
+          <div className="btn-row">
+            <Link className="btn" href="/kontakty">
+              Обсудить задачу
+            </Link>
+            <Link className="btn btn-ghost" href="/uslugi">
+              Смотреть услуги
+            </Link>
+          </div>
+        </div>
 
-      <div className="hero-content">
-        <p className="brand-inline">{site.name}</p>
-        <h1>{site.tagline}</h1>
-        <p className="lead">
-          Создаём, дорабатываем и продвигаем сайты под семантическое ядро — от первой услуги до тысяч статей.
-        </p>
-        <div className="btn-row">
-          <Link className="btn" href="/kontakty">
-            Обсудить задачу
-          </Link>
-          <Link className="btn btn-ghost" href="/uslugi">
-            Смотреть услуги
-          </Link>
+        <div className="hero-scene" aria-hidden="true">
+          <div className="scene-glow" />
+
+          <div className="scene-window scene-window-main">
+            <div className="win-chrome">
+              <i />
+              <i />
+              <i />
+              <span>signal.pro</span>
+            </div>
+            <div className="win-screen">
+              <div className="win-topbar" />
+              <div className="win-hero-art">
+                <span className="win-signal-wave" />
+                <span className="win-signal-wave win-signal-wave-2" />
+                <span className="win-signal-core" />
+              </div>
+              <div className="win-lines">
+                <b />
+                <b />
+                <b className="short" />
+              </div>
+              <div className="win-cards">
+                <em />
+                <em />
+                <em />
+              </div>
+            </div>
+          </div>
+
+          <div className="scene-window scene-window-side">
+            <div className="win-chrome">
+              <i />
+              <i />
+              <i />
+              <span>поиск · рост</span>
+            </div>
+            <div className="win-screen win-screen-chart">
+              <div className="chart-bars">
+                <span style={{ ["--h" as string]: "34%" }} />
+                <span style={{ ["--h" as string]: "52%" }} />
+                <span style={{ ["--h" as string]: "41%" }} />
+                <span style={{ ["--h" as string]: "68%" }} />
+                <span style={{ ["--h" as string]: "58%" }} />
+                <span style={{ ["--h" as string]: "84%" }} />
+                <span style={{ ["--h" as string]: "72%" }} />
+              </div>
+              <div className="chart-trend" />
+            </div>
+          </div>
+
+          <div className="scene-window scene-window-mini">
+            <div className="win-chrome">
+              <i />
+              <i />
+              <i />
+              <span>сеть</span>
+            </div>
+            <div className="win-screen win-screen-net">
+              <svg viewBox="0 0 160 90">
+                <g stroke="rgba(31,77,58,0.45)" strokeWidth="1.2" fill="none">
+                  <path d="M20 70 L50 30 L90 50 L130 20" />
+                  <path d="M50 30 L90 20 L130 55" />
+                  <path d="M20 70 L90 50 L130 55" />
+                </g>
+                <g fill="#1f4d3a">
+                  <circle className="mini-node" cx="20" cy="70" r="3.5" />
+                  <circle className="mini-node" cx="50" cy="30" r="3.5" />
+                  <circle className="mini-node" cx="90" cy="50" r="3.5" />
+                  <circle className="mini-node" cx="90" cy="20" r="3.5" />
+                  <circle className="mini-node" cx="130" cy="20" r="3.5" />
+                  <circle className="mini-node" cx="130" cy="55" r="3.5" />
+                </g>
+                <circle className="mini-pulse" cx="90" cy="50" r="3" fill="#c45c26" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="scene-packet scene-packet-1" />
+          <div className="scene-packet scene-packet-2" />
+          <div className="scene-packet scene-packet-3" />
         </div>
       </div>
     </section>
