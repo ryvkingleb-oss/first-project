@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 import { MessengerIcons } from "@/components/Messengers";
 import { MobileMenu } from "@/components/MobileMenu";
 import { nav, site } from "@/lib/site";
@@ -7,10 +8,7 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="site-header-inner">
-        <Link className="brand" href="/" aria-label={`${site.name} — на главную`}>
-          <span className="brand-mark" aria-hidden />
-          <span className="brand-name">{site.name}</span>
-        </Link>
+        <BrandLogo size="md" />
         <nav className="site-nav" aria-label="Основная навигация">
           {nav.map((item) => (
             <Link key={item.href} href={item.href}>
@@ -20,7 +18,7 @@ export function Header() {
         </nav>
         <div className="header-actions">
           <MessengerIcons size="md" className="header-messengers" />
-          <Link className="btn btn-compact" href="/kontakty">
+          <Link className="btn" href="/kontakty">
             Заявка
           </Link>
           <MobileMenu />
@@ -35,10 +33,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="site-footer-inner">
         <div>
-          <Link className="brand brand-footer" href="/">
-            <span className="brand-mark" aria-hidden />
-            <span className="brand-name">{site.name}</span>
-          </Link>
+          <BrandLogo size="md" className="brand-footer" />
           <p className="footer-tagline">{site.tagline}</p>
           <p className="footer-legal muted">
             {site.legal.form}. ИНН {site.legal.inn}

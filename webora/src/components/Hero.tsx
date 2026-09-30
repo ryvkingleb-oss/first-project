@@ -1,5 +1,5 @@
+import { BrandLogo } from "@/components/BrandLogo";
 import { MessengerIcons } from "@/components/Messengers";
-import { site } from "@/lib/site";
 
 export function Hero() {
   return (
@@ -35,8 +35,8 @@ export function Hero() {
 
       <div className="hero-layout">
         <div className="hero-copy">
-          <p className="brand-inline">{site.name}</p>
-          <h1>Создание и доработка сайтов</h1>
+          <BrandLogo size="hero" asLink={false} className="hero-brand" />
+          <h1 className="visually-hidden">Создание и доработка сайтов</h1>
           <p className="lead">Свяжитесь со мной любым удобным методом</p>
           <MessengerIcons size="lg" className="hero-messengers" />
         </div>
