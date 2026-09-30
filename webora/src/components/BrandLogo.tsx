@@ -35,12 +35,14 @@ export function BrandLogo({
   href = "/",
   size = "md",
   asLink = true,
+  showName = true,
   showSlogan = true,
   className = "",
 }: {
   href?: string;
   size?: "sm" | "md" | "lg" | "hero";
   asLink?: boolean;
+  showName?: boolean;
   showSlogan?: boolean;
   className?: string;
 }) {
@@ -48,24 +50,25 @@ export function BrandLogo({
     <>
       <BrandMark />
       <span className="brand-lockup">
-        <span className="brand-name">{site.name}</span>
+        {showName ? <span className="brand-name">{site.name}</span> : null}
         {showSlogan ? <span className="brand-slogan">{site.logoSlogan}</span> : null}
       </span>
     </>
   );
 
-  const classes = `brand brand-${size} ${className}`.trim();
+  const classes = `brand brand-${size}${showName ? "" : " brand-no-name"} ${className}`.trim();
+  const label = showName ? `${site.name} — ${site.logoSlogan}` : `${site.name}: ${site.logoSlogan}`;
 
   if (!asLink) {
     return (
-      <div className={classes} aria-label={`${site.name} — ${site.logoSlogan}`}>
+      <div className={classes} aria-label={label}>
         {content}
       </div>
     );
   }
 
   return (
-    <Link className={classes} href={href} aria-label={`${site.name} — ${site.logoSlogan}`}>
+    <Link className={classes} href={href} aria-label={label}>
       {content}
     </Link>
   );

@@ -35,7 +35,7 @@ export function Hero() {
 
       <div className="hero-layout">
         <div className="hero-copy">
-          <BrandLogo size="hero" asLink={false} className="hero-brand" />
+          <BrandLogo size="hero" asLink={false} showName={false} className="hero-brand" />
           <h1 className="visually-hidden">Создание и доработка сайтов</h1>
           <p className="lead">Свяжитесь со мной любым удобным методом</p>
           <MessengerIcons size="lg" className="hero-messengers" />
