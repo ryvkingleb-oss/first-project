@@ -460,7 +460,8 @@ main {
 
 .hero-copy {
   color: var(--ink);
-  max-width: 34rem;
+  max-width: min(40rem, 100%);
+  width: 100%;
 }
 
 .hero-copy .brand-inline {
@@ -477,7 +478,7 @@ main {
 
 .hero-copy h1 {
   font-size: clamp(1.4rem, 2.8vw, 2.05rem);
-  max-width: 14ch;
+  max-width: 18ch;
   font-weight: 500;
   letter-spacing: -0.03em;
   color: var(--primary);
@@ -487,9 +488,10 @@ main {
 
 .hero-copy .lead {
   margin-top: 16px;
-  max-width: 36ch;
-  font-size: clamp(1.02rem, 1.4vw, 1.14rem);
-  line-height: 1.55;
+  max-width: none;
+  width: 100%;
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
   color: var(--muted);
   animation: rise 0.9s ease both;
   animation-delay: 0.14s;
@@ -497,8 +499,24 @@ main {
 
 .hero-messengers {
   margin-top: 26px;
+  width: 100%;
+  max-width: 22rem;
+  display: flex !important;
+  justify-content: flex-start;
+  gap: 14px;
   animation: rise 0.95s ease both;
   animation-delay: 0.22s;
+}
+
+.hero-messengers .messenger-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+}
+
+.hero-messengers .messenger-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
 .hero-scene {
