@@ -234,12 +234,13 @@ p {
 
 .brand-hero.brand-no-name .brand-slogan {
   font-family: var(--display);
-  font-size: clamp(1.55rem, 3.4vw, 2.35rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.85rem, 4.2vw, 2.85rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
   text-transform: none;
-  color: var(--primary);
-  line-height: 1.15;
+  color: var(--ink);
+  line-height: 1.08;
+  max-width: 12ch;
 }
 
 .visually-hidden {
@@ -1756,18 +1757,53 @@ main {
   }
 
   .site-header-inner {
-    min-height: 64px;
-    gap: 10px;
+    min-height: 60px;
+    width: min(100% - 24px, var(--max));
+    gap: 8px;
   }
 
   .header-actions {
     margin-left: auto;
+    gap: 6px;
+  }
+
+  .header-cta {
+    display: none;
+  }
+
+  .brand-md {
     gap: 8px;
+    min-width: 0;
+  }
+
+  .brand-md .brand-mark-svg {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+  }
+
+  .brand-md .brand-name {
+    font-size: 1.25rem;
+  }
+
+  .brand-md .brand-slogan {
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
   }
 
   .header-messengers .messenger-icon {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .header-messengers .messenger-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .menu-toggle {
+    width: 40px;
+    height: 40px;
   }
 
   .article-grid {
@@ -1801,11 +1837,17 @@ main {
   .brand-hero {
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
   }
 
   .brand-hero .brand-lockup {
     align-items: center;
+    text-align: center;
+  }
+
+  .brand-hero.brand-no-name .brand-slogan {
+    font-size: clamp(1.7rem, 7vw, 2.2rem);
+    max-width: none;
     text-align: center;
   }
 

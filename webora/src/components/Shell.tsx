@@ -18,7 +18,7 @@ export function Header() {
         </nav>
         <div className="header-actions">
           <MessengerIcons size="md" className="header-messengers" />
-          <Link className="btn" href="/kontakty">
+          <Link className="btn header-cta" href="/kontakty">
             Заявка
           </Link>
           <MobileMenu />
