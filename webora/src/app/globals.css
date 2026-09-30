@@ -583,6 +583,7 @@ main {
   font-size: clamp(1.05rem, 1.5vw, 1.2rem);
   line-height: 1.5;
   color: var(--muted);
+  text-align: center;
   animation: rise 0.9s ease both;
   animation-delay: 0.14s;
 }
@@ -590,9 +591,8 @@ main {
 .hero-messengers {
   margin-top: 26px;
   width: 100%;
-  max-width: 22rem;
   display: flex !important;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 14px;
   animation: rise 0.95s ease both;
   animation-delay: 0.22s;
@@ -601,12 +601,17 @@ main {
 .hero-messengers .messenger-icon {
   width: 56px;
   height: 56px;
-  border-radius: 16px;
+  border-radius: 50%;
 }
 
 .hero-messengers .messenger-icon svg {
   width: 28px;
   height: 28px;
+}
+
+.hero-messengers .messenger-icon.is-max {
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .hero-scene {
@@ -1639,29 +1644,33 @@ main {
   .hero-copy {
     max-width: none;
     width: 100%;
+    text-align: center;
   }
 
+  .hero-copy .brand-inline,
   .hero-copy h1 {
     max-width: none;
+    text-align: center;
   }
 
   .hero-copy .lead {
     max-width: none;
     width: 100%;
+    text-align: center;
   }
 
   .hero-messengers {
     max-width: none;
     width: 100%;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content: center;
+    gap: 16px;
   }
 
   .hero-messengers .messenger-icon {
-    flex: 1 1 0;
-    max-width: 112px;
+    flex: 0 0 auto;
+    width: 56px;
     height: 56px;
-    width: auto;
+    border-radius: 50%;
   }
 
   .hero-scene {
