@@ -14,7 +14,7 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-visual" aria-hidden />
         <div className="hero-content">
-          <span className="brand-inline">{site.name}</span>
+          <p className="brand-inline">{site.name}</p>
           <h1>{site.tagline}</h1>
           <p className="lead">
             Создаём, дорабатываем и продвигаем сайты под семантическое ядро — от первой услуги до тысяч статей в блоге.
