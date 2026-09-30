@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CtaBlock, JsonLd } from "@/components/ui";
 import { getAllArticles, articlePath } from "@/lib/articles";
-import { categories, services } from "@/lib/catalog";
+import { categories, cmsServices, coreServices } from "@/lib/catalog";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
@@ -20,6 +20,15 @@ const serviceImages: Record<string, { src: string; alt: string }> = {
     alt: "SEO-аналитика и рост трафика",
   },
 };
+
+const cmsHubs = [
+  { href: "/uslugi/dorabotka-wordpress", name: "WordPress", text: "Темы, плагины, WooCommerce, скорость" },
+  { href: "/uslugi/dorabotka-php", name: "PHP", text: "Самопис, Laravel, API и интеграции" },
+  { href: "/uslugi/dorabotka-1c-bitrix", name: "1С-Битрикс", text: "Компоненты, каталог, обмен с 1С" },
+  { href: "/uslugi/dorabotka-tilda", name: "Tilda", text: "Zero Block, формы, CRM" },
+  { href: "/uslugi/dorabotka-opencart", name: "OpenCart", text: "Модули, checkout, оплаты" },
+  { href: "/blog/cms", name: "Joomla / Drupal / MODX", text: "Точечная доработка и переносы" },
+];
 
 export default function HomePage() {
   const latest = getAllArticles().slice(0, 6);
@@ -61,7 +70,7 @@ export default function HomePage() {
           <p className="muted">Разработка, доработка и SEO связаны: структура под спрос, техника и контент.</p>
         </div>
         <div className="service-list">
-          {services.map((service) => {
+          {coreServices.map((service) => {
             const img = serviceImages[service.slug];
             return (
               <Link key={service.slug} className="service-row" href={`/uslugi/${service.slug}`}>
@@ -76,6 +85,33 @@ export default function HomePage() {
               </Link>
             );
           })}
+        </div>
+      </section>
+
+      <section className="section" style={{ paddingTop: 0 }}>
+        <div className="section-head">
+          <p className="kicker">Доработка по CMS</p>
+          <h2>WordPress, PHP и основные платформы</h2>
+          <p className="muted">
+            Дорабатываем сайты на популярных CMS — от точечной правки до нового функционала и интеграций.
+          </p>
+        </div>
+        <div className="article-grid">
+          {cmsHubs.map((item) => (
+            <Link key={item.href} className="article-link" href={item.href}>
+              <span className="meta">CMS</span>
+              <h3>{item.name}</h3>
+              <p className="muted">{item.text}</p>
+            </Link>
+          ))}
+        </div>
+        <div className="btn-row">
+          <Link className="btn btn-ghost" href="/uslugi#cms">
+            Все CMS-услуги
+          </Link>
+          <Link className="btn btn-ghost" href={`/uslugi/${cmsServices[0]?.slug ?? "dorabotka-wordpress"}`}>
+            Доработка WordPress
+          </Link>
         </div>
       </section>
 

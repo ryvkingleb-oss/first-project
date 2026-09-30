@@ -1,7 +1,8 @@
 import type { Article } from "./catalog";
+import { seoArticles } from "./articles-seo";
 
 /** Seed articles — expand via `npm run generate:articles` from semantic seeds. */
-export const articles: Article[] = [
+const baseArticles: Article[] = [
   {
     slug: "kak-zakazat-sozdanie-sajta-pod-klyuch",
     category: "sozdanie-saitov",
@@ -470,7 +471,7 @@ export const articles: Article[] = [
     sections: [
       {
         type: "p",
-        text: "Лимит одного sitemap — до 50 000 URL и 50 МБ несжатых. При тысячах статей делите карты по типам: услуги, категории, статьи. В Веборе заложена генерация через Next.js sitemap API.",
+        text: "Лимит одного sitemap — до 50 000 URL и 50 МБ несжатых. При тысячах статей делите карты по типам: услуги, категории, статьи. В Сигнале заложена генерация через Next.js sitemap API.",
       },
     ],
   },
@@ -508,6 +509,8 @@ export const articles: Article[] = [
     ],
   },
 ];
+
+export const articles: Article[] = [...baseArticles, ...seoArticles];
 
 export function articlePath(article: Pick<Article, "category" | "slug">) {
   return `/blog/${article.category}/${article.slug}`;

@@ -48,9 +48,18 @@ export function Footer() {
             <Link href="/uslugi/seo-prodvizhenie">SEO-продвижение</Link>
           </div>
           <div>
+            <p className="footer-label">CMS</p>
+            <Link href="/uslugi/dorabotka-wordpress">WordPress</Link>
+            <Link href="/uslugi/dorabotka-php">PHP</Link>
+            <Link href="/uslugi/dorabotka-1c-bitrix">1С-Битрикс</Link>
+            <Link href="/uslugi/dorabotka-tilda">Tilda</Link>
+            <Link href="/uslugi/dorabotka-opencart">OpenCart</Link>
+          </div>
+          <div>
             <p className="footer-label">Материалы</p>
             <Link href="/blog">Блог</Link>
-            <Link href="/kejsy">Кейсы</Link>
+            <Link href="/blog/wordpress">WordPress</Link>
+            <Link href="/blog/cms">CMS и PHP</Link>
             <Link href="/ceny">Цены</Link>
             <Link href="/o-nas">О студии</Link>
           </div>
