@@ -1,4 +1,4 @@
-# SEO seeds — семантическое ядро Вебора (RU)
+# SEO seeds — семантическое ядро Сигнал (RU)
 
 | query | cluster | URL | type | status |
 | --- | --- | --- | --- | --- |

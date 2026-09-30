@@ -4,7 +4,7 @@ import { Breadcrumbs, CtaBlock, JsonLd } from "@/components/ui";
 import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Кейсы Вебора — сайты и SEO",
+  title: "Кейсы Сигнал — сайты и SEO",
   description: "Примеры задач: запуск сайта под ключ, доработка и SEO-структура под семантическое ядро.",
   path: "/kejsy",
 });

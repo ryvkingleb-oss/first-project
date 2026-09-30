@@ -82,7 +82,7 @@ export default function HomePage() {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="section-head">
           <p className="kicker">Семантическое ядро</p>
-          <h2>Кластеры знаний, а не свалка постов</h2>
+          <h2>Сигналы знаний, а не свалка постов</h2>
           <p className="muted">Блог делится на хабы — каждый кластер усиливает услуги и соседние статьи.</p>
         </div>
         <div className="article-grid">

@@ -1,17 +1,33 @@
 export const site = {
-  name: "Вебора",
-  legalName: "Вебора",
+  name: "Сигнал",
+  legalName: "Сигнал",
   tagline: "Сайты, которые находят клиентов",
   description:
-    "Студия Вебора: создание сайтов, доработка и SEO-продвижение. Проектируем структуру под спрос, пишем страницы под семантическое ядро и доводим до заявок.",
+    "Студия Сигнал: создание сайтов, доработка и SEO-продвижение. Проектируем структуру под спрос, пишем страницы под семантическое ядро и доводим до заявок.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://109.172.37.155:8792",
   locale: "ru_RU",
   language: "ru",
-  email: "hello@webora.ru",
-  phone: "+7 (495) 000-00-00",
-  phoneHref: "tel:+74950000000",
+  email: "hello@signal.pro",
   city: "Москва",
-  sameAs: [] as string[],
+  messengers: {
+    telegram: {
+      label: "Telegram",
+      href: "https://t.me/signal_studio",
+    },
+    whatsapp: {
+      label: "WhatsApp",
+      href: "https://wa.me/79000000000",
+    },
+    max: {
+      label: "Max",
+      href: "https://max.ru/signal_studio",
+    },
+  },
+  sameAs: [
+    "https://t.me/signal_studio",
+    "https://wa.me/79000000000",
+    "https://max.ru/signal_studio",
+  ],
 } as const;
 
 export const nav = [

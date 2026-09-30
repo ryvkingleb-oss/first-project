@@ -92,7 +92,7 @@ for (const [query, cluster] of rows) {
   const article = {
     slug,
     category,
-    title: `${query[0].toUpperCase()}${query.slice(1)} — гайд | Вебора`,
+    title: `${query[0].toUpperCase()}${query.slice(1)} — гайд | Сигнал`,
     description: `Практический материал по запросу «${query}»: что важно знать и как применить на сайте.`,
     h1: `${query[0].toUpperCase()}${query.slice(1)}`,
     lead: `Черновик статьи под запрос «${query}». Заполните секции по ТЗ перед публикацией.`,

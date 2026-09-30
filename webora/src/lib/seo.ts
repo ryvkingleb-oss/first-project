@@ -47,11 +47,18 @@ export function organizationJsonLd() {
     name: site.name,
     url: site.url,
     email: site.email,
-    telephone: site.phone,
+    sameAs: [...site.sameAs],
     address: {
       "@type": "PostalAddress",
       addressLocality: site.city,
       addressCountry: "RU",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: site.email,
+      availableLanguage: ["Russian"],
+      url: `${site.url}/kontakty`,
     },
   };
 }

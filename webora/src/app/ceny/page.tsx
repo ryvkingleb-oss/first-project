@@ -7,7 +7,7 @@ import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Цены на создание сайтов, доработку и SEO",
   description:
-    "Ориентиры цен Вебора: создание сайтов под ключ, доработка и SEO-продвижение. Точная смета — после брифа.",
+    "Ориентиры цен Сигнал: создание сайтов под ключ, доработка и SEO-продвижение. Точная смета — после брифа.",
   path: "/ceny",
 });
 

@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Golos_Text, Unbounded } from "next/font/google";
+import { Geologica, Onest } from "next/font/google";
 import { Footer, Header } from "@/components/Shell";
 import { site } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo";
 import "./globals.css";
 
-const body = Golos_Text({
+const body = Onest({
   subsets: ["cyrillic", "latin"],
   variable: "--font-body",
   display: "swap",
 });
 
-const display = Unbounded({
+const display = Geologica({
   subsets: ["cyrillic", "latin"],
   variable: "--font-display",
   display: "swap",
-  weight: ["500", "600"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {

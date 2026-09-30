@@ -4,9 +4,9 @@ import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
-  title: "О студии Вебора",
+  title: "О студии Сигнал",
   description:
-    "Вебора — студия создания сайтов, доработки и SEO-продвижения. Делаем структуру под семантическое ядро и контент на рост.",
+    "Сигнал — студия создания сайтов, доработки и SEO-продвижения. Делаем структуру под семантическое ядро и контент на рост.",
   path: "/o-nas",
 });
 

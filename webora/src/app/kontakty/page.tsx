@@ -4,10 +4,16 @@ import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Контакты студии Вебора",
-  description: "Связаться со студией Вебора: создание сайтов, доработка и SEO-продвижение.",
+  title: "Контакты студии Сигнал",
+  description: "Связаться со студией Сигнал в Telegram, WhatsApp или Max: создание сайтов, доработка и SEO.",
   path: "/kontakty",
 });
+
+const messengers = [
+  site.messengers.telegram,
+  site.messengers.whatsapp,
+  site.messengers.max,
+];
 
 export default function ContactsPage() {
   return (
@@ -22,17 +28,33 @@ export default function ContactsPage() {
         <Breadcrumbs items={[{ name: "Главная", href: "/" }, { name: "Контакты" }]} />
         <p className="kicker">Контакты</p>
         <h1>Обсудим задачу</h1>
-        <p className="lead">Коротко опишите сайт и цель — ответим с вопросами и ориентиром по формату работ.</p>
+        <p className="lead">
+          Напишите в удобный мессенджер или кратко опишите задачу формой — ответим с вопросами и ориентиром по работам.
+        </p>
 
-        <div className="contact-grid" style={{ marginTop: 28 }}>
+        <div className="messenger-row" style={{ marginTop: 22 }}>
+          {messengers.map((item) => (
+            <a
+              key={item.label}
+              className="btn messenger-btn"
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+
+        <div className="contact-grid" style={{ marginTop: 36 }}>
           <form className="contact-form" action={`mailto:${site.email}`} method="post" encType="text/plain">
             <label>
               Имя
               <input name="name" required autoComplete="name" />
             </label>
             <label>
-              Телефон или Telegram
-              <input name="contact" required autoComplete="tel" />
+              Telegram / WhatsApp / Max
+              <input name="contact" required placeholder="@username или ссылка" autoComplete="off" />
             </label>
             <label>
               Задача
@@ -46,9 +68,18 @@ export default function ContactsPage() {
             </p>
           </form>
           <div>
-            <p className="footer-label">Связь</p>
-            <p style={{ marginTop: 10 }}>
-              <a href={site.phoneHref}>{site.phone}</a>
+            <p className="footer-label">Мессенджеры</p>
+            <ul className="hub-links" style={{ marginTop: 8 }}>
+              {messengers.map((item) => (
+                <li key={item.label} style={{ listStyle: "none" }}>
+                  <a href={item.href} target="_blank" rel="noopener noreferrer">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p className="footer-label" style={{ marginTop: 22 }}>
+              Почта
             </p>
             <p style={{ marginTop: 8 }}>
               <a href={`mailto:${site.email}`}>{site.email}</a>

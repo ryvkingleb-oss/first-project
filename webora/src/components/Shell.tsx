@@ -50,14 +50,24 @@ export function Footer() {
             <Link href="/o-nas">О студии</Link>
           </div>
           <div>
-            <p className="footer-label">Контакты</p>
-            <a href={site.phoneHref}>{site.phone}</a>
+            <p className="footer-label">Связь</p>
+            <a href={site.messengers.telegram.href} target="_blank" rel="noopener noreferrer">
+              {site.messengers.telegram.label}
+            </a>
+            <a href={site.messengers.whatsapp.href} target="_blank" rel="noopener noreferrer">
+              {site.messengers.whatsapp.label}
+            </a>
+            <a href={site.messengers.max.href} target="_blank" rel="noopener noreferrer">
+              {site.messengers.max.label}
+            </a>
             <a href={`mailto:${site.email}`}>{site.email}</a>
             <span>{site.city}</span>
           </div>
         </div>
       </div>
-      <p className="footer-copy">© {new Date().getFullYear()} {site.name}. Создание, доработка и SEO сайтов.</p>
+      <p className="footer-copy">
+        © {new Date().getFullYear()} {site.name}. Создание, доработка и SEO сайтов.
+      </p>
     </footer>
   );
 }
