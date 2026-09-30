@@ -30,25 +30,44 @@ export function ContactForm({ className = "", compact = false, source }: Props) 
 
     const form = e.currentTarget;
     const honey = (form.elements.namedItem("website") as HTMLInputElement | null)?.value ?? "";
+    if (honey) {
+      setStatus("success");
+      return;
+    }
+
+    const subject = `Заявка с ${site.domain}${source ? ` · ${source}` : ""}`;
 
     try {
-      const res = await fetch("/api/contact", {
+      // FormSubmit требует вызов с клиента (серверные IP режет Cloudflare)
+      const res = await fetch(`https://formsubmit.co/ajax/${site.email}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
           name,
           contact,
           message,
-          source,
-          consent,
-          website: honey,
+          source: source || "сайт",
+          _subject: subject,
+          _template: "table",
+          _captcha: "false",
+          _replyto: contact.includes("@") ? contact : undefined,
         }),
       });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
 
-      if (!res.ok || !data.ok) {
+      const data = (await res.json().catch(() => ({}))) as {
+        success?: string | boolean;
+        message?: string;
+      };
+
+      if (!res.ok || data.success === false) {
         setStatus("error");
-        setError(data.error || "Не удалось отправить заявку. Попробуйте ещё раз.");
+        setError(
+          data.message ||
+            `Не удалось отправить. Напишите на ${site.email} или в мессенджеры.`,
+        );
         return;
       }
 
@@ -59,7 +78,7 @@ export function ContactForm({ className = "", compact = false, source }: Props) 
       setConsent(false);
     } catch {
       setStatus("error");
-      setError("Нет связи с сервером. Напишите напрямую на info@cignalpro.ru");
+      setError(`Нет связи. Напишите напрямую на ${site.email}`);
     }
   }
 
@@ -88,7 +107,6 @@ export function ContactForm({ className = "", compact = false, source }: Props) 
     <form
       className={`contact-form ${compact ? "contact-form-compact" : ""} ${className}`.trim()}
       onSubmit={onSubmit}
-      noValidate={false}
     >
       <label htmlFor={`${id}-name`}>
         Имя
@@ -128,7 +146,6 @@ export function ContactForm({ className = "", compact = false, source }: Props) 
         />
       </label>
 
-      {/* honeypot */}
       <input
         type="text"
         name="website"

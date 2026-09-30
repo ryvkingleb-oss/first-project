@@ -20,21 +20,22 @@ export const site = {
   messengers: {
     telegram: {
       label: "Telegram",
-      href: "https://t.me/signal_studio",
+      href: "https://t.me/Stasvew",
     },
     whatsapp: {
       label: "WhatsApp",
-      href: "https://wa.me/79000000000",
+      href: "https://wa.me/79581769228",
     },
     max: {
       label: "Max",
-      href: "https://max.ru/signal_studio",
+      href: "https://max.ru/u/f9LHodD0cOI8wMvs4qthOHMSdTrU5fJVakNn7XlASaXupj3NTIN8i0BYJ7U",
     },
   },
+  phone: "+79581769228",
   sameAs: [
-    "https://t.me/signal_studio",
-    "https://wa.me/79000000000",
-    "https://max.ru/signal_studio",
+    "https://t.me/Stasvew",
+    "https://wa.me/79581769228",
+    "https://max.ru/u/f9LHodD0cOI8wMvs4qthOHMSdTrU5fJVakNn7XlASaXupj3NTIN8i0BYJ7U",
   ],
 } as const;
 
