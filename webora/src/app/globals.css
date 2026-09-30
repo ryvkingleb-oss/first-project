@@ -111,10 +111,10 @@ p {
 .site-header-inner {
   width: min(var(--max), calc(100% - 32px));
   margin: 0 auto;
-  min-height: 64px;
+  min-height: 76px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px 22px;
 }
 
 .brand {
@@ -123,6 +123,7 @@ p {
   gap: 10px;
   text-decoration: none;
   color: var(--ink);
+  flex-shrink: 0;
 }
 
 .brand-mark {
@@ -136,7 +137,7 @@ p {
 
 .brand-name {
   font-family: var(--display);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.045em;
 }
@@ -144,23 +145,133 @@ p {
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px;
+  align-items: center;
+  gap: 4px 6px;
   margin-left: auto;
 }
 
 .site-nav a {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   color: var(--ink);
   text-decoration: none;
-  min-height: 44px;
-  padding: 0 12px;
+  min-height: 48px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
-  border-radius: 10px;
-  transition: background 0.2s ease;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 10px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
 }
 
 .site-nav a:hover {
   background: rgba(31, 77, 58, 0.08);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.site-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.messenger-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.messenger-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 0 rgba(20, 32, 26, 0.08);
+}
+
+.messenger-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.messenger-icons-sm .messenger-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+.messenger-icons-sm .messenger-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.messenger-icons-lg .messenger-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.messenger-icons-lg .messenger-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.messenger-icon.is-telegram {
+  background: #2aabee;
+}
+
+.messenger-icon.is-whatsapp {
+  background: #25d366;
+}
+
+.messenger-icon.is-max {
+  background: #7b61ff;
+}
+
+.messenger-icon:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 18px rgba(20, 32, 26, 0.14);
+}
+
+.footer-messengers {
+  margin-top: 18px;
+}
+
+.contacts-messengers {
+  margin-top: 22px;
+}
+
+.contacts-messengers-side {
+  margin-top: 12px;
 }
 
 .btn,
@@ -290,15 +401,6 @@ main {
   margin-bottom: 18px;
 }
 
-.messenger-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.messenger-btn {
-  min-width: 140px;
-}
 
 .hero-content h1 {
   font-size: clamp(1.35rem, 3vw, 2rem);
@@ -780,9 +882,31 @@ main {
   }
 }
 
+@media (max-width: 980px) {
+  .site-nav a {
+    font-size: 0.98rem;
+    padding: 0 10px;
+  }
+}
+
 @media (max-width: 720px) {
   .site-nav {
     display: none;
+  }
+
+  .site-header-inner {
+    min-height: 64px;
+    gap: 10px;
+  }
+
+  .header-actions {
+    margin-left: auto;
+    gap: 8px;
+  }
+
+  .header-messengers .messenger-icon {
+    width: 36px;
+    height: 36px;
   }
 
   .article-grid {
@@ -791,10 +915,6 @@ main {
 
   .hero {
     min-height: 78vh;
-  }
-
-  .btn-compact {
-    margin-left: auto;
   }
 }
 

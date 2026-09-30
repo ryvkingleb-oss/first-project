@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MessengerIcons } from "@/components/Messengers";
 import { nav, site } from "@/lib/site";
 
 export function Header() {
@@ -16,9 +17,12 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <Link className="btn btn-compact" href="/kontakty">
-          Заявка
-        </Link>
+        <div className="header-actions">
+          <MessengerIcons size="md" className="header-messengers" />
+          <Link className="btn btn-compact" href="/kontakty">
+            Заявка
+          </Link>
+        </div>
       </div>
     </header>
   );
@@ -34,6 +38,7 @@ export function Footer() {
             <span className="brand-name">{site.name}</span>
           </Link>
           <p className="footer-tagline">{site.tagline}</p>
+          <MessengerIcons size="lg" className="footer-messengers" />
         </div>
         <div className="footer-cols">
           <div>
@@ -51,15 +56,6 @@ export function Footer() {
           </div>
           <div>
             <p className="footer-label">Связь</p>
-            <a href={site.messengers.telegram.href} target="_blank" rel="noopener noreferrer">
-              {site.messengers.telegram.label}
-            </a>
-            <a href={site.messengers.whatsapp.href} target="_blank" rel="noopener noreferrer">
-              {site.messengers.whatsapp.label}
-            </a>
-            <a href={site.messengers.max.href} target="_blank" rel="noopener noreferrer">
-              {site.messengers.max.label}
-            </a>
             <a href={`mailto:${site.email}`}>{site.email}</a>
             <span>{site.city}</span>
           </div>
