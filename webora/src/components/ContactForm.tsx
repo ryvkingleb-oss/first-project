@@ -30,44 +30,25 @@ export function ContactForm({ className = "", compact = false, source }: Props) 
 
     const form = e.currentTarget;
     const honey = (form.elements.namedItem("website") as HTMLInputElement | null)?.value ?? "";
-    if (honey) {
-      setStatus("success");
-      return;
-    }
-
-    const subject = `Заявка с ${site.domain}${source ? ` · ${source}` : ""}`;
 
     try {
-      // FormSubmit требует вызов с клиента (серверные IP режет Cloudflare)
-      const res = await fetch(`https://formsubmit.co/ajax/${site.email}`, {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           contact,
           message,
-          source: source || "сайт",
-          _subject: subject,
-          _template: "table",
-          _captcha: "false",
-          _replyto: contact.includes("@") ? contact : undefined,
+          source,
+          consent,
+          website: honey,
         }),
       });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
 
-      const data = (await res.json().catch(() => ({}))) as {
-        success?: string | boolean;
-        message?: string;
-      };
-
-      if (!res.ok || data.success === false) {
+      if (!res.ok || !data.ok) {
         setStatus("error");
-        setError(
-          data.message ||
-            `Не удалось отправить. Напишите на ${site.email} или в мессенджеры.`,
-        );
+        setError(data.error || "Не удалось отправить заявку. Попробуйте ещё раз.");
         return;
       }
 
@@ -94,7 +75,7 @@ export function ContactForm({ className = "", compact = false, source }: Props) 
         </div>
         <h3 className="form-success-title">Заявка отправлена</h3>
         <p className="form-success-text">
-          Спасибо! Сообщение ушло на <strong>{site.email}</strong>. Отвечу в ближайшее время.
+          Спасибо! Сообщение успешно ушло на <strong>{site.email}</strong>. Отвечу в ближайшее время.
         </p>
         <button type="button" className="btn" onClick={() => setStatus("idle")}>
           Отправить ещё одну

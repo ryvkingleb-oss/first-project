@@ -30,6 +30,7 @@ export SSH_ASKPASS=/path/to/askpass SSH_ASKPASS_REQUIRE=force DISPLAY=:0
 
 rsync -az --delete \
   --exclude node_modules --exclude .next --exclude .git \
+  --exclude .env --exclude .env.local \
   ./webora/ masterprorab:/opt/webora/
 
 ssh masterprorab 'bash -s' <<'EOF'
@@ -65,3 +66,17 @@ docker exec naryad-caddy-1 caddy reload --config /etc/caddy/Caddyfile
 ```
 
 Не менять блоки `documentmigrant.ru` и `masterprorab.ru`.
+
+## Почта заявок (SMTP Beget)
+
+В `/opt/webora/.env` (не в git):
+
+```bash
+SMTP_HOST=smtp.beget.com
+SMTP_PORT=465
+SMTP_USER=info@cignalpro.ru
+SMTP_PASS=***
+CONTACT_TO=info@cignalpro.ru
+```
+
+После смены `.env`: `systemctl restart webora`.
