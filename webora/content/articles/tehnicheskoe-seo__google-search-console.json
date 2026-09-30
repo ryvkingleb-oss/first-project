@@ -1,0 +1,56 @@
+{
+  "slug": "google-search-console",
+  "category": "tehnicheskoe-seo",
+  "title": "Google search console — гайд | Сигнал",
+  "description": "Практический материал по запросу «google search console»: что важно знать и как применить на сайте.",
+  "h1": "Google search console",
+  "lead": "Черновик статьи под запрос «google search console». Заполните секции по ТЗ перед публикацией.",
+  "keywords": [
+    "google search console"
+  ],
+  "publishedAt": "2026-09-30",
+  "updatedAt": "2026-09-30",
+  "readingMinutes": 6,
+  "related": [],
+  "sections": [
+    {
+      "type": "p",
+      "text": "Введение по теме «google search console»."
+    },
+    {
+      "type": "h2",
+      "text": "Что важно понять"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Пункт 1",
+        "Пункт 2",
+        "Пункт 3"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Практические шаги"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "Шаг 1",
+        "Шаг 2",
+        "Шаг 3"
+      ]
+    },
+    {
+      "type": "callout",
+      "text": "Свяжите статью с услугой и хабом категории перед публикацией."
+    }
+  ],
+  "faq": [
+    {
+      "q": "Что такое google search console?",
+      "a": "Краткий ответ для FAQ и FAQPage schema."
+    }
+  ],
+  "status": "draft"
+}

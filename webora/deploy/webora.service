@@ -1,0 +1,21 @@
+[Unit]
+Description=Webora Next.js site
+After=network.target
+
+[Service]
+Type=simple
+User=webora
+Group=webora
+WorkingDirectory=/opt/webora
+Environment=NODE_ENV=production
+Environment=PORT=8792
+Environment=HOSTNAME=0.0.0.0
+Environment=NEXT_PUBLIC_SITE_URL=https://cignalpro.ru
+EnvironmentFile=-/opt/webora/.env
+ExecStart=/usr/bin/npm run start -- --hostname 0.0.0.0 --port 8792
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
