@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MessengerIcons } from "@/components/Messengers";
+import { MobileMenu } from "@/components/MobileMenu";
 import { nav, site } from "@/lib/site";
 
 export function Header() {
@@ -22,6 +23,7 @@ export function Header() {
           <Link className="btn btn-compact" href="/kontakty">
             Заявка
           </Link>
+          <MobileMenu />
         </div>
       </div>
     </header>

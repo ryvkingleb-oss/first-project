@@ -197,6 +197,96 @@ p {
   flex-shrink: 0;
 }
 
+.mobile-menu {
+  display: none;
+  position: relative;
+}
+
+.menu-toggle {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--paper) 90%, white);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.menu-toggle.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  border: 0;
+  padding: 0;
+  background: rgba(20, 32, 26, 0.35);
+  cursor: pointer;
+}
+
+.mobile-menu-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 31;
+  width: min(280px, calc(100vw - 32px));
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #f7faf7;
+  box-shadow: 0 18px 40px rgba(20, 32, 26, 0.16);
+}
+
+.mobile-menu-panel a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.mobile-menu-panel a:hover {
+  background: rgba(31, 77, 58, 0.08);
+  color: var(--primary);
+}
+
+.mobile-menu-cta {
+  margin-top: 6px;
+  text-align: center;
+  background: var(--primary) !important;
+  color: var(--primary-ink) !important;
+}
+
 .messenger-icons {
   display: inline-flex;
   align-items: center;
@@ -1511,6 +1601,10 @@ main {
     display: none;
   }
 
+  .mobile-menu {
+    display: block;
+  }
+
   .site-header-inner {
     min-height: 64px;
     gap: 10px;
@@ -1536,8 +1630,38 @@ main {
 
   .hero-layout {
     grid-template-columns: 1fr;
-    padding: 72px 0 40px;
+    width: 100%;
+    max-width: none;
+    padding: 72px 16px 40px;
     gap: 28px;
+  }
+
+  .hero-copy {
+    max-width: none;
+    width: 100%;
+  }
+
+  .hero-copy h1 {
+    max-width: none;
+  }
+
+  .hero-copy .lead {
+    max-width: none;
+    width: 100%;
+  }
+
+  .hero-messengers {
+    max-width: none;
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .hero-messengers .messenger-icon {
+    flex: 1 1 0;
+    max-width: 112px;
+    height: 56px;
+    width: auto;
   }
 
   .hero-scene {
