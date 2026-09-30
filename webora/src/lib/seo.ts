@@ -37,28 +37,55 @@ export function buildMetadata({
       title: fullTitle,
       description,
     },
+    other: {
+      ...(site.yandexVerification
+        ? { "yandex-verification": site.yandexVerification }
+        : {}),
+    },
   };
 }
 
+/** Самозанятый как Person + ProfessionalService — для Яндекса и ИИ-ответов. */
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Person", "ProfessionalService"],
     name: site.name,
+    alternateName: "Cignal Pro",
     url: site.url,
     email: site.email,
+    description: site.description,
     sameAs: [...site.sameAs],
     address: {
       "@type": "PostalAddress",
       addressLocality: site.city,
       addressCountry: "RU",
     },
+    areaServed: {
+      "@type": "Country",
+      name: "Russia",
+    },
+    taxID: site.legal.inn,
+    identifier: {
+      "@type": "PropertyValue",
+      name: "ИНН",
+      value: site.legal.inn,
+    },
+    knowsAbout: [
+      "создание сайтов",
+      "доработка сайтов",
+      "SEO-продвижение",
+      "WordPress",
+      "техническое SEO",
+      "семантическое ядро",
+    ],
     contactPoint: {
       "@type": "ContactPoint",
-      contactType: "sales",
+      contactType: "customer service",
       email: site.email,
       availableLanguage: ["Russian"],
-      url: `${site.url}/kontakty`,
+      areaServed: "RU",
+      url: absUrl("/kontakty"),
     },
   };
 }
@@ -68,8 +95,14 @@ export function websiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: site.name,
+    alternateName: "cignalpro.ru",
     url: site.url,
     inLanguage: "ru-RU",
+    publisher: {
+      "@type": "Person",
+      name: site.name,
+      email: site.email,
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: `${absUrl("/blog")}?q={search_term_string}`,
@@ -109,6 +142,7 @@ export function articleJsonLd(input: {
   path: string;
   publishedAt: string;
   updatedAt: string;
+  lead?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -118,9 +152,24 @@ export function articleJsonLd(input: {
     datePublished: input.publishedAt,
     dateModified: input.updatedAt,
     mainEntityOfPage: absUrl(input.path),
-    author: { "@type": "Organization", name: site.name },
-    publisher: { "@type": "Organization", name: site.name, url: site.url },
+    author: {
+      "@type": "Person",
+      name: site.name,
+      url: site.url,
+      email: site.email,
+    },
+    publisher: {
+      "@type": "Person",
+      name: site.name,
+      url: site.url,
+    },
     inLanguage: "ru-RU",
+    isAccessibleForFree: true,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".lead", "article h1", ".prose h2"],
+    },
+    about: input.lead ?? input.description,
   };
 }
 
@@ -134,8 +183,17 @@ export function serviceJsonLd(input: {
     "@type": "Service",
     name: input.name,
     description: input.description,
-    provider: { "@type": "Organization", name: site.name, url: site.url },
-    areaServed: "RU",
+    provider: {
+      "@type": "Person",
+      name: site.name,
+      email: site.email,
+      taxID: site.legal.inn,
+      url: site.url,
+    },
+    areaServed: [
+      { "@type": "City", name: site.city },
+      { "@type": "Country", name: "Russia" },
+    ],
     url: absUrl(input.path),
   };
 }

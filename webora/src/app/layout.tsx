@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geologica, Onest } from "next/font/google";
+import { CookieBanner } from "@/components/CookieBanner";
 import { Footer, Header } from "@/components/Shell";
 import { site } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo";
@@ -25,6 +26,17 @@ export const metadata: Metadata = {
     path: "/",
   }),
   metadataBase: new URL(site.url),
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  publisher: site.name,
+  robots: {
+    index: true,
+    follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+    "max-video-preview": -1,
+  },
+  category: "technology",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -36,6 +48,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <main>{children}</main>
           <Footer />
         </div>
+        <CookieBanner />
       </body>
     </html>
   );

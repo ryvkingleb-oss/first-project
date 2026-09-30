@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArticleContact } from "@/components/ArticleContact";
 import { Breadcrumbs, CtaBlock, Faq, JsonLd } from "@/components/ui";
 import {
   articlePath,
@@ -87,6 +88,7 @@ export default async function ArticlePage({ params }: Props) {
             path: articlePath(article),
             publishedAt: article.publishedAt,
             updatedAt: article.updatedAt,
+            lead: article.lead,
           }),
           ...(article.faq ? [faqJsonLd(article.faq)] : []),
         ]}
@@ -109,6 +111,8 @@ export default async function ArticlePage({ params }: Props) {
           <span>{article.readingMinutes} мин чтения</span>
         </p>
 
+        <ArticleContact source={articlePath(article)} />
+
         <div className="prose" style={{ marginTop: 28 }}>
           {article.sections.map(renderSection)}
         </div>
@@ -119,6 +123,8 @@ export default async function ArticlePage({ params }: Props) {
             <Faq items={article.faq} />
           </section>
         )}
+
+        <ArticleContact source={`${articlePath(article)}#bottom`} />
 
         <p style={{ marginTop: 28 }}>
           <Link href={`/uslugi/seo-prodvizhenie`}>SEO-продвижение</Link>

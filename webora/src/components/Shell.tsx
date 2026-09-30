@@ -38,6 +38,9 @@ export function Footer() {
             <span className="brand-name">{site.name}</span>
           </Link>
           <p className="footer-tagline">{site.tagline}</p>
+          <p className="footer-legal muted">
+            {site.legal.form}. ИНН {site.legal.inn}
+          </p>
           <MessengerIcons size="lg" className="footer-messengers" />
         </div>
         <div className="footer-cols">
@@ -58,20 +61,21 @@ export function Footer() {
           <div>
             <p className="footer-label">Материалы</p>
             <Link href="/blog">Блог</Link>
-            <Link href="/blog/wordpress">WordPress</Link>
-            <Link href="/blog/cms">CMS и PHP</Link>
             <Link href="/ceny">Цены</Link>
             <Link href="/o-nas">О студии</Link>
+            <Link href="/politika-konfidencialnosti">Конфиденциальность</Link>
           </div>
           <div>
             <p className="footer-label">Связь</p>
             <a href={`mailto:${site.email}`}>{site.email}</a>
             <span>{site.city}</span>
+            <span>{site.domain}</span>
           </div>
         </div>
       </div>
       <p className="footer-copy">
-        © {new Date().getFullYear()} {site.name}. Создание, доработка и SEO сайтов.
+        © {new Date().getFullYear()} {site.name} · {site.legal.form} · ИНН {site.legal.inn}. Создание,
+        доработка и SEO сайтов. {site.city}.
       </p>
     </footer>
   );

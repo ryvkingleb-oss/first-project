@@ -3,9 +3,12 @@ import { seoArticles as cmsSeedArticles } from "./articles-seo";
 import { cmsArticles } from "./articles/cms";
 import { dorabotkaArticles } from "./articles/dorabotka";
 import { kontentArticles } from "./articles/kontent";
+import { podderzhkaArticles } from "./articles/podderzhka";
 import { seoArticles as seoHubArticles } from "./articles/seo";
 import { sozdanieArticles } from "./articles/sozdanie";
 import { techArticles } from "./articles/tech";
+import { verstkaArticles } from "./articles/verstka";
+import { wordpressArticles } from "./articles/wordpress";
 
 const fullModules: Article[] = [
   ...sozdanieArticles,
@@ -14,11 +17,13 @@ const fullModules: Article[] = [
   ...techArticles,
   ...dorabotkaArticles,
   ...cmsArticles,
+  ...wordpressArticles,
+  ...verstkaArticles,
+  ...podderzhkaArticles,
 ];
 
 const FULL_SLUGS = new Set(fullModules.map((a) => a.slug));
 
-/** Сиды CMS/вёрстки/поддержки, пока нет полных модулей wordpress/verstka/podderzhka. */
 const leftoverSeeds = cmsSeedArticles.filter((a) => !FULL_SLUGS.has(a.slug));
 
 export const articles: Article[] = [...fullModules, ...leftoverSeeds];

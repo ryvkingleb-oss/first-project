@@ -58,7 +58,7 @@ export function Hero() {
               <i />
               <i />
               <i />
-              <span>signal.pro</span>
+              <span>cignalpro.ru</span>
             </div>
             <div className="win-screen">
               <div className="win-topbar" />

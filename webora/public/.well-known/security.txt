@@ -1,0 +1,3 @@
+Contact: mailto:info@cignalpro.ru
+Preferred-Languages: ru, en
+Canonical: https://cignalpro.ru/.well-known/security.txt

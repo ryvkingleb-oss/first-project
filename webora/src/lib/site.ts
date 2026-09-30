@@ -1,14 +1,21 @@
 export const site = {
   name: "Сигнал",
-  legalName: "Сигнал",
+  legalName: "Самозанятый",
   tagline: "Сайты, которые находят клиентов",
   description:
-    "Студия Сигнал: создание сайтов, доработка и SEO-продвижение. Проектируем структуру под спрос, пишем страницы под семантическое ядро и доводим до заявок.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://109.172.37.155:8792",
+    "Сигнал: создание сайтов, доработка и SEO-продвижение. Услуги оказывает частное лицо — самозанятый. Санкт-Петербург и удалённо по России.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://cignalpro.ru",
+  domain: "cignalpro.ru",
   locale: "ru_RU",
   language: "ru",
-  email: "hello@signal.pro",
-  city: "Москва",
+  email: "info@cignalpro.ru",
+  city: "Санкт-Петербург",
+  legal: {
+    form: "Частное лицо, самозанятый",
+    inn: "781019511603",
+    note: "Услуги по созданию, доработке и SEO-продвижению сайтов оказывает частное лицо — налогоплательщик налога на профессиональный доход (самозанятый).",
+  },
+  yandexVerification: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION ?? "",
   messengers: {
     telegram: {
       label: "Telegram",
